@@ -22,7 +22,7 @@
 	 * change the value
 	 */
 	NSDictionary *dic = [fruits objectAtIndex:index];
-	[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"value"] intValue]] forKey:@"value"];
+	[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"value"] intValue] + 300] forKey:@"value"];
 	
 	/*
 	 * resize rectangles with animation
@@ -97,17 +97,13 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-	//NSLog(@"_______");
-	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
-	//NSLog(@"orientation=%d", interfaceOrientation);
-	//NSLog(@"initialized %d", [(TreemapView*)self.view initialized]);
-	//	NSLog(@"self view %@", self.view);
-	//NSLog(@" self.interfaceOrientation %d", [self interfaceOrientation]);
     return YES;
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
 {
+	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
+	//NSLog(@" self.interfaceOrientation %d", [self interfaceOrientation]);
 	if([(TreemapView*)self.view initialized]) [self resizeView];
 }
 
