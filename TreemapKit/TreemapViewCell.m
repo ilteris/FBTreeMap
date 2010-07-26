@@ -6,6 +6,7 @@
 
 @synthesize valueLabel;
 @synthesize textLabel;
+@synthesize imageView;
 @synthesize index;
 @synthesize delegate;
 
@@ -34,7 +35,12 @@
 		valueLabel.backgroundColor = [UIColor clearColor];
 		valueLabel.lineBreakMode = UILineBreakModeCharacterWrap;
 		valueLabel.adjustsFontSizeToFitWidth = YES;
+		
 		[self addSubview:valueLabel];
+		
+		
+		
+		
 	}
 	return self;
 }
@@ -54,6 +60,7 @@
 - (void)dealloc {
 	[valueLabel release];
 	[textLabel release];
+	[imageView release];
 	[delegate release];
 
 	[super dealloc];

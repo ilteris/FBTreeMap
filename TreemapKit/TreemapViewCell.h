@@ -5,6 +5,8 @@
 @interface TreemapViewCell : UIControl {
 	UILabel *valueLabel;
 	UILabel *textLabel;
+	
+	UIImageView *imageView;
 
 	NSInteger index;
 
@@ -13,6 +15,8 @@
 
 @property (nonatomic, retain) UILabel *valueLabel;
 @property (nonatomic, retain) UILabel *textLabel;
+@property (nonatomic, retain) UIImageView *imageView;
+
 
 @property NSInteger index;
 

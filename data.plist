@@ -74,29 +74,5 @@
 		<key>value</key>
 		<integer>438</integer>
 	</dict>
-	<dict>
-		<key>name</key>
-		<string>Melon</string>
-		<key>value</key>
-		<integer>279</integer>
-	</dict>
-	<dict>
-		<key>name</key>
-		<string>Peach</string>
-		<key>value</key>
-		<integer>223</integer>
-	</dict>
-	<dict>
-		<key>name</key>
-		<string>Pear</string>
-		<key>value</key>
-		<integer>794</integer>
-	</dict>
-	<dict>
-		<key>name</key>
-		<string>Strawberry</string>
-		<key>value</key>
-		<integer>331</integer>
-	</dict>
 </array>
 </plist>

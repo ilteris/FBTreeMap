@@ -12,6 +12,8 @@
 	cell.valueLabel.text = [val stringValue];
 	cell.backgroundColor = [UIColor colorWithHue:(float)index / (fruits.count + 3)
 									  saturation:1 brightness:0.75 alpha:1];
+	
+	
 }
 
 #pragma mark -
