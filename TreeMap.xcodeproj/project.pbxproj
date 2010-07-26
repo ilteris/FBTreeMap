@@ -18,6 +18,15 @@
 		F033EA5B118A25230020F23D /* data.plist in Resources */ = {isa = PBXBuildFile; fileRef = F033EA5A118A25230020F23D /* data.plist */; };
 		F033EA6C118A25DF0020F23D /* TreemapView.m in Sources */ = {isa = PBXBuildFile; fileRef = F033EA69118A25DF0020F23D /* TreemapView.m */; };
 		F033EA6D118A25DF0020F23D /* TreemapViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F033EA6B118A25DF0020F23D /* TreemapViewCell.m */; };
+		F0FAC3AD11FE1A7900073EE1 /* FbGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FAC39A11FE1A7900073EE1 /* FbGraph.m */; };
+		F0FAC3AE11FE1A7900073EE1 /* FbGraphFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FAC39C11FE1A7900073EE1 /* FbGraphFile.m */; };
+		F0FAC3AF11FE1A7900073EE1 /* FbGraphResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FAC39E11FE1A7900073EE1 /* FbGraphResponse.m */; };
+		F0FAC3B011FE1A7900073EE1 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FAC3A211FE1A7900073EE1 /* NSObject+SBJSON.m */; };
+		F0FAC3B111FE1A7900073EE1 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FAC3A411FE1A7900073EE1 /* NSString+SBJSON.m */; };
+		F0FAC3B211FE1A7900073EE1 /* SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FAC3A611FE1A7900073EE1 /* SBJSON.m */; };
+		F0FAC3B311FE1A7900073EE1 /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FAC3A811FE1A7900073EE1 /* SBJsonBase.m */; };
+		F0FAC3B411FE1A7900073EE1 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FAC3AA11FE1A7900073EE1 /* SBJsonParser.m */; };
+		F0FAC3B511FE1A7900073EE1 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FAC3AC11FE1A7900073EE1 /* SBJsonWriter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +48,25 @@
 		F033EA69118A25DF0020F23D /* TreemapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TreemapView.m; sourceTree = "<group>"; };
 		F033EA6A118A25DF0020F23D /* TreemapViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TreemapViewCell.h; sourceTree = "<group>"; };
 		F033EA6B118A25DF0020F23D /* TreemapViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TreemapViewCell.m; sourceTree = "<group>"; };
+		F0FAC39911FE1A7900073EE1 /* FbGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FbGraph.h; sourceTree = "<group>"; };
+		F0FAC39A11FE1A7900073EE1 /* FbGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FbGraph.m; sourceTree = "<group>"; };
+		F0FAC39B11FE1A7900073EE1 /* FbGraphFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FbGraphFile.h; sourceTree = "<group>"; };
+		F0FAC39C11FE1A7900073EE1 /* FbGraphFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FbGraphFile.m; sourceTree = "<group>"; };
+		F0FAC39D11FE1A7900073EE1 /* FbGraphResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FbGraphResponse.h; sourceTree = "<group>"; };
+		F0FAC39E11FE1A7900073EE1 /* FbGraphResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FbGraphResponse.m; sourceTree = "<group>"; };
+		F0FAC3A011FE1A7900073EE1 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
+		F0FAC3A111FE1A7900073EE1 /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
+		F0FAC3A211FE1A7900073EE1 /* NSObject+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SBJSON.m"; sourceTree = "<group>"; };
+		F0FAC3A311FE1A7900073EE1 /* NSString+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+SBJSON.h"; sourceTree = "<group>"; };
+		F0FAC3A411FE1A7900073EE1 /* NSString+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+SBJSON.m"; sourceTree = "<group>"; };
+		F0FAC3A511FE1A7900073EE1 /* SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJSON.h; sourceTree = "<group>"; };
+		F0FAC3A611FE1A7900073EE1 /* SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJSON.m; sourceTree = "<group>"; };
+		F0FAC3A711FE1A7900073EE1 /* SBJsonBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonBase.h; sourceTree = "<group>"; };
+		F0FAC3A811FE1A7900073EE1 /* SBJsonBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonBase.m; sourceTree = "<group>"; };
+		F0FAC3A911FE1A7900073EE1 /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonParser.h; sourceTree = "<group>"; };
+		F0FAC3AA11FE1A7900073EE1 /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
+		F0FAC3AB11FE1A7900073EE1 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
+		F0FAC3AC11FE1A7900073EE1 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +118,8 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				F0FAC39811FE1A7900073EE1 /* FbGraphAPI */,
+				F0FAC39F11FE1A7900073EE1 /* JSON */,
 				32CA4F630368D1EE00C91783 /* TreeMap_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
@@ -126,6 +156,39 @@
 				F033EA6B118A25DF0020F23D /* TreemapViewCell.m */,
 			);
 			path = TreemapKit;
+			sourceTree = "<group>";
+		};
+		F0FAC39811FE1A7900073EE1 /* FbGraphAPI */ = {
+			isa = PBXGroup;
+			children = (
+				F0FAC39911FE1A7900073EE1 /* FbGraph.h */,
+				F0FAC39A11FE1A7900073EE1 /* FbGraph.m */,
+				F0FAC39B11FE1A7900073EE1 /* FbGraphFile.h */,
+				F0FAC39C11FE1A7900073EE1 /* FbGraphFile.m */,
+				F0FAC39D11FE1A7900073EE1 /* FbGraphResponse.h */,
+				F0FAC39E11FE1A7900073EE1 /* FbGraphResponse.m */,
+			);
+			path = FbGraphAPI;
+			sourceTree = "<group>";
+		};
+		F0FAC39F11FE1A7900073EE1 /* JSON */ = {
+			isa = PBXGroup;
+			children = (
+				F0FAC3A011FE1A7900073EE1 /* JSON.h */,
+				F0FAC3A111FE1A7900073EE1 /* NSObject+SBJSON.h */,
+				F0FAC3A211FE1A7900073EE1 /* NSObject+SBJSON.m */,
+				F0FAC3A311FE1A7900073EE1 /* NSString+SBJSON.h */,
+				F0FAC3A411FE1A7900073EE1 /* NSString+SBJSON.m */,
+				F0FAC3A511FE1A7900073EE1 /* SBJSON.h */,
+				F0FAC3A611FE1A7900073EE1 /* SBJSON.m */,
+				F0FAC3A711FE1A7900073EE1 /* SBJsonBase.h */,
+				F0FAC3A811FE1A7900073EE1 /* SBJsonBase.m */,
+				F0FAC3A911FE1A7900073EE1 /* SBJsonParser.h */,
+				F0FAC3AA11FE1A7900073EE1 /* SBJsonParser.m */,
+				F0FAC3AB11FE1A7900073EE1 /* SBJsonWriter.h */,
+				F0FAC3AC11FE1A7900073EE1 /* SBJsonWriter.m */,
+			);
+			path = JSON;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -188,6 +251,15 @@
 				F033EA4E118A24C30020F23D /* TreeMapViewController.m in Sources */,
 				F033EA6C118A25DF0020F23D /* TreemapView.m in Sources */,
 				F033EA6D118A25DF0020F23D /* TreemapViewCell.m in Sources */,
+				F0FAC3AD11FE1A7900073EE1 /* FbGraph.m in Sources */,
+				F0FAC3AE11FE1A7900073EE1 /* FbGraphFile.m in Sources */,
+				F0FAC3AF11FE1A7900073EE1 /* FbGraphResponse.m in Sources */,
+				F0FAC3B011FE1A7900073EE1 /* NSObject+SBJSON.m in Sources */,
+				F0FAC3B111FE1A7900073EE1 /* NSString+SBJSON.m in Sources */,
+				F0FAC3B211FE1A7900073EE1 /* SBJSON.m in Sources */,
+				F0FAC3B311FE1A7900073EE1 /* SBJsonBase.m in Sources */,
+				F0FAC3B411FE1A7900073EE1 /* SBJsonParser.m in Sources */,
+				F0FAC3B511FE1A7900073EE1 /* SBJsonWriter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
