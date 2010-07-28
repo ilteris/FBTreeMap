@@ -1,0 +1,6 @@
+Start with the stream.
+
+---> https://graph.facebook.com/me/home?access_token=2227470867|2.LB6EPM4_65YyBVySG8mrHA__.3600.1280347200-836255|a0bZELN1g78mQkw-EpgnViUfXiY.
+
+this gives the wall stream. now we can get the likes in these stream objects. that's the next topic.
+

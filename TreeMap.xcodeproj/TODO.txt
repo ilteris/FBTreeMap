@@ -1,2 +1,0 @@
-Now you are pulling Stephan's image as a large image.
-Next step is to bring this into treemap. but do we really need the tree map?

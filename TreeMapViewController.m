@@ -37,7 +37,7 @@
 	 *
 	 * Feel free to try both methods here, simply (un)comment out the appropriate one.....
 	 **/
-		[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,user_videos,publish_stream,offline_access" andSuperView:self.view];
+		[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,read_stream,user_status,offline_access" andSuperView:self.view];
 	
 }
 
@@ -55,7 +55,7 @@
 	[alert release];
 	*/
 	NSLog(@"------------>CONGRATULATIONS<------------, You're logged into Facebook...  Your oAuth token is:  %@", fbGraph.accessToken);
-    [self getAuthorPictureButtonPressed];
+    [self getMeButtonPressed];
 }
 
 /**
@@ -65,8 +65,36 @@
 
 -(void)getMeButtonPressed
 {
-	FbGraphResponse *fb_graph_response = [fbGraph doGraphGet:@"me" withGetVars:nil];
-	NSLog(@"getMeButtonPressed:  %@", fb_graph_response.htmlResponse);
+	FbGraphResponse *fb_graph_response = [fbGraph doGraphGet:@"me/home" withGetVars:nil];
+	NSLog(@"fb_graph_response:  %@", fb_graph_response.htmlResponse);
+    
+    //parse the json into a NSDictionary
+	SBJSON *parser = [[SBJSON alloc] init];
+	NSDictionary *parsed_json = [parser objectWithString:fb_graph_response.htmlResponse error:nil];	
+	[parser release];
+    
+	//there's 2 additional dictionaries inside this one on the first level ('data' and 'paging')
+	NSDictionary *dataDict = (NSDictionary *)[parsed_json objectForKey:@"data"];
+    
+    NSLog(@"dataDict is %i count", [dataDict count]);
+    
+    NSLog(@"dataDict is %@",dataDict);
+    
+    
+    
+
+    for (NSDictionary *item in dataDict) 
+    {
+        NSString *likes = [NSString stringWithFormat:@"%@", [item objectForKey:@"likes"]];
+        NSDictionary *fromDict = [NSDictionary dictionaryWithDictionary:[item objectForKey:@"from"]];
+      
+        NSLog(@"from: %@", [fromDict objectForKey:@"name"]);
+        NSLog(@"likes : %@", likes);
+
+
+    }
+       
+
 	
 }
 

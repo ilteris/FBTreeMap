@@ -128,7 +128,8 @@
 - (FbGraphResponse *)doGraphGetWithUrlString:(NSString *)url_string {
 	
 	FbGraphResponse *return_value = [[FbGraphResponse alloc] init];
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url_string]];
+	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url_string] cachePolicy:NSURLRequestReloadIgnoringLocalCacheData 
+                                         timeoutInterval:60];
 	
 	NSError *err;
 	NSURLResponse *resp;
