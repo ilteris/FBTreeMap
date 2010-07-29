@@ -14,15 +14,21 @@
 					depth:(int)depth 
 			   withCreate:(BOOL)createNode 
 {
+    
+    NSLog(@"nodes count is %i", [nodes count]);
 	if (nodes.count <= 1) {
 		NSInteger index = [[[nodes objectAtIndex:0] valueForKey:@"index"] intValue];
+ //      	NSInteger index = [[[nodes objectAtIndex:0] valueForKey:@"index"] integerValue];
+        NSLog(@"index here is %i", index);
 		if (createNode) {
 			TreemapViewCell *cell = [dataSource treemapView:self cellForIndex:index forRect:rect];
+            NSLog(@"createNode");
 			cell.index = index;
 			cell.delegate = self;
 			[self addSubview:cell];
 		}
 		else {
+            NSLog(@"else");
 			TreemapViewCell *cell = [self.subviews objectAtIndex:index];
 			cell.frame = rect;
 			if ([delegate respondsToSelector:@selector(treemapView:updateCell:forIndex:forRect:)])
@@ -32,6 +38,8 @@
 		return;
 	}
 	
+
+    
 	float total = 0;
 	for (NSDictionary *dic in nodes) 
 	{
@@ -105,6 +113,11 @@
 
 - (NSArray *)getData {
 	NSArray *values = [dataSource valuesForTreemapView:self];
+	
+
+
+	NSLog(@"values inside getData %@", values);
+    
 	NSMutableArray *nodes = [NSMutableArray arrayWithCapacity:values.count];
 	for (int i = 0; i < values.count; i++) {
 		NSNumber *value = [values objectAtIndex:i];
@@ -119,6 +132,10 @@
 - (void)createNodes {
 	NSArray *nodes = [self getData];
 	NSLog(@"creating nodes");
+	
+	NSLog(@"nodes inside create Nodes %@", nodes);
+
+	
 	if (nodes && nodes.count > 0) 
 	{
 
@@ -144,7 +161,7 @@
 						  width:ceil(self.bounds.size.width)
 						 height:ceil(self.bounds.size.height)
 						  depth:0
-					 withCreate:NO];
+					 withCreate:YES];
 	}
 }
 

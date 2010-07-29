@@ -4,3 +4,11 @@ Start with the stream.
 
 this gives the wall stream. now we can get the likes in these stream objects. that's the next topic.
 
+done.
+
+idea: accumulate likes for people in another server. so that we know ho's getting how many likes, we can then display this information and see how those people's behaviors are. 
+
+
+design screens for how to show the information
+
+

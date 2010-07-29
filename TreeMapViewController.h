@@ -12,7 +12,7 @@
 #import "FbGraph.h"
 
 
-@interface TreeMapViewController : UIViewController   </*TreemapViewDelegate, TreemapViewDataSource,*/ UIWebViewDelegate> {
+@interface TreeMapViewController : UIViewController   <TreemapViewDelegate, TreemapViewDataSource, UIWebViewDelegate> {
     
 	NSMutableArray *fruits;
 	
@@ -22,6 +22,10 @@
 	//we'll use this to store a feed post (when you press 'post me/feed').
 	//when you press delete me/feed this is the post that's deleted
 	NSString *feedPostId;
+	
+	IBOutlet UIWebView *myWebView;
+	
+	
 }
 
 @property (nonatomic, retain) NSMutableArray *fruits;
@@ -29,9 +33,11 @@
 //facebook
 @property (nonatomic, retain) FbGraph *fbGraph;
 @property (nonatomic, retain) NSString *feedPostId;
+@property (nonatomic, retain) IBOutlet UIWebView *myWebView;
 
 
-//- (void)resizeView;
+
+- (void)resizeView;
 -(void)getAuthorPictureButtonPressed;
 -(void)getMeButtonPressed;
 
