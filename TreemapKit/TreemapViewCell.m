@@ -14,6 +14,14 @@
 
 - (id)initWithFrame:(CGRect)frame {
 	if ((self = [super initWithFrame:frame])) {
+		
+				
+		self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width - 4, frame.size.height-4)];
+		[self addSubview:imageView];
+		
+		
+
+		
 		self.layer.borderWidth = 1.0;
 		self.layer.borderColor = [[UIColor whiteColor] CGColor];
 
@@ -39,8 +47,7 @@
 		[self addSubview:valueLabel];
 		
 		
-		
-		
+				
 	}
 	return self;
 }
@@ -50,6 +57,7 @@
 
 	textLabel.frame = CGRectMake(0, self.frame.size.height / 2 - 10, self.frame.size.width, 20);
 	valueLabel.frame = CGRectMake(0, self.frame.size.height / 2 + 10, self.frame.size.width, 20);
+	imageView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {

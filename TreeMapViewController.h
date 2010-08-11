@@ -41,4 +41,8 @@
 -(void)getAuthorPictureButtonPressed;
 -(void)getMeButtonPressed;
 
+-(void) filterEntries:(NSMutableArray*)mutableArray;
+-(UIImage *)scaleAndCropFrame:(CGRect)rect withUIImage:(UIImage*)image;
+
+
 @end
