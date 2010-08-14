@@ -38,7 +38,7 @@
 
 
 - (void)resizeView;
--(void)getAuthorPictureButtonPressed;
+
 -(void)getMeButtonPressed;
 
 -(void) filterEntries:(NSMutableArray*)mutableArray;

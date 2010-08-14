@@ -2,6 +2,8 @@
 #import "FbGraphFile.h"
 #import "SBJSON.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIImage+ProportionalFill.h"
+#import "UIImage+Tint.h"
 
 
 #define numberOfObjects (10)
@@ -227,47 +229,6 @@
 	
 }
 
--(void)getAuthorPictureButtonPressed 
-{
-   // http://graph.facebook.com/stephanvalter/picture?type=large
-	
-	NSString *get_string = [NSString stringWithFormat:@"%@/picture", @"stephanvalter"];
-   // NSLog(@"getString: %@",get_string);
-    NSMutableDictionary *variables = [NSMutableDictionary dictionaryWithCapacity:1];
-    
-    [variables setObject:@"large" forKey:@"type"];
-    
-	FbGraphResponse *fb_graph_response = [fbGraph doGraphGet:get_string withGetVars:variables];
-	
-	/**
-	 * Rather than returing a url to the image, Facebook will stream an image file's bits back to us..
-	 **/
-	if (fb_graph_response.imageResponse != nil) {
-		
-        /*
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Author's Avatar" message:@"~Cheese~" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		
-		//simply set the UIImage we have in the image view to display....easy as pie.....mmmm pie....
-		UIImageView *image_view = [[UIImageView alloc] initWithImage:fb_graph_response.imageResponse];
-		[alert addSubview:image_view];
-		[alert show];
-         
-         */
-        CGRect imageViewFrame = [self.view frame];
-        
-        imageViewFrame.origin.y = 0;
-
-        
-        UIImageView *image_view = [[UIImageView alloc] initWithImage:fb_graph_response.imageResponse];
-        
-        image_view.frame = imageViewFrame;
-        [self.view addSubview:image_view];
-
-
-		
-	}//end if
-}
-
 
 
 
@@ -280,7 +241,7 @@
 	
 	//NSLog(@"cell %@", NSStringFromCGRect(cell.frame));
 	
-	NSLog(@"cell bounds: %.0f, %.0f, %3.0f, %3.0f", cell.frame.origin.x, cell.frame.origin.x, cell.frame.size.width, cell.frame.size.height);
+	NSLog(@"cell bounds: %.0f, %.0f, %3.0f, %3.0f", cell.frame.origin.x, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
 	cell.textLabel.text = [[fruits objectAtIndex:index] valueForKey:@"name"];
 	cell.valueLabel.text = [val stringValue];
 	cell.backgroundColor = [UIColor colorWithHue:(float)index / (fruits.count + 3) saturation:1 brightness:0.75 alpha:.3];
@@ -365,8 +326,42 @@
 
 - (UIImage *)scaleAndCropFrame:(CGRect)rect withUIImage:(UIImage*)image  
 {
+	
+	UIImage *newImage;
+
+	
+	
+	BOOL widthGreaterThanHeight = (image.size.width > image.size.height);
+	
+	float sideFull = (widthGreaterThanHeight) ? rect.size.height : rect.size.width;
+	newImage = [image imageScaledToFitSize:CGSizeMake(sideFull, sideFull)];
+	newImage = [image imageCroppedToFitSize:rect.size];
+	
+	/*
+	
+	UIImageView *mainImageView = [[UIImageView alloc] initWithImage:image];
+	CGRect clippedRect = CGRectMake(0, 0, rect.size.width, rect.size.height);
+	
+	// the most import thing I learned when writing this script is that when you 
+	// call UIGraphicsBeginImageContext(CGSize) make sure that the size you pass in 
+	// is the size you want your final image to be.
+	// http://www.nickkuh.com/iphone/how-to-create-square-thumbnails-using-iphone-sdk-cg-quartz-2d/2010/03/
+	 
+	
+	UIGraphicsBeginImageContext(CGSizeMake(rect.size.width, rect.size.height));
+	CGContextRef currentContext = UIGraphicsGetCurrentContext();
+	CGContextClipToRect( currentContext, clippedRect);
+	CGContextTranslateCTM(currentContext, (image.size.width), 0);
+	
+	[mainImageView.layer renderInContext:currentContext];
+	image = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
+	*/
+	
 	//couldn’t find a previously created thumb image so create one first…
 	
+	 
+	 /*
 	UIImageView *mainImageView = [[UIImageView alloc] initWithImage:image];
 	BOOL widthGreaterThanHeight = (image.size.width > image.size.height);
 	float sideFull = (widthGreaterThanHeight) ? rect.size.height : rect.size.width;
@@ -395,7 +390,10 @@
 	[mainImageView.layer renderInContext:currentContext];
 	image = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
-	return image;
+	
+	*/
+	
+	return newImage;
 }
 
 									  
