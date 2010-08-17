@@ -21,6 +21,8 @@
 		F06A1CD31200AE3B001E46AE /* todo.txt in Resources */ = {isa = PBXBuildFile; fileRef = F06A1CD21200AE3B001E46AE /* todo.txt */; };
 		F0F00BDF1215D57100DB0EF9 /* UIImage+ProportionalFill.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F00BDC1215D57100DB0EF9 /* UIImage+ProportionalFill.m */; };
 		F0F00BE01215D57100DB0EF9 /* UIImage+Tint.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F00BDE1215D57100DB0EF9 /* UIImage+Tint.m */; };
+		F0F00C75121AE12900DB0EF9 /* original.png in Resources */ = {isa = PBXBuildFile; fileRef = F0F00C74121AE12900DB0EF9 /* original.png */; };
+		F0F00CC6121AEB9900DB0EF9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0F00CC5121AEB9900DB0EF9 /* QuartzCore.framework */; };
 		F0FAC3AD11FE1A7900073EE1 /* FbGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FAC39A11FE1A7900073EE1 /* FbGraph.m */; };
 		F0FAC3AE11FE1A7900073EE1 /* FbGraphFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FAC39C11FE1A7900073EE1 /* FbGraphFile.m */; };
 		F0FAC3AF11FE1A7900073EE1 /* FbGraphResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FAC39E11FE1A7900073EE1 /* FbGraphResponse.m */; };
@@ -56,6 +58,8 @@
 		F0F00BDC1215D57100DB0EF9 /* UIImage+ProportionalFill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ProportionalFill.m"; sourceTree = "<group>"; };
 		F0F00BDD1215D57100DB0EF9 /* UIImage+Tint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Tint.h"; sourceTree = "<group>"; };
 		F0F00BDE1215D57100DB0EF9 /* UIImage+Tint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Tint.m"; sourceTree = "<group>"; };
+		F0F00C74121AE12900DB0EF9 /* original.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = original.png; sourceTree = "<group>"; };
+		F0F00CC5121AEB9900DB0EF9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F0FAC39911FE1A7900073EE1 /* FbGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FbGraph.h; sourceTree = "<group>"; };
 		F0FAC39A11FE1A7900073EE1 /* FbGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FbGraph.m; sourceTree = "<group>"; };
 		F0FAC39B11FE1A7900073EE1 /* FbGraphFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FbGraphFile.h; sourceTree = "<group>"; };
@@ -85,6 +89,7 @@
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
+				F0F00CC6121AEB9900DB0EF9 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,6 +155,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F0F00CC5121AEB9900DB0EF9 /* QuartzCore.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
@@ -171,6 +177,7 @@
 		F0F00BDA1215D57100DB0EF9 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				F0F00C74121AE12900DB0EF9 /* original.png */,
 				F0F00BDB1215D57100DB0EF9 /* UIImage+ProportionalFill.h */,
 				F0F00BDC1215D57100DB0EF9 /* UIImage+ProportionalFill.m */,
 				F0F00BDD1215D57100DB0EF9 /* UIImage+Tint.h */,
@@ -261,6 +268,7 @@
 				F033EA4F118A24C30020F23D /* TreeMapViewController.xib in Resources */,
 				F033EA5B118A25230020F23D /* data.plist in Resources */,
 				F06A1CD31200AE3B001E46AE /* todo.txt in Resources */,
+				F0F00C75121AE12900DB0EF9 /* original.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

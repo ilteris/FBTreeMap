@@ -61,9 +61,13 @@
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Note" message:@"For the simplest code, I've written all output to the 'Debugger Console'." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 	[alert show];
 	[alert release];
-	*/
+
+	 */
+	
 	NSLog(@"------------>CONGRATULATIONS<------------, You're logged into Facebook...  Your oAuth token is:  %@", fbGraph.accessToken);
-    	[self getMeButtonPressed];
+	
+	[self.myWebView removeFromSuperview];
+	[self getMeButtonPressed];
 }
 
 /**
@@ -308,7 +312,7 @@
 	
 	
     //highlight the background
-	 
+	 /*
 	[UIView beginAnimations:@"highlight" context:nil];
 	[UIView setAnimationDuration:1.0];
 	
@@ -316,8 +320,62 @@
 	UIColor *color = cell.backgroundColor;
 	[cell setBackgroundColor:[UIColor whiteColor]];
 	[cell setBackgroundColor:color];
+
+	  	
+	
+	//cell.imageView.image = [UIImage imageNamed:@"original.png"];
 	
 	[UIView commitAnimations];
+	
+	*/
+	
+	
+	TreemapViewCell *cell = (TreemapViewCell *)[self.view.subviews objectAtIndex:index];
+
+	[cell setBackgroundColor:[UIColor whiteColor]];
+	//cell.imageView.image = nil;
+	
+	/*
+		 */
+
+	//[cell.layer setAnchorPoint:CGPointMake(0, 0)]; 
+	
+	NSValue *valueTo = nil; 
+	NSValue *valueFrom = nil; 
+	CABasicAnimation *animation = nil;
+
+	[cell.layer removeAllAnimations]; 
+	/*
+	CGRect workFrame = [cell.layer bounds]; 
+	workFrame.origin.x = cell.frame.origin.x + cell.frame.size.width/2; 
+	workFrame.origin.y = cell.frame.origin.y + cell.frame.size.height/2;  
+	workFrame.size.width = cell.frame.size.width;
+	workFrame.size.height = cell.frame.size.height; 
+	
+	[cell.layer setFrame:workFrame];
+	*/
+	
+	animation = [CABasicAnimation animationWithKeyPath:@"transform"]; 
+	
+	//value = [NSValue valueWithCATransform3D:transform]; 
+	//[animation setToValue:value]; 
+	CATransform3D transformFrom = CATransform3DMakeScale(1.0f, 1.0f, 1.0f);
+	valueFrom = [NSValue valueWithCATransform3D:transformFrom];
+	CATransform3D transformTo = CATransform3DMakeScale(0.5f, 0.5f, 1.0f); 
+	valueTo = [NSValue valueWithCATransform3D:transformTo];	
+	
+	//transform = CATransform3DMakeTranslation(0.f,0.f,0.f);
+
+	[animation setFromValue:valueFrom];
+	[animation setToValue:valueTo];
+	//[animation setAutoreverses:YES]; 
+	[animation setDuration:1.0f]; 
+	//[animation setRepeatCount:100];
+	[cell.layer addAnimation:animation forKey:nil];
+	NSLog(@"cell : %@", cell);
+	
+	
+	
 }
 
 #pragma mark -

@@ -178,6 +178,7 @@
 #pragma mark Public methods
 
 - (void)reloadData {
+	NSLog(@"turning turning");
 	[self resizeNodes];
 }
 
@@ -209,6 +210,7 @@
 	[super layoutSubviews];
 	
 	if (!initialized) {
+		NSLog(@"initializedinitialized");
 		[self createNodes];
 		initialized = YES;
 	}
