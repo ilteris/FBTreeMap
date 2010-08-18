@@ -330,52 +330,50 @@
 	*/
 	
 	
-	TreemapViewCell *cell = (TreemapViewCell *)[self.view.subviews objectAtIndex:index];
-
-	[cell setBackgroundColor:[UIColor whiteColor]];
-	//cell.imageView.image = nil;
 	
-	/*
-		 */
-
-	//[cell.layer setAnchorPoint:CGPointMake(0, 0)]; 
 	
-	NSValue *valueTo = nil; 
-	NSValue *valueFrom = nil; 
+/*
+	
+	
+
 	CABasicAnimation *animation = nil;
 
 	[cell.layer removeAllAnimations]; 
-	/*
-	CGRect workFrame = [cell.layer bounds]; 
-	workFrame.origin.x = cell.frame.origin.x + cell.frame.size.width/2; 
-	workFrame.origin.y = cell.frame.origin.y + cell.frame.size.height/2;  
-	workFrame.size.width = cell.frame.size.width;
-	workFrame.size.height = cell.frame.size.height; 
-	
-	[cell.layer setFrame:workFrame];
-	*/
-	
-	animation = [CABasicAnimation animationWithKeyPath:@"transform"]; 
-	
-	//value = [NSValue valueWithCATransform3D:transform]; 
-	//[animation setToValue:value]; 
-	CATransform3D transformFrom = CATransform3DMakeScale(1.0f, 1.0f, 1.0f);
-	valueFrom = [NSValue valueWithCATransform3D:transformFrom];
-	CATransform3D transformTo = CATransform3DMakeScale(0.5f, 0.5f, 1.0f); 
-	valueTo = [NSValue valueWithCATransform3D:transformTo];	
-	
-	//transform = CATransform3DMakeTranslation(0.f,0.f,0.f);
 
-	[animation setFromValue:valueFrom];
-	[animation setToValue:valueTo];
+	
+	animation = [CABasicAnimation animationWithKeyPath:@"position"]; 
+	
+
+
+	[animation setFromValue:[NSValue valueWithCGPoint:cell.frame.origin]];
+	[animation setToValue:[NSValue valueWithCGPoint:CGPointMake(500, 500)]];
 	//[animation setAutoreverses:YES]; 
 	[animation setDuration:1.0f]; 
 	//[animation setRepeatCount:100];
-	[cell.layer addAnimation:animation forKey:nil];
+	[cell.layer addAnimation:animation forKey:@"transform"];
+	//cell.layer.position = CGPointMake(500, 500);
+	
 	NSLog(@"cell : %@", cell);
+	*/
+
+	TreemapViewCell *cell = (TreemapViewCell *)[self.view.subviews objectAtIndex:index];
+	[cell setBackgroundColor:[UIColor whiteColor]];
+	cell.layer.borderWidth = 0.0;
+	cell.imageView.image = nil;
+	//cell.transform = CGAffineTransformMakeScale(2,2);
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:1.];
+	//cell.transform = CGAffineTransformMakeScale(1,1);
+	//cell.alpha = 1.0;
+	cell.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
 	
+	NSLog(@"self.view.bounds : %@",NSStringFromCGRect(self.view.bounds) );
+
+
+		
+	[UIView commitAnimations];
 	
-	
+	[self.view bringSubviewToFront:cell];
 }
 
 #pragma mark -

@@ -46,7 +46,7 @@
 		
 		[self addSubview:valueLabel];
 		
-		
+
 				
 	}
 	return self;
