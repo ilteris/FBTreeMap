@@ -108,7 +108,7 @@
 			
 			value = (NSString *)[get_vars objectForKey:key];
 			url_string = [NSString stringWithFormat:@"%@%@=%@&", url_string, key, value];
-            NSLog(@"url_string %@", url_string);
+         //   NSLog(@"url_string %@", url_string);
 
 		}//end while	
 	}//end if
@@ -116,12 +116,12 @@
 	if (accessToken != nil) {
 		//now that any variables have been appended, let's attach the access token....
 		url_string = [NSString stringWithFormat:@"%@access_token=%@", url_string, self.accessToken];
-         NSLog(@"action %@", url_string);
+       //  NSLog(@"action %@", url_string);
     }
 	
 	//encode the string
 	url_string = [url_string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	   NSLog(@"action %@", url_string);
+	 //  NSLog(@"action %@", url_string);
 	return [self doGraphGetWithUrlString:url_string];
 }
 

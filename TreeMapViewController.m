@@ -112,7 +112,7 @@
     for (NSDictionary *item in firstPageData) 
 	{
 		
-		NSLog(@"item %@", item);
+	//	NSLog(@"item %@", item);
 
 	    //NSString *likes = [NSString stringWithFormat:@"%@", [item objectForKey:@"likes"]];
 		
@@ -131,27 +131,30 @@
 		NSDictionary *contact = [NSDictionary dictionaryWithObjectsAndKeys:
 								[fromDict objectForKey:@"name"], @"name", 
 								  [fromDict objectForKey:@"id"], @"id",
+								 [item objectForKey:@"type"], @"type",
 								 value, @"value", nil];
 		//NSLog(@"contact %@", contact);
-		[fruits addObject:contact];
+		//[fruits addObject:contact];
+		[fruits addObject:item];
+
     }
 	
 	for (NSDictionary *item in secondPageData) 
 	{
-		NSLog(@"item %@", item);
+		//NSLog(@"item %@", item);
 		
 	    //NSString *likes = [NSString stringWithFormat:@"%@", [item objectForKey:@"likes"]];
 		
         NSNumber *value = [NSNumber numberWithInt:[[NSString stringWithFormat:@"%@",[item objectForKey:@"likes"]] intValue ]];
 		NSDictionary *fromDict = [NSDictionary dictionaryWithDictionary:[item objectForKey:@"from"]];
-		NSString *type = [NSString stringWithFormat:@"%@", [item objectForKey:@"type"]];
+		//NSString *type = [NSString stringWithFormat:@"%@", [item objectForKey:@"type"]];
 		
         
 		
 		// NSLog(@"from: %@", [fromDict objectForKey:@"name"]);
 		
         
-		NSLog(@"type : %@", type);
+	//	NSLog(@"type : %@", type);
 		
 		//[fromDict objectForKey:@"id"] ---> how to get the picture of the person?
 		
@@ -159,11 +162,13 @@
 		NSDictionary *contact = [NSDictionary dictionaryWithObjectsAndKeys:
 								 [fromDict objectForKey:@"name"], @"name", 
 								 [fromDict objectForKey:@"id"], @"id",
+								 [item objectForKey:@"type"], @"type",
 								 value, @"value", nil];
 		
 		
 		//NSLog(@"contact %@", contact);
-		[fruits addObject:contact];
+	//	[fruits addObject:contact];
+		[fruits addObject:item];
 		
 		
 		
@@ -173,39 +178,54 @@
 	for (NSDictionary *item in thirdPageData) 
 	{
 		
-		NSLog(@"item %@", item);
+		//NSLog(@"item %@", item);
 		
 		
 	    //NSString *likes = [NSString stringWithFormat:@"%@", [item objectForKey:@"likes"]];
 		
         NSNumber *value = [NSNumber numberWithInt:[[NSString stringWithFormat:@"%@",[item objectForKey:@"likes"]] intValue ]];
 		NSDictionary *fromDict = [NSDictionary dictionaryWithDictionary:[item objectForKey:@"from"]];
-		NSString *type = [NSString stringWithFormat:@"%@", [item objectForKey:@"type"]];
+	//	NSString *type = [NSString stringWithFormat:@"%@", [item objectForKey:@"type"]];
 		
         
 		
 		// NSLog(@"from: %@", [fromDict objectForKey:@"name"]);
 		
         
-		NSLog(@"type : %@", type);
+		//NSLog(@"type : %@", type);
 		
 		
 		NSDictionary *contact = [NSDictionary dictionaryWithObjectsAndKeys:
-								 [fromDict objectForKey:@"name"], @"name", 
-								  [fromDict objectForKey:@"id"], @"id",
+								[fromDict objectForKey:@"name"], @"name", 
+								[fromDict objectForKey:@"id"], @"id",
+								[item objectForKey:@"type"], @"type",
 								 value, @"value", nil];
+					
 		
 		
-		//NSLog(@"contact %@", contact);
-		[fruits addObject:contact];
+		
+	//	[fruits addObject:contact];
+		[fruits addObject:item];
 		
 		
 		
 		
     }
 	
+	
+	
+	for (NSDictionary *item in fruits) 
+	{
+		//NSLog(@"item %@", item);
+		
+	}
 	/*Bring the contacts back to 15 according to the values of @value!*/
 	[self filterEntries:fruits];
+	
+	
+	
+	
+	
 	
 	
 	
@@ -217,20 +237,27 @@
 
 -(void) filterEntries:(NSMutableArray*)mutableArray
 {
+	//here we are sorting according to value.
 	
-
 	
-		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"value" ascending: NO];
-		[mutableArray sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
-		[sortDescriptor release];
-
-		[mutableArray removeObjectsInRange: NSMakeRange(numberOfObjects,[mutableArray count]-numberOfObjects)];
+	
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"likes" ascending: NO];
+	[mutableArray sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
+	[sortDescriptor release];
+	
+	// here  we are getting rid of the rest of the objects after numberOfObjects
+	
+	[mutableArray removeObjectsInRange: NSMakeRange(numberOfObjects,[mutableArray count]-numberOfObjects)];
 	
 	for (NSDictionary *item in mutableArray) 
 	{
-		NSLog(@"value : %@", [item objectForKey:@"value"]);
-	}
+	//	NSLog(@"contact %@", item);
+	//	NSLog(@"type is: %@",		[item objectForKey:@"type"]);
+	//	NSLog(@"here value : %@",	[item objectForKey:@"value"]);
+		
 	
+		
+	}
 }
 
 
@@ -240,19 +267,78 @@
 #pragma mark -
 
 - (void)updateCell:(TreemapViewCell *)cell forIndex:(NSInteger)index {
-	NSNumber *val = [[fruits objectAtIndex:index] valueForKey:@"value"];
+	
+	
+	//maybe here do the all extravazanga<--------
+	
+	//check the type
+	//if type is link
+		//if type is extralink
+		//if type is internalink
+	
+	//if type is status
+	//if type is photo
+	//if type is video
+	
+	NSLog(@"type %@", [[fruits objectAtIndex:index] objectForKey:@"type"]);
+	
+	//if the type === status
+	if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"status"])
+	{
+		NSLog(@"STATUS");
+		NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
+		
+		CGSize maximumLabelSize = CGSizeMake(cell.frame.size.width-(10*2),9999);
+		
+		CGSize expectedLabelSize = [[[fruits objectAtIndex:index] objectForKey:@"message"] sizeWithFont:[UIFont systemFontOfSize:14] 
+										  constrainedToSize:maximumLabelSize 
+											  lineBreakMode:UILineBreakModeWordWrap]; 
+		//adjust the label the the new height.
+		CGRect newFrame = cell.textLabel.frame;
+		newFrame.size.height = expectedLabelSize.height;
+		cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
+		cell.textLabel.frame = newFrame;
+
+
+	}//if the type === link
+	else if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"link"])
+	{
+		NSLog(@"LINK");
+		if([[[fruits objectAtIndex:index] objectForKey:@"link"] isEqual:@"http://www.facebook.com/"])
+		{//if the link is internal link
+			NSLog(@"INTERNAL_LINK");
+
+			NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
+			NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
+			
+		}
+		else
+		{ //the link is external link.
+			//grab the second part of the link.
+			NSLog(@"EXTERNAL_LINK");
+			NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
+			NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
+		}
+	}
+
+	
+
+
+	NSNumber *val = [[fruits objectAtIndex:index] objectForKey:@"likes"];
 	
 	
 	//NSLog(@"cell %@", NSStringFromCGRect(cell.frame));
 	
-	NSLog(@"cell bounds: %.0f, %.0f, %3.0f, %3.0f", cell.frame.origin.x, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
-	cell.textLabel.text = [[fruits objectAtIndex:index] valueForKey:@"name"];
+	//NSLog(@"cell bounds: %.0f, %.0f, %3.0f, %3.0f", cell.frame.origin.x, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
+	
+	cell.nameLabel.text = [NSString stringWithFormat:@"%@ has %@ likes" ,[[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"], [[fruits objectAtIndex:index] objectForKey:@"likes"]];
+	
 	cell.valueLabel.text = [val stringValue];
 	cell.backgroundColor = [UIColor colorWithHue:(float)index / (fruits.count + 3) saturation:1 brightness:0.75 alpha:.3];
 	
 	//imageview
 	
-	NSString *get_string = [NSString stringWithFormat:@"%@/picture", [[fruits objectAtIndex:index] valueForKey:@"id"]];
+	NSString *get_string = [NSString stringWithFormat:@"%@/picture", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"id"]];
 	// NSLog(@"getString: %@",get_string);
     NSMutableDictionary *variables = [NSMutableDictionary dictionaryWithCapacity:1];
     
@@ -303,7 +389,7 @@
 	 // change the value
 	 
 	//NSDictionary *dic = [fruits objectAtIndex:index];
-	//[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"value"] intValue] + 300] forKey:@"value"];
+	//[dic setValue:[NSNumber numberWithInt:[[dic objectForKey:@"value"] intValue] + 300] forKey:@"value"];
 	
 	
 	 //resize rectangles with animation
@@ -356,6 +442,7 @@
 	NSLog(@"cell : %@", cell);
 	*/
 
+	/*
 	TreemapViewCell *cell = (TreemapViewCell *)[self.view.subviews objectAtIndex:index];
 	[cell setBackgroundColor:[UIColor whiteColor]];
 	cell.layer.borderWidth = 0.0;
@@ -367,13 +454,18 @@
 	//cell.alpha = 1.0;
 	cell.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
 	
-	NSLog(@"self.view.bounds : %@",NSStringFromCGRect(self.view.bounds) );
+	//NSLog(@"self.view.bounds : %@",NSStringFromCGRect(self.view.bounds) );
 
 
 		
 	[UIView commitAnimations];
 	
+	
 	[self.view bringSubviewToFront:cell];
+	 
+	 
+	  */
+	
 }
 
 #pragma mark -
@@ -493,12 +585,14 @@
 		
 	}
 	
-	//NSLog(@"fruits: %@", fruits);
+	
+	NSLog(@"fruits %@", fruits);
 	
 	NSMutableArray *values = [NSMutableArray arrayWithCapacity:fruits.count];
 	for (NSDictionary *dic in fruits) 
 	 {
-		[values addObject:[dic valueForKey:@"value"]];
+		 NSLog(@"fruit: %@", [dic objectForKey:@"likes"]);
+		[values addObject:[dic objectForKey:@"likes"]];
 	}
 	return values;
 }

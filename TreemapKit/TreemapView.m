@@ -17,8 +17,8 @@
     
    // NSLog(@"nodes count is %i", [nodes count]);
 	if (nodes.count <= 1) {
-		NSInteger index = [[[nodes objectAtIndex:0] valueForKey:@"index"] intValue];
- //      	NSInteger index = [[[nodes objectAtIndex:0] valueForKey:@"index"] integerValue];
+		NSInteger index = [[[nodes objectAtIndex:0] objectForKey:@"index"] intValue];
+ //      	NSInteger index = [[[nodes objectAtIndex:0] objectForKey:@"index"] integerValue];
      //   NSLog(@"index here is %i", index);
 		if (createNode) {
 			TreemapViewCell *cell = [dataSource treemapView:self cellForIndex:index forRect:rect];
@@ -112,11 +112,12 @@
 
 
 - (NSArray *)getData {
+	NSLog(@"values inside getData");
 	NSArray *values = [dataSource valuesForTreemapView:self];
+		NSLog(@"values inside getData");
+
+
 	
-
-
-	//NSLog(@"values inside getData %@", values);
     
 	NSMutableArray *nodes = [NSMutableArray arrayWithCapacity:values.count];
 	for (int i = 0; i < values.count; i++) {
@@ -133,7 +134,7 @@
 	NSArray *nodes = [self getData];
 	//NSLog(@"creating nodes");
 	
-	//NSLog(@"nodes inside create Nodes %@", nodes);
+	NSLog(@"nodes inside create Nodes %@", nodes);
 
 	
 	if (nodes && nodes.count > 0) 
@@ -151,8 +152,9 @@
 }
 
 - (void)resizeNodes {
+	NSLog(@"resizing nodes");
 	NSArray *nodes = [self getData];
-	//NSLog(@"resizing nodes");
+	
 	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.bounds.size.width,self.bounds.size.height);
 
 	if (nodes && nodes.count > 0) {
@@ -210,7 +212,7 @@
 	[super layoutSubviews];
 	
 	if (!initialized) {
-		NSLog(@"initializedinitialized");
+		NSLog(@"initialized initialized");
 		[self createNodes];
 		initialized = YES;
 	}
