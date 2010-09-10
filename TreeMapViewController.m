@@ -111,124 +111,28 @@
     self.fruits = [[NSMutableArray alloc] initWithCapacity:2];
     for (NSDictionary *item in firstPageData) 
 	{
-		
-	//	NSLog(@"item %@", item);
-
-	    //NSString *likes = [NSString stringWithFormat:@"%@", [item objectForKey:@"likes"]];
-		
-        NSNumber *value = [NSNumber numberWithInt:[[NSString stringWithFormat:@"%@",[item objectForKey:@"likes"]] intValue ]];
-		NSDictionary *fromDict = [NSDictionary dictionaryWithDictionary:[item objectForKey:@"from"]];
-      //  NSString *type = [NSString stringWithFormat:@"%@", [item objectForKey:@"type"]];
-
-        
-      
-       // NSLog(@"from: %@", [fromDict objectForKey:@"name"]);
-
-        
-		//NSLog(@"type : %@", type);
-
-		
-		NSDictionary *contact = [NSDictionary dictionaryWithObjectsAndKeys:
-								[fromDict objectForKey:@"name"], @"name", 
-								  [fromDict objectForKey:@"id"], @"id",
-								 [item objectForKey:@"type"], @"type",
-								 value, @"value", nil];
-		//NSLog(@"contact %@", contact);
-		//[fruits addObject:contact];
-		[fruits addObject:item];
+	
+       		[fruits addObject:item];
 
     }
 	
 	for (NSDictionary *item in secondPageData) 
 	{
-		//NSLog(@"item %@", item);
 		
-	    //NSString *likes = [NSString stringWithFormat:@"%@", [item objectForKey:@"likes"]];
-		
-        NSNumber *value = [NSNumber numberWithInt:[[NSString stringWithFormat:@"%@",[item objectForKey:@"likes"]] intValue ]];
-		NSDictionary *fromDict = [NSDictionary dictionaryWithDictionary:[item objectForKey:@"from"]];
-		//NSString *type = [NSString stringWithFormat:@"%@", [item objectForKey:@"type"]];
-		
-        
-		
-		// NSLog(@"from: %@", [fromDict objectForKey:@"name"]);
-		
-        
-	//	NSLog(@"type : %@", type);
-		
-		//[fromDict objectForKey:@"id"] ---> how to get the picture of the person?
-		
-		
-		NSDictionary *contact = [NSDictionary dictionaryWithObjectsAndKeys:
-								 [fromDict objectForKey:@"name"], @"name", 
-								 [fromDict objectForKey:@"id"], @"id",
-								 [item objectForKey:@"type"], @"type",
-								 value, @"value", nil];
-		
-		
-		//NSLog(@"contact %@", contact);
-	//	[fruits addObject:contact];
-		[fruits addObject:item];
-		
-		
-		
+     	[fruits addObject:item];
 		
     }
 	
 	for (NSDictionary *item in thirdPageData) 
 	{
 		
-		//NSLog(@"item %@", item);
-		
-		
-	    //NSString *likes = [NSString stringWithFormat:@"%@", [item objectForKey:@"likes"]];
-		
-        NSNumber *value = [NSNumber numberWithInt:[[NSString stringWithFormat:@"%@",[item objectForKey:@"likes"]] intValue ]];
-		NSDictionary *fromDict = [NSDictionary dictionaryWithDictionary:[item objectForKey:@"from"]];
-	//	NSString *type = [NSString stringWithFormat:@"%@", [item objectForKey:@"type"]];
-		
-        
-		
-		// NSLog(@"from: %@", [fromDict objectForKey:@"name"]);
-		
-        
-		//NSLog(@"type : %@", type);
-		
-		
-		NSDictionary *contact = [NSDictionary dictionaryWithObjectsAndKeys:
-								[fromDict objectForKey:@"name"], @"name", 
-								[fromDict objectForKey:@"id"], @"id",
-								[item objectForKey:@"type"], @"type",
-								 value, @"value", nil];
-					
-		
-		
-		
-	//	[fruits addObject:contact];
-		[fruits addObject:item];
-		
-		
-		
-		
+   		[fruits addObject:item];
+			
     }
-	
-	
-	
-	for (NSDictionary *item in fruits) 
-	{
-		//NSLog(@"item %@", item);
 		
-	}
+	
 	/*Bring the contacts back to 15 according to the values of @value!*/
 	[self filterEntries:fruits];
-	
-	
-	
-	
-	
-	
-	
-	
 
 	[(TreemapView *)self.view reloadData];
 }
@@ -248,16 +152,6 @@
 	// here  we are getting rid of the rest of the objects after numberOfObjects
 	
 	[mutableArray removeObjectsInRange: NSMakeRange(numberOfObjects,[mutableArray count]-numberOfObjects)];
-	
-	for (NSDictionary *item in mutableArray) 
-	{
-	//	NSLog(@"contact %@", item);
-	//	NSLog(@"type is: %@",		[item objectForKey:@"type"]);
-	//	NSLog(@"here value : %@",	[item objectForKey:@"value"]);
-		
-	
-		
-	}
 }
 
 
@@ -282,11 +176,12 @@
 	
 	NSLog(@"type %@", [[fruits objectAtIndex:index] objectForKey:@"type"]);
 	
+	
 	//if the type === status
 	if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"status"])
 	{
 		NSLog(@"STATUS");
-		NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
+		//NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
 		
 		CGSize maximumLabelSize = CGSizeMake(cell.frame.size.width-(10*2),9999);
 		
@@ -297,6 +192,7 @@
 		CGRect newFrame = cell.textLabel.frame;
 		newFrame.size.height = expectedLabelSize.height;
 		cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
+		NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
 		cell.textLabel.frame = newFrame;
 
 
@@ -307,34 +203,42 @@
 		if([[[fruits objectAtIndex:index] objectForKey:@"link"] isEqual:@"http://www.facebook.com/"])
 		{//if the link is internal link
 			NSLog(@"INTERNAL_LINK");
-
-			NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
-			NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
+			cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
+			//NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
+			//NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
 			
 		}
 		else
 		{ //the link is external link.
 			//grab the second part of the link.
 			NSLog(@"EXTERNAL_LINK");
-			NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
+			
+			
+			//NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
 			NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
 		}
+	}//if the type === video
+	else if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"video"])
+	{
+		NSLog(@"VIDEO");
+		NSLog(@"link of video is %@", [[fruits objectAtIndex:index] objectForKey:@"link"]);
+		
+		NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
+		cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
 	}
-
 	
 
-
-	NSNumber *val = [[fruits objectAtIndex:index] objectForKey:@"likes"];
-	
-	
+		
 	//NSLog(@"cell %@", NSStringFromCGRect(cell.frame));
 	
 	//NSLog(@"cell bounds: %.0f, %.0f, %3.0f, %3.0f", cell.frame.origin.x, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
 	
 	cell.nameLabel.text = [NSString stringWithFormat:@"%@ has %@ likes" ,[[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"], [[fruits objectAtIndex:index] objectForKey:@"likes"]];
+	cell.valueLabel.text = [NSString stringWithFormat:@"%@ comments", [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]];
+	if([cell.valueLabel.text isEqual:@"(null) comments"]) cell.valueLabel.text = [NSString stringWithFormat:@"0 comments"];
+	//cell.backgroundColor = [UIColor colorWithHue:(float)index / (fruits.count + 3) saturation:1 brightness:0.75 alpha:.3];
 	
-	cell.valueLabel.text = [val stringValue];
-	cell.backgroundColor = [UIColor colorWithHue:(float)index / (fruits.count + 3) saturation:1 brightness:0.75 alpha:.3];
+	
 	
 	//imageview
 	
@@ -351,34 +255,8 @@
 	 **/
 	if (fb_graph_response.imageResponse != nil) 
 	{
-		
-       
-     //   CGRect imageViewFrame = [self.view frame];
-        
-      //  imageViewFrame.origin.y = 0;
-		
-        
-       
-        //CGRect imageViewFrame = [self.view frame];
-        
-       // imageViewFrame.origin.y = 0;
-		
-        
-        //UIImageView *image_view = [[UIImageView alloc] initWithImage:fb_graph_response.imageResponse];
-        
-		
-		
-       // image_view.frame = imageViewFrame;
 		cell.imageView.image = [self scaleAndCropFrame:cell.frame withUIImage:fb_graph_response.imageResponse];
-		
-     //   [self.view addSubview:image_view];
-    //    image_view.frame = imageViewFrame;
-     //   [self.view addSubview:image_view];
-
-	}
-		
-	
-		
+   	}
 }
 
 #pragma mark -
@@ -414,8 +292,6 @@
 	[UIView commitAnimations];
 	
 	*/
-	
-	
 	
 	
 /*

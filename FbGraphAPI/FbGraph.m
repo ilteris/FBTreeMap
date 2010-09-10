@@ -267,16 +267,19 @@
 		//we want everything after the 'access_token=' thus the position where it starts + it's length
 		int from_index = access_token_range.location + access_token_range.length;
 		NSString *access_token = [url_string substringFromIndex:from_index];
-		
+		NSLog(@"access_token 1 :  %@",access_token);	
 		//finally we have to url decode the access token
 		access_token = [access_token stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		
+		NSLog(@"access_token 2 :  %@",access_token);	
 		//remove everything '&' (inclusive) onward...
 		NSRange period_range = [access_token rangeOfString:@"&"];
 		
 		//move beyond the .
+		NSLog(@"period_range.length  %d",period_range.length);	
+		NSLog(@"period_range.location  %d",period_range.location);	
 		access_token = [access_token substringToIndex:period_range.location];
-		
+		NSLog(@"hereeeesssse");
+
 		//store our request token....
 		NSLog(@"token:  %@", access_token);	
 		self.accessToken = access_token;
@@ -298,7 +301,7 @@
 }
 
 -(void) dealloc {
-	
+		
 	if (facebookClientID != nil) {
 		[facebookClientID release];
 	}
