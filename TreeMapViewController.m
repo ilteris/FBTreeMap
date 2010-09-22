@@ -181,7 +181,7 @@
 	if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"status"])
 	{
 		NSLog(@"STATUS");
-		//NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
+		NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
 		
 		CGSize maximumLabelSize = CGSizeMake(cell.frame.size.width-(10*2),9999);
 		
@@ -226,6 +226,15 @@
 		NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
 		cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
 	}
+	 else if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"photo"])
+	 {
+	 NSLog(@"PHOTO");
+	// NSLog(@"link of video is %@", [[fruits objectAtIndex:index] objectForKey:@"link"]);
+	 
+	// NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
+	// cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
+	 }
+	 
 	
 
 		
@@ -234,8 +243,8 @@
 	//NSLog(@"cell bounds: %.0f, %.0f, %3.0f, %3.0f", cell.frame.origin.x, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
 	
 	cell.nameLabel.text = [NSString stringWithFormat:@"%@ has %@ likes" ,[[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"], [[fruits objectAtIndex:index] objectForKey:@"likes"]];
-	cell.valueLabel.text = [NSString stringWithFormat:@"%@ comments", [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]];
-	if([cell.valueLabel.text isEqual:@"(null) comments"]) cell.valueLabel.text = [NSString stringWithFormat:@"0 comments"];
+//	cell.valueLabel.text = [NSString stringWithFormat:@"%@ comments", [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]];
+	//if([cell.valueLabel.text isEqual:@"(null) comments"]) cell.valueLabel.text = [NSString stringWithFormat:@"0 comments"];
 	//cell.backgroundColor = [UIColor colorWithHue:(float)index / (fruits.count + 3) saturation:1 brightness:0.75 alpha:.3];
 	
 	
@@ -253,6 +262,8 @@
 	/**
 	 * Rather than returing a url to the image, Facebook will stream an image file's bits back to us..
 	 **/
+	
+	
 	if (fb_graph_response.imageResponse != nil) 
 	{
 		cell.imageView.image = [self scaleAndCropFrame:cell.frame withUIImage:fb_graph_response.imageResponse];
@@ -264,36 +275,10 @@
 
 - (void)treemapView:(TreemapView *)treemapView tapped:(NSInteger)index {
 	
-	 // change the value
-	 
-	//NSDictionary *dic = [fruits objectAtIndex:index];
-	//[dic setValue:[NSNumber numberWithInt:[[dic objectForKey:@"value"] intValue] + 300] forKey:@"value"];
-	
-	
-	 //resize rectangles with animation
-	 
-	//[self resizeView];
-	
-	
-    //highlight the background
-	 /*
-	[UIView beginAnimations:@"highlight" context:nil];
-	[UIView setAnimationDuration:1.0];
-	
-	TreemapViewCell *cell = (TreemapViewCell *)[self.view.subviews objectAtIndex:index];
-	UIColor *color = cell.backgroundColor;
-	[cell setBackgroundColor:[UIColor whiteColor]];
-	[cell setBackgroundColor:color];
 
-	  	
+	TreemapViewCell *cell = (TreemapViewCell *)[self.view.subviews objectAtIndex:index];
 	
-	//cell.imageView.image = [UIImage imageNamed:@"original.png"];
-	
-	[UIView commitAnimations];
-	
-	*/
-	
-	
+	[cell flipIt];
 /*
 	
 	

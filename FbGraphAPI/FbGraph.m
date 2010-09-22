@@ -73,7 +73,7 @@
 	[aWebView setDelegate:self];	
 	self.webView = aWebView;
 	
-    NSLog(@"aWebView %@", aWebView);
+   // NSLog(@"aWebView %@", aWebView);
 	[webView loadRequest:request];	
 	[super_view addSubview:webView];
      
@@ -84,7 +84,7 @@
 	
 	UIWindow* window = [UIApplication sharedApplication].keyWindow;
 	
-    NSLog(@" windows: %@", [[UIApplication sharedApplication] windows]); //(null)
+   // NSLog(@" windows: %@", [[UIApplication sharedApplication] windows]); //(null)
     if (!window) {
         
 		window = [[UIApplication sharedApplication].windows objectAtIndex:0];

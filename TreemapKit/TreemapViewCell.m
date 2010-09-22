@@ -10,15 +10,22 @@
 @synthesize imageView;
 @synthesize index;
 @synthesize delegate;
+@synthesize aView;
+@synthesize bView;
+
 
 #pragma mark -
 
 - (id)initWithFrame:(CGRect)frame {
 	if ((self = [super initWithFrame:frame])) {
 		
-				
+		self.aView = [[UIView alloc] initWithFrame:self.bounds];
+		self.bView = [[UIView alloc] initWithFrame:self.bounds];
+		
+		self.bView.backgroundColor = [UIColor redColor];
+		
 		self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width - 4, frame.size.height-4)];
-		[self addSubview:imageView];
+		[self.aView addSubview:imageView];
 		
 		
 
@@ -41,7 +48,7 @@
 		textLabel.adjustsFontSizeToFitWidth = NO;
 		
 		
-		[self addSubview:textLabel];
+		[self.aView addSubview:textLabel];
 		//setting it arbitrarily. 
 		self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 10)];
 		
@@ -60,7 +67,7 @@
 		
 
 		
-		[self addSubview:nameLabel];
+		[self.aView addSubview:nameLabel];
 
 		self.valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 10)];
 		valueLabel.font = [UIFont boldSystemFontOfSize:10];
@@ -75,13 +82,37 @@
 				
 		
 		
-		[self addSubview:valueLabel];
+		[self.aView addSubview:valueLabel];
 		
-
+		[self insertSubview:self.aView atIndex:1];
+		[self insertSubview:self.bView atIndex:0];
 				
 	}
 	return self;
 }
+
+
+-(void) flipIt
+{
+	NSLog(@"here");
+		
+	
+	
+	
+	[UIView beginAnimations:nil context:NULL]; 
+	
+	[UIView setAnimationDuration:0.5]; 
+	
+	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:self cache:YES]; 
+	
+	[self exchangeSubviewAtIndex:1 withSubviewAtIndex:0];
+
+
+	[UIView commitAnimations]; 
+	
+	
+}
+
 
 - (void)layoutSubviews {
 	[super layoutSubviews];

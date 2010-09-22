@@ -112,9 +112,9 @@
 
 
 - (NSArray *)getData {
-	NSLog(@"values inside getData");
+	//NSLog(@"values inside getData");
 	NSArray *values = [dataSource valuesForTreemapView:self];
-		NSLog(@"values inside getData");
+	//	NSLog(@"values inside getData");
 
 
 	
@@ -134,7 +134,7 @@
 	NSArray *nodes = [self getData];
 	//NSLog(@"creating nodes");
 	
-	NSLog(@"nodes inside create Nodes %@", nodes);
+	//NSLog(@"nodes inside create Nodes %@", nodes);
 
 	
 	if (nodes && nodes.count > 0) 
@@ -152,7 +152,7 @@
 }
 
 - (void)resizeNodes {
-	NSLog(@"resizing nodes");
+	//NSLog(@"resizing nodes");
 	NSArray *nodes = [self getData];
 	
 	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.bounds.size.width,self.bounds.size.height);
@@ -180,7 +180,7 @@
 #pragma mark Public methods
 
 - (void)reloadData {
-	NSLog(@"turning turning");
+//	NSLog(@"turning turning");
 	[self resizeNodes];
 }
 
