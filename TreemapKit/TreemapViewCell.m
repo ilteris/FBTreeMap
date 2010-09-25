@@ -22,7 +22,7 @@
 		self.aView = [[UIView alloc] initWithFrame:self.bounds];
 		self.bView = [[UIView alloc] initWithFrame:self.bounds];
 		
-		self.bView.backgroundColor = [UIColor redColor];
+		self.bView.backgroundColor = [UIColor whiteColor];
 		
 		self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width - 4, frame.size.height-4)];
 		[self.aView addSubview:imageView];

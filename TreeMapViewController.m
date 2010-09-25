@@ -152,6 +152,7 @@
 	// here  we are getting rid of the rest of the objects after numberOfObjects
 	
 	[mutableArray removeObjectsInRange: NSMakeRange(numberOfObjects,[mutableArray count]-numberOfObjects)];
+	NSLog(@"fruits %@", mutableArray);
 }
 
 
@@ -161,6 +162,7 @@
 #pragma mark -
 
 - (void)updateCell:(TreemapViewCell *)cell forIndex:(NSInteger)index {
+	
 	
 	
 	//maybe here do the all extravazanga<--------
@@ -176,12 +178,12 @@
 	
 	NSLog(@"type %@", [[fruits objectAtIndex:index] objectForKey:@"type"]);
 	
-	
+	NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
 	//if the type === status
 	if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"status"])
 	{
 		NSLog(@"STATUS");
-		NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
+		//NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
 		
 		CGSize maximumLabelSize = CGSizeMake(cell.frame.size.width-(10*2),9999);
 		
@@ -216,12 +218,20 @@
 			
 			//NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
 			NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
+			
 		}
 	}//if the type === video
 	else if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"video"])
 	{
 		NSLog(@"VIDEO");
 		NSLog(@"link of video is %@", [[fruits objectAtIndex:index] objectForKey:@"link"]);
+		NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
+		NSString *deviceToken = [[[[[fruits objectAtIndex:index] objectForKey:@"picture"] stringByReplacingOccurrencesOfString:@"%2F"withString:@"/"] 
+								  stringByReplacingOccurrencesOfString:@"%3A" withString:@":"] 
+								 stringByReplacingOccurrencesOfString: @" " withString: @""];
+		
+		NSLog(@"picture is ----> %@", deviceToken);
+		
 		
 		NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
 		cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
@@ -252,7 +262,7 @@
 	//imageview
 	
 	NSString *get_string = [NSString stringWithFormat:@"%@/picture", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"id"]];
-	// NSLog(@"getString: %@",get_string);
+	 NSLog(@"getString: %@",get_string);
     NSMutableDictionary *variables = [NSMutableDictionary dictionaryWithCapacity:1];
     
     [variables setObject:@"large" forKey:@"type"];
@@ -269,6 +279,7 @@
 		cell.imageView.image = [self scaleAndCropFrame:cell.frame withUIImage:fb_graph_response.imageResponse];
    	}
 }
+
 
 #pragma mark -
 #pragma mark TreemapView delegate
@@ -447,7 +458,7 @@
 	}
 	
 	
-	NSLog(@"fruits %@", fruits);
+	
 	
 	NSMutableArray *values = [NSMutableArray arrayWithCapacity:fruits.count];
 	for (NSDictionary *dic in fruits) 
