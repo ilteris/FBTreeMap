@@ -4,6 +4,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIImage+ProportionalFill.h"
 #import "UIImage+Tint.h"
+#import "RegexKitLite.h"
 
 
 #define numberOfObjects (10)
@@ -67,6 +68,7 @@
 	NSLog(@"------------>CONGRATULATIONS<------------, You're logged into Facebook...  Your oAuth token is:  %@", fbGraph.accessToken);
 	
 	[self.myWebView removeFromSuperview];
+	
 	[self getMeButtonPressed];
 }
 
@@ -77,6 +79,9 @@
 
 -(void)getMeButtonPressed
 {
+	
+	NSLog(@"getMeButtonPressed");
+	
 	FbGraphResponse *fb_graph_response = [fbGraph doGraphGet:@"me/home" withGetVars:nil];
 //	NSLog(@"fb_graph_response:  %@", fb_graph_response.htmlResponse);
     
@@ -175,7 +180,7 @@
 	//if type is status
 	//if type is photo
 	//if type is video
-	
+	NSLog(@"---start here");
 	NSLog(@"type %@", [[fruits objectAtIndex:index] objectForKey:@"type"]);
 	
 	NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
@@ -196,8 +201,8 @@
 		cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
 		NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
 		cell.textLabel.frame = newFrame;
-
-
+		
+		NSLog(@"---end here.");
 	}//if the type === link
 	else if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"link"])
 	{
@@ -206,9 +211,13 @@
 		{//if the link is internal link
 			NSLog(@"INTERNAL_LINK");
 			cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
-			//NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
-			//NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
+			NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
+			NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
+			//if it's the internal link then it could still be internal but the link part is different?
+			//doublecheck
 			
+			
+			NSLog(@"---end here.");
 		}
 		else
 		{ //the link is external link.
@@ -217,30 +226,69 @@
 			
 			
 			//NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
+			NSLog(@"link is %@", [[fruits objectAtIndex:index] objectForKey:@"link"]);
 			NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
+			/*
+			 NSString *deviceToken = [[[[[fruits objectAtIndex:index] objectForKey:@"picture"] stringByReplacingOccurrencesOfString:@"%2F"withString:@"/"] 
+			 stringByReplacingOccurrencesOfString:@"%3A" withString:@":"] 
+			 stringByReplacingOccurrencesOfString: @" " withString: @""];
+			 */
 			
+			//done removing the percent escapes
+			NSString *filePath = [[[fruits objectAtIndex:index] objectForKey:@"picture"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+			//get the second url now:
+			NSLog(@"picture is ----> %@", filePath);
+			
+			NSString *regexString   = @"url=(.+)";
+			//also you can use look behind assertation.
+			//(?<=url=).+
+			NSString *matchedString   = [filePath stringByMatching:regexString capture:1L];
+	
+			NSLog(@"regexString is ----> %@", matchedString);
+			NSLog(@"---end here.");
 		}
 	}//if the type === video
 	else if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"video"])
 	{
+		
+		//TODO: the vide could be external OR internal, check it here!
 		NSLog(@"VIDEO");
 		NSLog(@"link of video is %@", [[fruits objectAtIndex:index] objectForKey:@"link"]);
 		NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
+		
+		/*
 		NSString *deviceToken = [[[[[fruits objectAtIndex:index] objectForKey:@"picture"] stringByReplacingOccurrencesOfString:@"%2F"withString:@"/"] 
 								  stringByReplacingOccurrencesOfString:@"%3A" withString:@":"] 
 								 stringByReplacingOccurrencesOfString: @" " withString: @""];
+		*/
 		
-		NSLog(@"picture is ----> %@", deviceToken);
+		//done removing the percent escapes
+		NSString *filePath = [[[fruits objectAtIndex:index] objectForKey:@"picture"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		//get the second url now:
+		NSLog(@"picture is ----> %@", filePath);
+		
+		NSString *regexString   = @"url=(.+)";
+		//also you can use look behind assertation.
+		//(?<=url=).+
+		
+		NSString *matchedString   = [filePath stringByMatching:regexString capture:1L] ;
+		
+		
+		
+		NSLog(@"picture is ----> %@", matchedString);
+		
 		
 		
 		NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
+		NSLog(@"---end here.");
 		cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
 	}
 	 else if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"photo"])
 	 {
 	 NSLog(@"PHOTO");
-	// NSLog(@"link of video is %@", [[fruits objectAtIndex:index] objectForKey:@"link"]);
-	 
+	 NSLog(@"link of photo is %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
+	 //the photo ends with _s but need to replace that with _n and load it. 
+		 NSLog(@"---end here.");	 
 	// NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
 	// cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
 	 }
@@ -252,7 +300,7 @@
 	
 	//NSLog(@"cell bounds: %.0f, %.0f, %3.0f, %3.0f", cell.frame.origin.x, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
 	
-	cell.nameLabel.text = [NSString stringWithFormat:@"%@ has %@ likes" ,[[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"], [[fruits objectAtIndex:index] objectForKey:@"likes"]];
+//	cell.nameLabel.text = [NSString stringWithFormat:@"%@ has %@ likes" ,[[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"], [[fruits objectAtIndex:index] objectForKey:@"likes"]];
 //	cell.valueLabel.text = [NSString stringWithFormat:@"%@ comments", [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]];
 	//if([cell.valueLabel.text isEqual:@"(null) comments"]) cell.valueLabel.text = [NSString stringWithFormat:@"0 comments"];
 	//cell.backgroundColor = [UIColor colorWithHue:(float)index / (fruits.count + 3) saturation:1 brightness:0.75 alpha:.3];
@@ -279,6 +327,7 @@
 		cell.imageView.image = [self scaleAndCropFrame:cell.frame withUIImage:fb_graph_response.imageResponse];
    	}
 }
+
 
 
 #pragma mark -
@@ -351,10 +400,10 @@
 
 	
 	
-	BOOL widthGreaterThanHeight = (image.size.width > image.size.height);
+	//BOOL widthGreaterThanHeight = (image.size.width > image.size.height);
 	
-	float sideFull = (widthGreaterThanHeight) ? rect.size.height : rect.size.width;
-	newImage = [image imageScaledToFitSize:CGSizeMake(sideFull, sideFull)];
+	//float sideFull = (widthGreaterThanHeight) ? rect.size.height : rect.size.width;
+	//newImage = [image imageScaledToFitSize:CGSizeMake(sideFull, sideFull)];
 	newImage = [image imageCroppedToFitSize:rect.size];
 	
 	/*
@@ -441,7 +490,7 @@
 	if (!fruits) 
 	{
 	
-		/*
+		NSLog(@"valuesForTreemapView");
 		NSBundle *bundle = [NSBundle mainBundle];
 		NSString *plistPath = [bundle pathForResource:@"data" ofType:@"plist"];
 		NSArray *array = [[NSArray alloc] initWithContentsOfFile:plistPath];
@@ -453,7 +502,9 @@
 			[fruits addObject:mDic];
 		
 		 }
-		 */
+		
+		
+		 
 		
 	}
 	
@@ -464,7 +515,18 @@
 	for (NSDictionary *dic in fruits) 
 	 {
 		 NSLog(@"fruit: %@", [dic objectForKey:@"likes"]);
-		[values addObject:[dic objectForKey:@"likes"]];
+		 if([dic objectForKey:@"likes"]) 
+		 {
+			 [values addObject:[dic objectForKey:@"likes"]];
+			 
+		 }
+		 else 
+		 {
+			[values addObject:0];
+			
+		 }
+
+
 	}
 	return values;
 }
@@ -500,7 +562,7 @@
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	if([(TreemapView*)self.view initialized]) [self resizeView];
+	//if([(TreemapView*)self.view initialized]) [self resizeView];
 }
 
 

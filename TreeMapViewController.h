@@ -10,10 +10,13 @@
 #import "TreemapView.h"
 
 #import "FbGraph.h"
+#import "RegexKitLite.h"
+
+@class ASINetworkQueue;
 
 
 @interface TreeMapViewController : UIViewController   <TreemapViewDelegate, TreemapViewDataSource, UIWebViewDelegate> {
-    
+    ASINetworkQueue *networkQueue;
 	NSMutableArray *fruits;
 	
 	//facebook

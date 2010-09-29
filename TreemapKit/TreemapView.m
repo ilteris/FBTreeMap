@@ -15,8 +15,10 @@
 			   withCreate:(BOOL)createNode 
 {
     
-   // NSLog(@"nodes count is %i", [nodes count]);
+	
+//    NSLog(@"nodes %@", nodes);
 	if (nodes.count <= 1) {
+		NSLog(@"inside");
 		NSInteger index = [[[nodes objectAtIndex:0] objectForKey:@"index"] intValue];
  //      	NSInteger index = [[[nodes objectAtIndex:0] objectForKey:@"index"] integerValue];
      //   NSLog(@"index here is %i", index);
@@ -105,7 +107,8 @@
 		aRect = CGRectMake(rect.origin.x, rect.origin.y, aWidth, aHeight);
 		bRect = CGRectMake(rect.origin.x, rect.origin.y + aHeight + sep, bWidth, bHeight);
 	}
-	
+//	NSLog(@"array a %@", aArray);
+//	NSLog(@"array b %@", bArray);
 	[self calcNodePositions:aRect nodes:aArray width:aWidth height:aHeight depth:depth + 1 withCreate:createNode];
 	[self calcNodePositions:bRect nodes:bArray width:bWidth height:bHeight depth:depth + 1 withCreate:createNode];
 }
@@ -117,7 +120,7 @@
 	//	NSLog(@"values inside getData");
 
 
-	
+//	NSLog(@"values %@",values);	
     
 	NSMutableArray *nodes = [NSMutableArray arrayWithCapacity:values.count];
 	for (int i = 0; i < values.count; i++) {
@@ -132,9 +135,9 @@
 
 - (void)createNodes {
 	NSArray *nodes = [self getData];
-	//NSLog(@"creating nodes");
+	NSLog(@"creating nodes");
 	
-	//NSLog(@"nodes inside create Nodes %@", nodes);
+//	NSLog(@"nodes inside create Nodes %@", nodes);
 
 	
 	if (nodes && nodes.count > 0) 
@@ -152,18 +155,18 @@
 }
 
 - (void)resizeNodes {
-	//NSLog(@"resizing nodes");
+	NSLog(@"resizing nodes");
 	NSArray *nodes = [self getData];
 	
 	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.bounds.size.width,self.bounds.size.height);
-
+//	NSLog(@"nodes %@", nodes);
 	if (nodes && nodes.count > 0) {
 		[self calcNodePositions:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)
 						  nodes:nodes
 						  width:ceil(self.bounds.size.width)
 						 height:ceil(self.bounds.size.height)
 						  depth:0
-					 withCreate:YES];
+					 withCreate:NO];
 	}
 }
 

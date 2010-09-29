@@ -5,74 +5,62 @@
 	<dict>
 		<key>name</key>
 		<string>Orange</string>
-		<key>value</key>
-		<integer>100</integer>
+		<key>likes</key>
+		<integer>1</integer>
 	</dict>
 	<dict>
 		<key>name</key>
 		<string>Banana</string>
-		<key>value</key>
-		<integer>50</integer>
+		<key>likes</key>
+		<integer>1</integer>
 	</dict>
 	<dict>
 		<key>name</key>
 		<string>Strawberry</string>
-		<key>value</key>
-		<integer>331</integer>
+		<key>likes</key>
+		<integer>1</integer>
 	</dict>
 	<dict>
 		<key>name</key>
 		<string>Strawberry</string>
-		<key>value</key>
-		<integer>331</integer>
+		<key>likes</key>
+		<integer>1</integer>
 	</dict>
 	<dict>
 		<key>name</key>
 		<string>Strawberry</string>
-		<key>value</key>
-		<integer>331</integer>
+		<key>likes</key>
+		<integer>1</integer>
 	</dict>
 	<dict>
 		<key>name</key>
 		<string>Strawberry</string>
-		<key>value</key>
-		<integer>331</integer>
+		<key>likes</key>
+		<integer>1</integer>
 	</dict>
 	<dict>
 		<key>name</key>
 		<string>Strawberry</string>
-		<key>value</key>
-		<integer>331</integer>
+		<key>likes</key>
+		<integer>1</integer>
 	</dict>
 	<dict>
 		<key>name</key>
 		<string>Strawberry</string>
-		<key>value</key>
-		<integer>331</integer>
+		<key>likes</key>
+		<integer>1</integer>
 	</dict>
 	<dict>
 		<key>name</key>
 		<string>Apple</string>
-		<key>value</key>
-		<integer>835</integer>
+		<key>likes</key>
+		<integer>1</integer>
 	</dict>
 	<dict>
 		<key>name</key>
 		<string>Banana</string>
-		<key>value</key>
-		<integer>233</integer>
-	</dict>
-	<dict>
-		<key>name</key>
-		<string>Orange</string>
-		<key>value</key>
-		<integer>161</integer>
-	</dict>
-	<dict>
-		<key>name</key>
-		<string>Mango</string>
-		<key>value</key>
-		<integer>438</integer>
+		<key>likes</key>
+		<integer>1</integer>
 	</dict>
 </array>
 </plist>
