@@ -5,6 +5,8 @@
 #import "UIImage+ProportionalFill.h"
 #import "UIImage+Tint.h"
 #import "RegexKitLite.h"
+#import "ASIHTTPRequest.h"
+#import "ASINetworkQueue.h"
 
 
 #define numberOfObjects (10)
@@ -13,6 +15,7 @@
 @implementation TreeMapViewController
 
 @synthesize fruits;
+@synthesize pictures;
 @synthesize myWebView;
 
 //fcebook
@@ -30,9 +33,11 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 	
+	
+	
 	/*Facebook Application ID*/
 	NSString *client_id = @"128496757192973";
-	
+	self.pictures = [[NSMutableArray alloc] initWithCapacity:2];
 	//alloc and initalize our FbGraph instance
 	self.fbGraph = [[FbGraph alloc] initWithFbClientID:client_id];
 	
@@ -63,7 +68,7 @@
 	[alert show];
 	[alert release];
 
-	 */
+	*/
 	
 	NSLog(@"------------>CONGRATULATIONS<------------, You're logged into Facebook...  Your oAuth token is:  %@", fbGraph.accessToken);
 	
@@ -89,6 +94,8 @@
 	//parse the json into a NSDictionary
 	SBJSON *parser = [[SBJSON alloc] init];
 	NSDictionary *parsed_json = [parser objectWithString:fb_graph_response.htmlResponse error:nil];	
+	
+	
 	
     
 	//there's 2 additional dictionaries inside this one on the first level ('data' and 'paging')
@@ -139,8 +146,10 @@
 	/*Bring the contacts back to 15 according to the values of @value!*/
 	[self filterEntries:fruits];
 
-	[(TreemapView *)self.view reloadData];
+	//[(TreemapView *)self.view reloadData];
+	[self callAPI];
 }
+
 
 
 
@@ -157,9 +166,79 @@
 	// here  we are getting rid of the rest of the objects after numberOfObjects
 	
 	[mutableArray removeObjectsInRange: NSMakeRange(numberOfObjects,[mutableArray count]-numberOfObjects)];
-	NSLog(@"fruits %@", mutableArray);
+	
+	
 }
 
+
+- (void) callAPI
+{
+	//NSLog(@"fruits %@", fruits);
+	
+	if (!networkQueue) {
+		networkQueue = [[ASINetworkQueue alloc] init];	
+	}
+	
+	failed = NO;
+	[networkQueue reset];
+	//[networkQueue setDownloadProgressDelegate:progressIndicator];
+	[networkQueue setRequestDidFinishSelector:@selector(imageFetchComplete:)];
+	[networkQueue setRequestDidFailSelector:@selector(imageFetchFailed:)];
+	//[networkQueue setShowAccurateProgress:[accurateProgress isOn]];
+	[networkQueue setDelegate:self];
+	
+	ASIHTTPRequest *request;
+	[networkQueue go];
+	
+	
+	for (NSInteger i = 0; i < [fruits count]; i++)
+	{
+		//images
+		NSString *get_string = [NSString stringWithFormat:@"%@/picture", [[[fruits objectAtIndex:i] objectForKey:@"from"] objectForKey:@"id"]];
+		NSLog(@"getString: %@",get_string);
+		NSMutableDictionary *variables = [NSMutableDictionary dictionaryWithCapacity:1];
+		
+		[variables setObject:@"large" forKey:@"type"];
+		
+		NSString *url_string = [fbGraph returnURL:get_string withGetVars:variables];
+		//need to send the full url here as a ASIRequest.
+		NSLog(@"url_string %@", url_string);
+		
+		request = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:url_string]] autorelease];
+		[request setUserInfo:[NSDictionary dictionaryWithObject:[NSNumber   
+																 numberWithInt:i] forKey:@"ImageNumber"]]; 
+		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"1.png"]];
+	//	[request setDownloadProgressDelegate:imageProgressIndicator1];
+		[networkQueue addOperation:request];
+		
+	}
+	
+}
+
+- (void)imageFetchComplete:(ASIHTTPRequest *)request
+{
+	UIImage *img = [UIImage imageWithContentsOfFile:[request downloadDestinationPath]];
+	if (img) 
+	{
+		NSLog(@"here");
+		int imageNo =  [[[request userInfo] objectForKey:@"ImageNumber"] intValue]; 
+		NSLog(@"imageNo %i", imageNo);
+		//[(TreemapView *)self.view reloadData];
+		
+
+	}
+	
+}
+
+- (void)imageFetchFailed:(ASIHTTPRequest *)request
+{
+	if (!failed) {
+		if ([[request error] domain] != NetworkRequestErrorDomain || [[request error] code] != ASIRequestCancelledErrorType) {
+			UIAlertView *alertView = [[[UIAlertView alloc] initWithTitle:@"Download failed" message:@"Failed to download images" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+			[alertView show];
+		}		failed = YES;
+	}
+}
 
 
 
@@ -181,6 +260,7 @@
 	//if type is photo
 	//if type is video
 	NSLog(@"---start here");
+	NSLog(@"index %i", index);
 	NSLog(@"type %@", [[fruits objectAtIndex:index] objectForKey:@"type"]);
 	
 	NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
@@ -195,7 +275,7 @@
 		CGSize expectedLabelSize = [[[fruits objectAtIndex:index] objectForKey:@"message"] sizeWithFont:[UIFont systemFontOfSize:14] 
 										  constrainedToSize:maximumLabelSize 
 											  lineBreakMode:UILineBreakModeWordWrap]; 
-		//adjust the label the the new height.
+		//adjust the label to the new height.
 		CGRect newFrame = cell.textLabel.frame;
 		newFrame.size.height = expectedLabelSize.height;
 		cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
@@ -309,23 +389,22 @@
 	
 	//imageview
 	
-	NSString *get_string = [NSString stringWithFormat:@"%@/picture", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"id"]];
-	 NSLog(@"getString: %@",get_string);
-    NSMutableDictionary *variables = [NSMutableDictionary dictionaryWithCapacity:1];
-    
-    [variables setObject:@"large" forKey:@"type"];
-    
-	FbGraphResponse *fb_graph_response = [fbGraph doGraphGet:get_string withGetVars:variables];
+	
+	
+	
 	
 	/**
 	 * Rather than returing a url to the image, Facebook will stream an image file's bits back to us..
 	 **/
 	
-	
+	/*
 	if (fb_graph_response.imageResponse != nil) 
 	{
 		cell.imageView.image = [self scaleAndCropFrame:cell.frame withUIImage:fb_graph_response.imageResponse];
    	}
+	 */
+	
+	
 }
 
 
@@ -522,7 +601,7 @@
 		 }
 		 else 
 		 {
-			[values addObject:0];
+			[values addObject:@"0"];
 			
 		 }
 

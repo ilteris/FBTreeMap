@@ -18,7 +18,7 @@
 @interface TreeMapViewController : UIViewController   <TreemapViewDelegate, TreemapViewDataSource, UIWebViewDelegate> {
     ASINetworkQueue *networkQueue;
 	NSMutableArray *fruits;
-	
+	NSMutableArray *pictures;
 	//facebook
 	FbGraph *fbGraph;
 	
@@ -28,10 +28,14 @@
 	
 	IBOutlet UIWebView *myWebView;
 	
+	BOOL failed;
+	
+	
 	
 }
 
 @property (nonatomic, retain) NSMutableArray *fruits;
+@property (nonatomic, retain) NSMutableArray *pictures;
 
 //facebook
 @property (nonatomic, retain) FbGraph *fbGraph;
@@ -46,6 +50,6 @@
 
 -(void) filterEntries:(NSMutableArray*)mutableArray;
 -(UIImage *)scaleAndCropFrame:(CGRect)rect withUIImage:(UIImage*)image;
-
+- (void) callAPI;
 
 @end

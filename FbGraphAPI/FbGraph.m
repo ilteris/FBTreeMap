@@ -73,6 +73,7 @@
 	[aWebView setDelegate:self];	
 	self.webView = aWebView;
 	
+	
    // NSLog(@"aWebView %@", aWebView);
 	[webView loadRequest:request];	
 	[super_view addSubview:webView];
@@ -108,7 +109,7 @@
 			
 			value = (NSString *)[get_vars objectForKey:key];
 			url_string = [NSString stringWithFormat:@"%@%@=%@&", url_string, key, value];
-         //   NSLog(@"url_string %@", url_string);
+
 
 		}//end while	
 	}//end if
@@ -118,12 +119,47 @@
 		url_string = [NSString stringWithFormat:@"%@access_token=%@", url_string, self.accessToken];
        //  NSLog(@"action %@", url_string);
     }
-	
+	NSLog(@"url_string %@", url_string);
 	//encode the string
 	url_string = [url_string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	 //  NSLog(@"action %@", url_string);
+	
 	return [self doGraphGetWithUrlString:url_string];
 }
+
+- (NSString *)returnURL:(NSString *)action withGetVars:(NSDictionary *)get_vars {
+	
+	
+	NSString *url_string = [NSString stringWithFormat:@"https://graph.facebook.com/%@?", action];
+	
+	//tack on any get vars we have...
+	if ( (get_vars != nil) && ([get_vars count] > 0) ) {
+		
+		NSEnumerator *enumerator = [get_vars keyEnumerator];
+		NSString *key;
+		NSString *value;
+		while ((key = (NSString *)[enumerator nextObject])) {
+			
+			value = (NSString *)[get_vars objectForKey:key];
+			url_string = [NSString stringWithFormat:@"%@%@=%@&", url_string, key, value];
+			
+			
+		}//end while	
+	}//end if
+	
+	if (accessToken != nil) {
+		//now that any variables have been appended, let's attach the access token....
+		url_string = [NSString stringWithFormat:@"%@access_token=%@", url_string, self.accessToken];
+		//  NSLog(@"action %@", url_string);
+    }
+	//NSLog(@"url_string %@", url_string);
+	//encode the string
+	url_string = [url_string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	
+	return url_string;
+}
+
+
+
 
 - (FbGraphResponse *)doGraphGetWithUrlString:(NSString *)url_string {
 	
@@ -267,18 +303,18 @@
 		//we want everything after the 'access_token=' thus the position where it starts + it's length
 		int from_index = access_token_range.location + access_token_range.length;
 		NSString *access_token = [url_string substringFromIndex:from_index];
-		NSLog(@"access_token 1 :  %@",access_token);	
+	
 		//finally we have to url decode the access token
 		access_token = [access_token stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		NSLog(@"access_token 2 :  %@",access_token);	
+	
 		//remove everything '&' (inclusive) onward...
 		NSRange period_range = [access_token rangeOfString:@"&"];
 		
 		//move beyond the .
-		NSLog(@"period_range.length  %d",period_range.length);	
-		NSLog(@"period_range.location  %d",period_range.location);	
+
+
 		access_token = [access_token substringToIndex:period_range.location];
-		NSLog(@"hereeeesssse");
+
 
 		//store our request token....
 		NSLog(@"token:  %@", access_token);	

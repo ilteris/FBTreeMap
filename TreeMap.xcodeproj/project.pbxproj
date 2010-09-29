@@ -31,6 +31,7 @@
 		F061196D125296B6008C7D07 /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F0611823125294DA008C7D07 /* libz.1.2.3.dylib */; };
 		F061197C12529973008C7D07 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F061197B12529973008C7D07 /* Reachability.m */; };
 		F06A1CD31200AE3B001E46AE /* todo.txt in Resources */ = {isa = PBXBuildFile; fileRef = F06A1CD21200AE3B001E46AE /* todo.txt */; };
+		F0A7DBFA1253F2A200A5E37C /* CellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A7DBF91253F2A200A5E37C /* CellModel.m */; };
 		F0F00BDF1215D57100DB0EF9 /* UIImage+ProportionalFill.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F00BDC1215D57100DB0EF9 /* UIImage+ProportionalFill.m */; };
 		F0F00BE01215D57100DB0EF9 /* UIImage+Tint.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F00BDE1215D57100DB0EF9 /* UIImage+Tint.m */; };
 		F0F00C75121AE12900DB0EF9 /* original.png in Resources */ = {isa = PBXBuildFile; fileRef = F0F00C74121AE12900DB0EF9 /* original.png */; };
@@ -91,6 +92,8 @@
 		F061197A12529973008C7D07 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		F061197B12529973008C7D07 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		F06A1CD21200AE3B001E46AE /* todo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = todo.txt; sourceTree = "<group>"; };
+		F0A7DBF81253F2A200A5E37C /* CellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellModel.h; sourceTree = "<group>"; };
+		F0A7DBF91253F2A200A5E37C /* CellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellModel.m; sourceTree = "<group>"; };
 		F0F00BDB1215D57100DB0EF9 /* UIImage+ProportionalFill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ProportionalFill.h"; sourceTree = "<group>"; };
 		F0F00BDC1215D57100DB0EF9 /* UIImage+ProportionalFill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ProportionalFill.m"; sourceTree = "<group>"; };
 		F0F00BDD1215D57100DB0EF9 /* UIImage+Tint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Tint.h"; sourceTree = "<group>"; };
@@ -215,6 +218,8 @@
 		F033EA67118A25DF0020F23D /* TreemapKit */ = {
 			isa = PBXGroup;
 			children = (
+				F0A7DBF81253F2A200A5E37C /* CellModel.h */,
+				F0A7DBF91253F2A200A5E37C /* CellModel.m */,
 				F033EA68118A25DF0020F23D /* TreemapView.h */,
 				F033EA69118A25DF0020F23D /* TreemapView.m */,
 				F033EA6A118A25DF0020F23D /* TreemapViewCell.h */,
@@ -377,6 +382,7 @@
 				F061177912524755008C7D07 /* ASINetworkQueue.m in Sources */,
 				F061177A12524755008C7D07 /* ASIDownloadCache.m in Sources */,
 				F061197C12529973008C7D07 /* Reachability.m in Sources */,
+				F0A7DBFA1253F2A200A5E37C /* CellModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
