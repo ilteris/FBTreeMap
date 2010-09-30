@@ -7,7 +7,7 @@
 #import "RegexKitLite.h"
 #import "ASIHTTPRequest.h"
 #import "ASINetworkQueue.h"
-
+#import "CellModel.h"
 
 #define numberOfObjects (10)
 
@@ -28,16 +28,19 @@
 #pragma mark facebook delegate
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
 }
 
 
 - (void)viewDidAppear:(BOOL)animated {
 	
-	
+	imagesLoaded - FALSE;
 	
 	/*Facebook Application ID*/
 	NSString *client_id = @"128496757192973";
 	self.pictures = [[NSMutableArray alloc] initWithCapacity:2];
+	
+	
 	//alloc and initalize our FbGraph instance
 	self.fbGraph = [[FbGraph alloc] initWithFbClientID:client_id];
 	
@@ -50,9 +53,12 @@
 	 *
 	 * Feel free to try both methods here, simply (un)comment out the appropriate one.....
 	 **/
-    [self.view addSubview:self.myWebView];
+
+	
+	[self.view addSubview:self.myWebView];
 	[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,read_stream,user_status,offline_access" andSuperView:self.myWebView];
 
+	
 }
 
 #pragma mark -
@@ -184,11 +190,13 @@
 	//[networkQueue setDownloadProgressDelegate:progressIndicator];
 	[networkQueue setRequestDidFinishSelector:@selector(imageFetchComplete:)];
 	[networkQueue setRequestDidFailSelector:@selector(imageFetchFailed:)];
+	[networkQueue setQueueDidFinishSelector:@selector(queueComplete:)]; 
 	//[networkQueue setShowAccurateProgress:[accurateProgress isOn]];
 	[networkQueue setDelegate:self];
 	
 	ASIHTTPRequest *request;
 	[networkQueue go];
+	
 	
 	
 	for (NSInteger i = 0; i < [fruits count]; i++)
@@ -207,7 +215,7 @@
 		request = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:url_string]] autorelease];
 		[request setUserInfo:[NSDictionary dictionaryWithObject:[NSNumber   
 																 numberWithInt:i] forKey:@"ImageNumber"]]; 
-		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"1.png"]];
+		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%i.png",i]]];
 	//	[request setDownloadProgressDelegate:imageProgressIndicator1];
 		[networkQueue addOperation:request];
 		
@@ -221,11 +229,13 @@
 	if (img) 
 	{
 		NSLog(@"here");
+	
 		int imageNo =  [[[request userInfo] objectForKey:@"ImageNumber"] intValue]; 
+		CellModel *cell = [[CellModel alloc] initWithImage:img atIndex:imageNo];
+		[self.pictures addObject:cell];
+		[cell release];
 		NSLog(@"imageNo %i", imageNo);
-		//[(TreemapView *)self.view reloadData];
 		
-
 	}
 	
 }
@@ -240,6 +250,14 @@
 	}
 }
 
+
+- (void)queueComplete:(ASINetworkQueue*)queue
+{
+	NSLog(@"Queue finished");
+	imagesLoaded = YES;
+	[(TreemapView *)self.view reloadData];
+	
+}
 
 
 
@@ -384,14 +402,19 @@
 //	cell.valueLabel.text = [NSString stringWithFormat:@"%@ comments", [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]];
 	//if([cell.valueLabel.text isEqual:@"(null) comments"]) cell.valueLabel.text = [NSString stringWithFormat:@"0 comments"];
 	//cell.backgroundColor = [UIColor colorWithHue:(float)index / (fruits.count + 3) saturation:1 brightness:0.75 alpha:.3];
-	
-	
-	
-	//imageview
-	
-	
-	
-	
+
+
+	if(imagesLoaded)
+	{
+		CellModel *c = [self.pictures objectAtIndex:index];
+		
+		//imageview;
+
+		
+		
+		cell.imageView.image = [self scaleAndCropFrame:cell.frame withUIImage:c.profileImage];
+	}
+	 
 	
 	/**
 	 * Rather than returing a url to the image, Facebook will stream an image file's bits back to us..
@@ -485,61 +508,7 @@
 	//newImage = [image imageScaledToFitSize:CGSizeMake(sideFull, sideFull)];
 	newImage = [image imageCroppedToFitSize:rect.size];
 	
-	/*
 	
-	UIImageView *mainImageView = [[UIImageView alloc] initWithImage:image];
-	CGRect clippedRect = CGRectMake(0, 0, rect.size.width, rect.size.height);
-	
-	// the most import thing I learned when writing this script is that when you 
-	// call UIGraphicsBeginImageContext(CGSize) make sure that the size you pass in 
-	// is the size you want your final image to be.
-	// http://www.nickkuh.com/iphone/how-to-create-square-thumbnails-using-iphone-sdk-cg-quartz-2d/2010/03/
-	 
-	
-	UIGraphicsBeginImageContext(CGSizeMake(rect.size.width, rect.size.height));
-	CGContextRef currentContext = UIGraphicsGetCurrentContext();
-	CGContextClipToRect( currentContext, clippedRect);
-	CGContextTranslateCTM(currentContext, (image.size.width), 0);
-	
-	[mainImageView.layer renderInContext:currentContext];
-	image = UIGraphicsGetImageFromCurrentImageContext();
-	UIGraphicsEndImageContext();
-	*/
-	
-	//couldn’t find a previously created thumb image so create one first…
-	
-	 
-	 /*
-	UIImageView *mainImageView = [[UIImageView alloc] initWithImage:image];
-	BOOL widthGreaterThanHeight = (image.size.width > image.size.height);
-	float sideFull = (widthGreaterThanHeight) ? rect.size.height : rect.size.width;
-	CGRect clippedRect = CGRectMake(0, 0, rect.size.width, rect.size.height);
-	//creating a square context the size of the final image which we will then
-	// manipulate and transform before drawing in the original image
-	UIGraphicsBeginImageContext(CGSizeMake(rect.size.width, rect.size.height));
-	CGContextRef currentContext = UIGraphicsGetCurrentContext();
-	CGContextClipToRect( currentContext, clippedRect);
-	
-
-	if (widthGreaterThanHeight) {
-		CGFloat scaleFactor = rect.size.width/sideFull;
-		//a landscape image – make context shift the original image to the left when drawn into the context
-		CGContextTranslateCTM(currentContext, -((image.size.width-sideFull)*.5)*scaleFactor, 0);
-		CGContextScaleCTM(currentContext, scaleFactor, scaleFactor);
-	}
-	else {
-		CGFloat scaleFactor = rect.size.height/sideFull;
-		//a portfolio image – make context shift the original image upwards when drawn into the context
-		CGContextTranslateCTM(currentContext,0, -((image.size.height-sideFull)*.5)*scaleFactor);
-		CGContextScaleCTM(currentContext, scaleFactor, scaleFactor);
-	}
-	//this will automatically scale any CGImage down/up to the required thumbnail side (length) when the CGImage gets drawn into the context on the next line of code
-	
-	[mainImageView.layer renderInContext:currentContext];
-	image = UIGraphicsGetImageFromCurrentImageContext();
-	UIGraphicsEndImageContext();
-	
-	*/
 	
 	return newImage;
 }
@@ -562,14 +531,13 @@
 }
 
 #pragma mark TreemapView data source
-
+//this gets called when resizing to get the datasource. 
 - (NSArray *)valuesForTreemapView:(TreemapView *)treemapView 
 {
-	
+	NSLog(@"valuesForTreemapView");
 	if (!fruits) 
 	{
-	
-		NSLog(@"valuesForTreemapView");
+		//NSLog(@"valuesForTreemapView");
 		NSBundle *bundle = [NSBundle mainBundle];
 		NSString *plistPath = [bundle pathForResource:@"data" ofType:@"plist"];
 		NSArray *array = [[NSArray alloc] initWithContentsOfFile:plistPath];
@@ -579,12 +547,7 @@
 		{
 			NSMutableDictionary *mDic = [NSMutableDictionary dictionaryWithDictionary:dic];
 			[fruits addObject:mDic];
-		
 		 }
-		
-		
-		 
-		
 	}
 	
 	
@@ -611,14 +574,18 @@
 }
 
 
-
+//this gets called on the creation/initially. 
 - (TreemapViewCell *)treemapView:(TreemapView *)treemapView cellForIndex:(NSInteger)index forRect:(CGRect)rect {
 	TreemapViewCell *cell = [[TreemapViewCell alloc] initWithFrame:rect];
+
 	[self updateCell:cell forIndex:index];
 	return cell;
 }
 
+
+//this gets called on the update 
 - (void)treemapView:(TreemapView *)treemapView updateCell:(TreemapViewCell *)cell forIndex:(NSInteger)index forRect:(CGRect)rect {
+
 	[self updateCell:cell forIndex:index];
 }
 
@@ -635,13 +602,14 @@
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
 {
 	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
-	//NSLog(@" self.interfaceOrientation %d", [self interfaceOrientation]);
+
 	if([(TreemapView*)self.view initialized]) [self resizeView];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	//if([(TreemapView*)self.view initialized]) [self resizeView];
+
+//	if([(TreemapView*)self.view initialized]) [self resizeView];
 }
 
 

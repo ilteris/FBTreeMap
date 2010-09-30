@@ -29,6 +29,7 @@
 	IBOutlet UIWebView *myWebView;
 	
 	BOOL failed;
+	BOOL imagesLoaded;
 	
 	
 	

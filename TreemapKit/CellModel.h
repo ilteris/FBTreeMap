@@ -11,14 +11,16 @@
 
 @interface CellModel : NSObject {
 	UIImage *profileImage;
+	NSInteger indexNo;
 }
 
 
 
-- (id)initWithImage:(UIImage*)image;
+- (id)initWithImage:(UIImage*)image atIndex:(NSInteger)index;
 
 
 
 @property(nonatomic, retain) UIImage *profileImage;
+@property(nonatomic, assign) NSInteger indexNo;
 
 @end

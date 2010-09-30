@@ -11,25 +11,29 @@
 
 @implementation CellModel
 @synthesize profileImage;
+@synthesize indexNo;
 
-- (id)initWithImage:(UIImage*)image {
-	self = [super init];
-	if(nil != self)
-	{
-		self.profileImage = image;
-	}
+- (id)initWithImage:(UIImage*)image 
+		atIndex:(NSInteger)index
+
+{
+	if (![super init]) 
+		return nil;
+		
+	self.profileImage = image;
+	self.indexNo = index;
 	return self;
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+
+
+- (id)init {
+	return [self initWithImage:self.profileImage atIndex:indexNo];
 }
-*/
+
 
 - (void)dealloc {
+	[self.profileImage release];
     [super dealloc];
 }
 

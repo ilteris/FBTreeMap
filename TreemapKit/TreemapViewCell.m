@@ -67,7 +67,7 @@
 		
 
 		
-	//	[self.aView addSubview:nameLabel];
+		[self.aView addSubview:nameLabel];
 
 		self.valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 10)];
 		valueLabel.font = [UIFont boldSystemFontOfSize:10];
@@ -82,7 +82,7 @@
 				
 		
 		
-	//	[self.aView addSubview:valueLabel];
+		[self.aView addSubview:valueLabel];
 		
 		[self insertSubview:self.aView atIndex:1];
 		[self insertSubview:self.bView atIndex:0];
