@@ -1,4 +1,5 @@
 #import "TreemapView.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation TreemapView
 
@@ -29,10 +30,38 @@
 			cell.delegate = self;
 			[self addSubview:cell];
 		}
-		else {
-      //      NSLog(@"else");
+		else 
+		{
+			
+			
+			
+			//TODO: animate it here.
 			TreemapViewCell *cell = [self.subviews objectAtIndex:index];
+			/*
+		//	CGRect boundRect1 = CGRectMake(0, 0, cell.bounds.size.width, cell.bounds.size.height);
+			CGRect boundRect2 = CGRectMake(0, 0, rect.size.width, rect.size.height);
+			
+		//	NSLog(@"rect1 %@", NSStringFromCGRect(tempRect));
+			NSLog(@"rect1 %@", NSStringFromCGRect(rect));
+			CABasicAnimation *boundsAnimation = [CABasicAnimation animationWithKeyPath:@"bounds"]; 
+			[boundsAnimation setFromValue:[NSValue valueWithCGRect:cell.bounds]];
+			[boundsAnimation setToValue:[NSValue valueWithCGRect:boundRect2]]; 
+			[boundsAnimation setDuration:1.0f];
+			
+			CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
+
+			[positionAnimation setFromValue: [NSValue valueWithCGPoint:CGPointMake(cell.frame.origin.x, cell.frame.origin.y)]];
+			[positionAnimation setToValue:[NSValue valueWithCGPoint:CGPointMake(rect.origin.x, rect.origin.y)]]; 
+			[positionAnimation setDuration:1.0f];
+		
+		
+			//[cell.layer addAnimation:boundsAnimation forKey:@"bounds"];
+			cell.layer.actions = [NSDictionary dictionaryWithObject:boundsAnimation forKey:@"bounds"];
+			cell.layer.bounds = boundRect2;
+			//[cell.layer addAnimation:positionAnimation forKey:@"position"];
+			 */
 			cell.frame = rect;
+			
 			if ([delegate respondsToSelector:@selector(treemapView:updateCell:forIndex:forRect:)])
 				[delegate treemapView:self updateCell:cell forIndex:index forRect:rect];
 			[cell layoutSubviews];

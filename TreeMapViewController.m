@@ -236,8 +236,9 @@
 		
 		TreemapViewCell *cell = [self.cells objectAtIndex:imageNo];
 		cell.imageView.image = [self scaleAndCropFrame:cell.frame withUIImage:img];
-		cell.downloadDestinationPath = [request downloadDestinationPath];
-		NSLog(@"cell.downloadDestinationPath %@", cell.downloadDestinationPath);
+		//add like and destination values to a nsdictionary and add this to an array and then write to a plist file.
+		//cell.downloadDestinationPath = [request downloadDestinationPath];
+		//NSLog(@"cell.downloadDestinationPath %@", cell.downloadDestinationPath);
 		
 	}
 	
@@ -258,7 +259,7 @@
 {
 	NSLog(@"Queue finished");
 	imagesLoaded = YES;
-//	[(TreemapView *)self.view reloadData];
+	[(TreemapView *)self.view reloadData];
 	
 }
 
@@ -412,7 +413,7 @@
 
 		
 
-	NSLog(@"cell.downloadDestinationPath %@", cell.downloadDestinationPath);
+	//NSLog(@"cell.downloadDestinationPath %@", cell.downloadDestinationPath);
 	//if(cell.loaded)	cell.imageView.image = [self scaleAndCropFrame:cell.frame withUIImage:[UIImage imageWithContentsOfFile:cell.downloadDestinationPath]];
 
 	 
@@ -538,13 +539,15 @@
 	NSLog(@"valuesForTreemapView");
 	if (!fruits) //meaning just launched the app. 
 	{
-		//NSLog(@"valuesForTreemapView");
+		//need to fill the fruits 
+		//get the plist
 		NSBundle *bundle = [NSBundle mainBundle];
 		NSString *plistPath = [bundle pathForResource:@"data" ofType:@"plist"];
 		NSArray *array = [[NSArray alloc] initWithContentsOfFile:plistPath];
 		
 		self.fruits = [[NSMutableArray alloc] initWithCapacity:array.count];
-		
+		self.destinationPaths = [NSMutableArray arrayWithCapacity:array.count];
+		NSLog(@"array %@", array);
 		for (NSDictionary *dic in array) 
 		{
 			NSMutableDictionary *mDic = [NSMutableDictionary dictionaryWithDictionary:dic];
@@ -552,17 +555,19 @@
 		 }
 	}
 	
-	
+	NSLog(@"fruits %@", fruits);
 	
 	//these values go to the treemapview in order to be used for calculating the sizes of the cells
 	// no need to store those in the cellModel.
 	NSMutableArray *values = [NSMutableArray arrayWithCapacity:fruits.count];
-	destinationPaths = [NSMutableArray arrayWithCapacity:fruits.count];
+	
 
 	for (NSDictionary *dic in fruits) 
 	 {
 		 NSLog(@"fruit: %@", [dic objectForKey:@"likes"]);
-		 [self.destinationPaths addObject:[dic objectForKey:@"destinationPath"]];
+		 //passing the file names from the plist here. hmmmm.
+		 
+		// [self.destinationPaths addObject:[dic objectForKey:@"destinationPath"]];
 		 if([dic objectForKey:@"likes"]) 
 		 {
 			 [values addObject:[dic objectForKey:@"likes"]];
@@ -584,17 +589,19 @@
 	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex: 0];
 	
-	NSString *fn = [documentsDirectory stringByAppendingPathComponent: [destinationPaths objectAtIndex:index]];
+	NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"destinationPath"]];
 	
 	//NSString *fn = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[destinationPaths objectAtIndex:index]];
 	//NSSearchPathForDirectoriesInDomains
 					
 	NSLog(@"fn %@", fn);
-	cell.downloadDestinationPath = fn;
+	//cell.downloadDestinationPath = fn;
 	
-	//CellModel *cellModel = [[CellModel alloc] initWithFrame:rect atIndex:index];
+
 	[self.cells addObject:cell];
 	[cell release];
+	
+	//load the local images first here.
 	
 	[self updateCell:cell forIndex:index];
 	return cell;
