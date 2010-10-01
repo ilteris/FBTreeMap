@@ -15,7 +15,9 @@
 @implementation TreeMapViewController
 
 @synthesize fruits;
-@synthesize pictures;
+@synthesize cells;
+@synthesize destinationPaths;
+
 @synthesize myWebView;
 
 //fcebook
@@ -38,7 +40,7 @@
 	
 	/*Facebook Application ID*/
 	NSString *client_id = @"128496757192973";
-	self.pictures = [[NSMutableArray alloc] initWithCapacity:2];
+	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
 	
 	
 	//alloc and initalize our FbGraph instance
@@ -231,10 +233,11 @@
 		NSLog(@"here");
 	
 		int imageNo =  [[[request userInfo] objectForKey:@"ImageNumber"] intValue]; 
-		CellModel *cell = [[CellModel alloc] initWithImage:img atIndex:imageNo];
-		[self.pictures addObject:cell];
-		[cell release];
-		NSLog(@"imageNo %i", imageNo);
+		
+		TreemapViewCell *cell = [self.cells objectAtIndex:imageNo];
+		cell.imageView.image = [self scaleAndCropFrame:cell.frame withUIImage:img];
+		cell.downloadDestinationPath = [request downloadDestinationPath];
+		NSLog(@"cell.downloadDestinationPath %@", cell.downloadDestinationPath);
 		
 	}
 	
@@ -255,7 +258,7 @@
 {
 	NSLog(@"Queue finished");
 	imagesLoaded = YES;
-	[(TreemapView *)self.view reloadData];
+//	[(TreemapView *)self.view reloadData];
 	
 }
 
@@ -404,16 +407,14 @@
 	//cell.backgroundColor = [UIColor colorWithHue:(float)index / (fruits.count + 3) saturation:1 brightness:0.75 alpha:.3];
 
 
-	if(imagesLoaded)
-	{
-		CellModel *c = [self.pictures objectAtIndex:index];
-		
-		//imageview;
+
+
 
 		
-		
-		cell.imageView.image = [self scaleAndCropFrame:cell.frame withUIImage:c.profileImage];
-	}
+
+	NSLog(@"cell.downloadDestinationPath %@", cell.downloadDestinationPath);
+	//if(cell.loaded)	cell.imageView.image = [self scaleAndCropFrame:cell.frame withUIImage:[UIImage imageWithContentsOfFile:cell.downloadDestinationPath]];
+
 	 
 	
 	/**
@@ -531,11 +532,11 @@
 }
 
 #pragma mark TreemapView data source
-//this gets called when resizing to get the datasource. 
+//this gets called when resizing to get the datasource or creating the first time too. 
 - (NSArray *)valuesForTreemapView:(TreemapView *)treemapView 
 {
 	NSLog(@"valuesForTreemapView");
-	if (!fruits) 
+	if (!fruits) //meaning just launched the app. 
 	{
 		//NSLog(@"valuesForTreemapView");
 		NSBundle *bundle = [NSBundle mainBundle];
@@ -543,6 +544,7 @@
 		NSArray *array = [[NSArray alloc] initWithContentsOfFile:plistPath];
 		
 		self.fruits = [[NSMutableArray alloc] initWithCapacity:array.count];
+		
 		for (NSDictionary *dic in array) 
 		{
 			NSMutableDictionary *mDic = [NSMutableDictionary dictionaryWithDictionary:dic];
@@ -552,23 +554,23 @@
 	
 	
 	
-	
+	//these values go to the treemapview in order to be used for calculating the sizes of the cells
+	// no need to store those in the cellModel.
 	NSMutableArray *values = [NSMutableArray arrayWithCapacity:fruits.count];
+	destinationPaths = [NSMutableArray arrayWithCapacity:fruits.count];
+
 	for (NSDictionary *dic in fruits) 
 	 {
 		 NSLog(@"fruit: %@", [dic objectForKey:@"likes"]);
+		 [self.destinationPaths addObject:[dic objectForKey:@"destinationPath"]];
 		 if([dic objectForKey:@"likes"]) 
 		 {
 			 [values addObject:[dic objectForKey:@"likes"]];
-			 
 		 }
 		 else 
 		 {
 			[values addObject:@"0"];
-			
 		 }
-
-
 	}
 	return values;
 }
@@ -577,7 +579,23 @@
 //this gets called on the creation/initially. 
 - (TreemapViewCell *)treemapView:(TreemapView *)treemapView cellForIndex:(NSInteger)index forRect:(CGRect)rect {
 	TreemapViewCell *cell = [[TreemapViewCell alloc] initWithFrame:rect];
-
+	
+	//here give the document thingie.
+	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex: 0];
+	
+	NSString *fn = [documentsDirectory stringByAppendingPathComponent: [destinationPaths objectAtIndex:index]];
+	
+	//NSString *fn = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[destinationPaths objectAtIndex:index]];
+	//NSSearchPathForDirectoriesInDomains
+					
+	NSLog(@"fn %@", fn);
+	cell.downloadDestinationPath = fn;
+	
+	//CellModel *cellModel = [[CellModel alloc] initWithFrame:rect atIndex:index];
+	[self.cells addObject:cell];
+	[cell release];
+	
 	[self updateCell:cell forIndex:index];
 	return cell;
 }

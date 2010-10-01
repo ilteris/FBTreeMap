@@ -3,61 +3,61 @@
 <plist version="1.0">
 <array>
 	<dict>
-		<key>name</key>
+		<key>destinationPath</key>
 		<string>Orange</string>
 		<key>likes</key>
 		<integer>1</integer>
 	</dict>
 	<dict>
-		<key>name</key>
+		<key>destinationPath</key>
 		<string>Banana</string>
 		<key>likes</key>
 		<integer>1</integer>
 	</dict>
 	<dict>
-		<key>name</key>
+		<key>destinationPath</key>
 		<string>Strawberry</string>
 		<key>likes</key>
 		<integer>1</integer>
 	</dict>
 	<dict>
-		<key>name</key>
+		<key>destinationPath</key>
 		<string>Strawberry</string>
 		<key>likes</key>
 		<integer>1</integer>
 	</dict>
 	<dict>
-		<key>name</key>
+		<key>destinationPath</key>
 		<string>Strawberry</string>
 		<key>likes</key>
 		<integer>1</integer>
 	</dict>
 	<dict>
-		<key>name</key>
+		<key>destinationPath</key>
 		<string>Strawberry</string>
 		<key>likes</key>
 		<integer>1</integer>
 	</dict>
 	<dict>
-		<key>name</key>
+		<key>destinationPath</key>
 		<string>Strawberry</string>
 		<key>likes</key>
 		<integer>1</integer>
 	</dict>
 	<dict>
-		<key>name</key>
+		<key>destinationPath</key>
 		<string>Strawberry</string>
 		<key>likes</key>
 		<integer>1</integer>
 	</dict>
 	<dict>
-		<key>name</key>
+		<key>destinationPath</key>
 		<string>Apple</string>
 		<key>likes</key>
 		<integer>1</integer>
 	</dict>
 	<dict>
-		<key>name</key>
+		<key>destinationPath</key>
 		<string>Banana</string>
 		<key>likes</key>
 		<integer>1</integer>

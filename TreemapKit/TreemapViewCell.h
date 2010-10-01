@@ -15,6 +15,11 @@
 	
 	NSInteger index;
 
+	//models
+	NSString* downloadDestinationPath;
+	
+	BOOL loaded;
+	
 	id <TreemapViewCellDelegate> delegate;
 }
 
@@ -28,7 +33,11 @@
 @property (nonatomic, retain) UIView *bView;
 
 
-@property NSInteger index;
+@property (nonatomic, retain) NSString *downloadDestinationPath;
+
+@property(nonatomic, assign) BOOL loaded;
+
+@property (nonatomic, assign) NSInteger index;
 
 @property (nonatomic, retain) id <TreemapViewCellDelegate> delegate;
 

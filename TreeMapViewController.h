@@ -18,7 +18,9 @@
 @interface TreeMapViewController : UIViewController   <TreemapViewDelegate, TreemapViewDataSource, UIWebViewDelegate> {
     ASINetworkQueue *networkQueue;
 	NSMutableArray *fruits;
-	NSMutableArray *pictures;
+	NSMutableArray *cells;
+	NSMutableArray *destinationPaths;
+	
 	//facebook
 	FbGraph *fbGraph;
 	
@@ -36,7 +38,8 @@
 }
 
 @property (nonatomic, retain) NSMutableArray *fruits;
-@property (nonatomic, retain) NSMutableArray *pictures;
+@property (nonatomic, retain) NSMutableArray *cells;
+@property (nonatomic, retain) NSMutableArray *destinationPaths;
 
 //facebook
 @property (nonatomic, retain) FbGraph *fbGraph;

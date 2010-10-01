@@ -13,6 +13,8 @@
 @synthesize aView;
 @synthesize bView;
 
+@synthesize downloadDestinationPath;
+@synthesize loaded;
 
 #pragma mark -
 
@@ -27,8 +29,9 @@
 		self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width - 4, frame.size.height-4)];
 		[self.aView addSubview:imageView];
 		
+		self.downloadDestinationPath = [NSString stringWithFormat:@""];
 		
-
+		loaded = false;
 		
 		self.layer.borderWidth = 1;
 
