@@ -7,7 +7,7 @@
 #import "RegexKitLite.h"
 #import "ASIHTTPRequest.h"
 #import "ASINetworkQueue.h"
-#import "CellModel.h"
+
 
 #define numberOfObjects (10)
 
@@ -220,7 +220,6 @@
 		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%i.png",i]]];
 	//	[request setDownloadProgressDelegate:imageProgressIndicator1];
 		[networkQueue addOperation:request];
-		
 	}
 	
 }
@@ -230,16 +229,22 @@
 	UIImage *img = [UIImage imageWithContentsOfFile:[request downloadDestinationPath]];
 	if (img) 
 	{
-		NSLog(@"here");
+
 	
 		int imageNo =  [[[request userInfo] objectForKey:@"ImageNumber"] intValue]; 
 		
 		TreemapViewCell *cell = [self.cells objectAtIndex:imageNo];
-		cell.imageView.image = [self scaleAndCropFrame:cell.frame withUIImage:img];
+		cell.imageViewB.image = [img imageCroppedToFitSize:cell.frame.size];
+		
+		//cell.imageView.image = [self scaleAndCropFrame:cell.frame withUIImage:img];
 		//add like and destination values to a nsdictionary and add this to an array and then write to a plist file.
 		//cell.downloadDestinationPath = [request downloadDestinationPath];
 		//NSLog(@"cell.downloadDestinationPath %@", cell.downloadDestinationPath);
-		
+		NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
+		NSString *documentsDirectory = [paths objectAtIndex: 0];
+		NSLog(@"likes : %@", [[fruits objectAtIndex:imageNo] objectForKey:@"likes"]);
+		//NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"likes"]];
+		//TODO: add to the plist here?
 	}
 	
 }
@@ -259,6 +264,7 @@
 {
 	NSLog(@"Queue finished");
 	imagesLoaded = YES;
+	//TODO: just comment out the reload here.
 	[(TreemapView *)self.view reloadData];
 	
 }
@@ -353,7 +359,7 @@
 	else if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"video"])
 	{
 		
-		//TODO: the vide could be external OR internal, check it here!
+		//TODO: the video could be external OR internal, check it here!
 		NSLog(@"VIDEO");
 		NSLog(@"link of video is %@", [[fruits objectAtIndex:index] objectForKey:@"link"]);
 		NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
@@ -402,7 +408,7 @@
 	
 	//NSLog(@"cell bounds: %.0f, %.0f, %3.0f, %3.0f", cell.frame.origin.x, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
 	
-//	cell.nameLabel.text = [NSString stringWithFormat:@"%@ has %@ likes" ,[[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"], [[fruits objectAtIndex:index] objectForKey:@"likes"]];
+	cell.nameLabel.text = [NSString stringWithFormat:@"%@ has %@ likes" ,[[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"], [[fruits objectAtIndex:index] objectForKey:@"likes"]];
 //	cell.valueLabel.text = [NSString stringWithFormat:@"%@ comments", [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]];
 	//if([cell.valueLabel.text isEqual:@"(null) comments"]) cell.valueLabel.text = [NSString stringWithFormat:@"0 comments"];
 	//cell.backgroundColor = [UIColor colorWithHue:(float)index / (fruits.count + 3) saturation:1 brightness:0.75 alpha:.3];
@@ -443,81 +449,12 @@
 	TreemapViewCell *cell = (TreemapViewCell *)[self.view.subviews objectAtIndex:index];
 	
 	[cell flipIt];
-/*
-	
-	
 
-	CABasicAnimation *animation = nil;
-
-	[cell.layer removeAllAnimations]; 
-
-	
-	animation = [CABasicAnimation animationWithKeyPath:@"position"]; 
-	
-
-
-	[animation setFromValue:[NSValue valueWithCGPoint:cell.frame.origin]];
-	[animation setToValue:[NSValue valueWithCGPoint:CGPointMake(500, 500)]];
-	//[animation setAutoreverses:YES]; 
-	[animation setDuration:1.0f]; 
-	//[animation setRepeatCount:100];
-	[cell.layer addAnimation:animation forKey:@"transform"];
-	//cell.layer.position = CGPointMake(500, 500);
-	
-	NSLog(@"cell : %@", cell);
-	*/
-
-	/*
-	TreemapViewCell *cell = (TreemapViewCell *)[self.view.subviews objectAtIndex:index];
-	[cell setBackgroundColor:[UIColor whiteColor]];
-	cell.layer.borderWidth = 0.0;
-	cell.imageView.image = nil;
-	//cell.transform = CGAffineTransformMakeScale(2,2);
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:1.];
-	//cell.transform = CGAffineTransformMakeScale(1,1);
-	//cell.alpha = 1.0;
-	cell.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
-	
-	//NSLog(@"self.view.bounds : %@",NSStringFromCGRect(self.view.bounds) );
-
-
-		
-	[UIView commitAnimations];
-	
-	
-	[self.view bringSubviewToFront:cell];
-	 
-	 
-	  */
-	
 }
 
 #pragma mark -
 
 
-
-- (UIImage *)scaleAndCropFrame:(CGRect)rect withUIImage:(UIImage*)image  
-{
-	
-	UIImage *newImage;
-
-	
-	
-	//BOOL widthGreaterThanHeight = (image.size.width > image.size.height);
-	
-	//float sideFull = (widthGreaterThanHeight) ? rect.size.height : rect.size.width;
-	//newImage = [image imageScaledToFitSize:CGSizeMake(sideFull, sideFull)];
-	newImage = [image imageCroppedToFitSize:rect.size];
-	
-	
-	
-	return newImage;
-}
-
-									  
-									  
-									  
 
 - (void)resizeView
 {
@@ -585,18 +522,20 @@
 - (TreemapViewCell *)treemapView:(TreemapView *)treemapView cellForIndex:(NSInteger)index forRect:(CGRect)rect {
 	TreemapViewCell *cell = [[TreemapViewCell alloc] initWithFrame:rect];
 	
-	//here give the document thingie.
+	//here give the document thingie so that we can load the images from the plist file.
 	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex: 0];
 	
-	NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"destinationPath"]];
+	NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"filename"]];
 	
 	//NSString *fn = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[destinationPaths objectAtIndex:index]];
 	//NSSearchPathForDirectoriesInDomains
 					
 	NSLog(@"fn %@", fn);
-	//cell.downloadDestinationPath = fn;
+	UIImage *img = [UIImage imageWithContentsOfFile:fn];
 	
+	//cell.downloadDestinationPath = fn;
+	cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 
 	[self.cells addObject:cell];
 	[cell release];

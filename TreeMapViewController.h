@@ -53,7 +53,7 @@
 -(void)getMeButtonPressed;
 
 -(void) filterEntries:(NSMutableArray*)mutableArray;
--(UIImage *)scaleAndCropFrame:(CGRect)rect withUIImage:(UIImage*)image;
+
 - (void) callAPI;
 
 @end

@@ -7,7 +7,9 @@
 	UILabel *textLabel;
 	UILabel *nameLabel;
 	
-	UIImageView *imageView;
+	UIImageView *imageViewA;
+	
+	UIImageView *imageViewB;
 
 	
 	UIView *aView;
@@ -27,7 +29,8 @@
 @property (nonatomic, retain) UILabel *textLabel;
 @property (nonatomic, retain) UILabel *nameLabel;
 
-@property (nonatomic, retain) UIImageView *imageView;
+@property (nonatomic, retain) UIImageView *imageViewA;
+@property (nonatomic, retain) UIImageView *imageViewB;
 
 @property (nonatomic, retain) UIView *aView;
 @property (nonatomic, retain) UIView *bView;
@@ -43,6 +46,7 @@
 
 - (id)initWithFrame:(CGRect)frame;
 - (void)flipIt;
+-(void) moveAndScale:(CGRect)rect;
 
 @end
 

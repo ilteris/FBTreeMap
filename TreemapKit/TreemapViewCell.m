@@ -1,13 +1,16 @@
 #import "TreemapView.h"
 #import "TreemapViewCell.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIImage+Tint.h"
+#import "UIImage+ProportionalFill.h"
 
 @implementation TreemapViewCell
 
 @synthesize valueLabel;
 @synthesize textLabel;
 @synthesize nameLabel;
-@synthesize imageView;
+@synthesize imageViewA;
+@synthesize imageViewB;
 @synthesize index;
 @synthesize delegate;
 @synthesize aView;
@@ -26,8 +29,10 @@
 		
 		self.bView.backgroundColor = [UIColor whiteColor];
 		
-		self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width - 4, frame.size.height-4)];
-		[self.aView addSubview:imageView];
+		self.imageViewA = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width - 4, frame.size.height-4)];
+		self.imageViewB = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width - 4, frame.size.height-4)];
+
+		[self.aView addSubview:imageViewA];
 		
 		self.downloadDestinationPath = [NSString stringWithFormat:@""];
 		
@@ -98,9 +103,6 @@
 -(void) flipIt
 {
 	NSLog(@"here");
-		
-	
-	
 	
 	[UIView beginAnimations:nil context:NULL]; 
 	
@@ -116,6 +118,41 @@
 	
 }
 
+-(void) moveAndScale:(CGRect)rect
+{
+	NSLog(@"moveAndScale");
+
+	NSLog(@"cell.frame: %@", NSStringFromCGRect(self.bounds));
+	NSLog(@"rect %@", NSStringFromCGRect(rect));
+	
+	
+	//self.imageView.alpha = 0.0;
+	CGRect boundRect2 = CGRectMake(0, 0, rect.size.width, rect.size.height);
+
+	
+	[UIView beginAnimations:@"UIBase Hide" context:nil];
+	[UIView setAnimationDelegate:self];
+	[UIView setAnimationDuration:.5f]; 
+	[UIView setAnimationDidStopSelector:@selector(animationDidStop)];
+	//self.bounds = boundRect2;
+	self.frame = rect;
+	//self.transform = CGAffineTransformMakeScale(1.2, 1.2);
+	[UIView commitAnimations];	
+	
+}
+
+- (void)animationDidStop {
+	NSLog(@"animationDidStop");
+	
+	self.imageViewA.image = [self.imageViewB.image imageCroppedToFitSize:self.frame.size];;
+}
+
+
+
+
+
+
+
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
@@ -125,7 +162,7 @@
 
 	
 	valueLabel.frame = CGRectMake(0, 20, self.frame.size.width, self.valueLabel.frame.size.height);
-	imageView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+	imageViewA.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
 	
 	
 }
@@ -139,7 +176,8 @@
 	[valueLabel release];
 	[textLabel release];
 	[nameLabel release];
-	[imageView release];
+	[imageViewA release];
+	[imageViewB release];
 	[delegate release];
 
 	[super dealloc];

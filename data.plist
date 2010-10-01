@@ -3,64 +3,64 @@
 <plist version="1.0">
 <array>
 	<dict>
-		<key>destinationPath</key>
-		<string>Orange</string>
+		<key>filename</key>
+		<string>0.png</string>
 		<key>likes</key>
 		<integer>1</integer>
 	</dict>
 	<dict>
-		<key>destinationPath</key>
-		<string>Banana</string>
+		<key>filename</key>
+		<string>1.png</string>
 		<key>likes</key>
 		<integer>1</integer>
 	</dict>
 	<dict>
-		<key>destinationPath</key>
-		<string>Strawberry</string>
+		<key>filename</key>
+		<string>2.png</string>
+		<key>likes</key>
+		<integer>4</integer>
+	</dict>
+	<dict>
+		<key>filename</key>
+		<string>3.png</string>
+		<key>likes</key>
+		<integer>2</integer>
+	</dict>
+	<dict>
+		<key>filename</key>
+		<string>4.png</string>
 		<key>likes</key>
 		<integer>1</integer>
 	</dict>
 	<dict>
-		<key>destinationPath</key>
-		<string>Strawberry</string>
+		<key>filename</key>
+		<string>5.png</string>
+		<key>likes</key>
+		<integer>3</integer>
+	</dict>
+	<dict>
+		<key>filename</key>
+		<string>6.png</string>
 		<key>likes</key>
 		<integer>1</integer>
 	</dict>
 	<dict>
-		<key>destinationPath</key>
-		<string>Strawberry</string>
+		<key>filename</key>
+		<string>7.png</string>
 		<key>likes</key>
-		<integer>1</integer>
+		<integer>4</integer>
 	</dict>
 	<dict>
-		<key>destinationPath</key>
-		<string>Strawberry</string>
+		<key>filename</key>
+		<string>8.png</string>
 		<key>likes</key>
-		<integer>1</integer>
+		<integer>4</integer>
 	</dict>
 	<dict>
-		<key>destinationPath</key>
-		<string>Strawberry</string>
+		<key>filename</key>
+		<string>9.png</string>
 		<key>likes</key>
-		<integer>1</integer>
-	</dict>
-	<dict>
-		<key>destinationPath</key>
-		<string>Strawberry</string>
-		<key>likes</key>
-		<integer>1</integer>
-	</dict>
-	<dict>
-		<key>destinationPath</key>
-		<string>Apple</string>
-		<key>likes</key>
-		<integer>1</integer>
-	</dict>
-	<dict>
-		<key>destinationPath</key>
-		<string>Banana</string>
-		<key>likes</key>
-		<integer>1</integer>
+		<integer>2</integer>
 	</dict>
 </array>
 </plist>

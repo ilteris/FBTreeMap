@@ -20,6 +20,7 @@
 //    NSLog(@"nodes %@", nodes);
 	if (nodes.count <= 1) {
 		NSLog(@"inside");
+		NSLog(@"nodes %@", nodes);
 		NSInteger index = [[[nodes objectAtIndex:0] objectForKey:@"index"] intValue];
  //      	NSInteger index = [[[nodes objectAtIndex:0] objectForKey:@"index"] integerValue];
      //   NSLog(@"index here is %i", index);
@@ -32,11 +33,17 @@
 		}
 		else 
 		{
-			
+			//THIS GETS CALLED ON THE UPDATE
 			
 			
 			//TODO: animate it here.
 			TreemapViewCell *cell = [self.subviews objectAtIndex:index];
+			
+		
+			NSLog(@"wait a second???");
+			[cell moveAndScale:rect];
+
+						
 			/*
 		//	CGRect boundRect1 = CGRectMake(0, 0, cell.bounds.size.width, cell.bounds.size.height);
 			CGRect boundRect2 = CGRectMake(0, 0, rect.size.width, rect.size.height);
@@ -49,7 +56,7 @@
 			[boundsAnimation setDuration:1.0f];
 			
 			CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
-
+			 
 			[positionAnimation setFromValue: [NSValue valueWithCGPoint:CGPointMake(cell.frame.origin.x, cell.frame.origin.y)]];
 			[positionAnimation setToValue:[NSValue valueWithCGPoint:CGPointMake(rect.origin.x, rect.origin.y)]]; 
 			[positionAnimation setDuration:1.0f];
@@ -60,7 +67,7 @@
 			cell.layer.bounds = boundRect2;
 			//[cell.layer addAnimation:positionAnimation forKey:@"position"];
 			 */
-			cell.frame = rect;
+		//	cell.frame = rect;
 			
 			if ([delegate respondsToSelector:@selector(treemapView:updateCell:forIndex:forRect:)])
 				[delegate treemapView:self updateCell:cell forIndex:index forRect:rect];
