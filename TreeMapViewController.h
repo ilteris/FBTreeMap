@@ -29,6 +29,7 @@
 	NSString *feedPostId;
 	
 	IBOutlet UIWebView *myWebView;
+	IBOutlet UIView *treeMapView;
 	
 	BOOL failed;
 	BOOL imagesLoaded;
@@ -45,7 +46,7 @@
 @property (nonatomic, retain) FbGraph *fbGraph;
 @property (nonatomic, retain) NSString *feedPostId;
 @property (nonatomic, retain) IBOutlet UIWebView *myWebView;
-
+@property (nonatomic, retain) IBOutlet UIView *treeMapView;
 
 
 - (void)resizeView;
@@ -54,6 +55,6 @@
 
 -(void) filterEntries:(NSMutableArray*)mutableArray;
 
-- (void) callAPI;
+- (void) downloadImages;
 
 @end

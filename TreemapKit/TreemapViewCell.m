@@ -27,13 +27,13 @@
 		self.aView = [[UIView alloc] initWithFrame:self.bounds];
 		self.bView = [[UIView alloc] initWithFrame:self.bounds];
 		
-		self.bView.backgroundColor = [UIColor whiteColor];
+		self.bView.backgroundColor = [UIColor redColor];
 		
 		self.imageViewA = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width - 4, frame.size.height-4)];
 		self.imageViewB = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width - 4, frame.size.height-4)];
 
 		[self.aView addSubview:imageViewA];
-		
+		self.bView.backgroundColor = [UIColor redColor];
 		self.downloadDestinationPath = [NSString stringWithFormat:@""];
 		
 		loaded = false;
@@ -56,7 +56,7 @@
 		textLabel.adjustsFontSizeToFitWidth = NO;
 		
 		
-		//[self.aView addSubview:textLabel];
+		[self.aView addSubview:textLabel];
 		//setting it arbitrarily. 
 		self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, frame.size.width, 10)];
 		
@@ -112,9 +112,7 @@
 	
 	[self exchangeSubviewAtIndex:1 withSubviewAtIndex:0];
 
-
 	[UIView commitAnimations]; 
-	
 	
 }
 
@@ -136,8 +134,9 @@
 	[UIView setAnimationDidStopSelector:@selector(animationDidStop)];
 	//self.bounds = boundRect2;
 	self.frame = rect;
-	//self.transform = CGAffineTransformMakeScale(1.2, 1.2);
+	//self.transform = CGAffineTransformMakeScale(.8, .8);
 	[UIView commitAnimations];	
+	
 	
 }
 
@@ -146,10 +145,6 @@
 	
 	self.imageViewA.image = [self.imageViewB.image imageCroppedToFitSize:self.frame.size];;
 }
-
-
-
-
 
 
 
@@ -163,7 +158,8 @@
 	
 	valueLabel.frame = CGRectMake(0, 20, self.frame.size.width, self.valueLabel.frame.size.height);
 	imageViewA.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-	
+	aView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+	bView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
 	
 }
 

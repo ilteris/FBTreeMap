@@ -17,7 +17,7 @@
 @synthesize fruits;
 @synthesize cells;
 @synthesize destinationPaths;
-
+@synthesize treeMapView;
 @synthesize myWebView;
 
 //fcebook
@@ -57,7 +57,7 @@
 	 **/
 
 	
-	[self.view addSubview:self.myWebView];
+	//[self.view addSubview:self.myWebView];
 	[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,read_stream,user_status,offline_access" andSuperView:self.myWebView];
 
 	
@@ -70,6 +70,7 @@
  **/
 - (void)fbGraphCallback:(id)sender {
 	
+	NSLog(@"fbGraphCallback");
 	//pop a message letting them know most of the info will be dumped in the log
 	/* 
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Note" message:@"For the simplest code, I've written all output to the 'Debugger Console'." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
@@ -81,6 +82,7 @@
 	NSLog(@"------------>CONGRATULATIONS<------------, You're logged into Facebook...  Your oAuth token is:  %@", fbGraph.accessToken);
 	
 	[self.myWebView removeFromSuperview];
+	//[self.view addSubview:self.treeMapView];
 	
 	[self getMeButtonPressed];
 }
@@ -155,7 +157,7 @@
 	[self filterEntries:fruits];
 
 	//[(TreemapView *)self.view reloadData];
-	[self callAPI];
+	[self downloadImages];
 }
 
 
@@ -179,7 +181,7 @@
 }
 
 
-- (void) callAPI
+- (void) downloadImages
 {
 	//NSLog(@"fruits %@", fruits);
 	
@@ -243,6 +245,9 @@
 		NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
 		NSString *documentsDirectory = [paths objectAtIndex: 0];
 		NSLog(@"likes : %@", [[fruits objectAtIndex:imageNo] objectForKey:@"likes"]);
+		
+		NSLog(@"[request downloadDestinationPath]: %@", [request downloadDestinationPath]);
+		
 		//NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"likes"]];
 		//TODO: add to the plist here?
 	}
@@ -265,7 +270,7 @@
 	NSLog(@"Queue finished");
 	imagesLoaded = YES;
 	//TODO: just comment out the reload here.
-	[(TreemapView *)self.view reloadData];
+	//[(TreemapView *)self.treeMapView reloadData];
 	
 }
 
@@ -446,7 +451,7 @@
 - (void)treemapView:(TreemapView *)treemapView tapped:(NSInteger)index {
 	
 
-	TreemapViewCell *cell = (TreemapViewCell *)[self.view.subviews objectAtIndex:index];
+	TreemapViewCell *cell = (TreemapViewCell *)[self.treeMapView.subviews objectAtIndex:index];
 	
 	[cell flipIt];
 
@@ -464,9 +469,11 @@
 	[UIView beginAnimations:@"reload" context:nil];
 	[UIView setAnimationDuration:0.5];
 	
-	[(TreemapView *)self.view reloadData];
+	[(TreemapView *)self.treeMapView reloadData];
 	
 	[UIView commitAnimations];
+	
+	NSLog(@"resizeView");
 }
 
 #pragma mark TreemapView data source
@@ -567,13 +574,13 @@
 {
 	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
 
-	if([(TreemapView*)self.view initialized]) [self resizeView];
+	if([(TreemapView*)self.treeMapView initialized]) [self resizeView];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
 
-//	if([(TreemapView*)self.view initialized]) [self resizeView];
+	//if([(TreemapView*)self.treeMapView initialized]) [self resizeView];
 }
 
 

@@ -156,7 +156,7 @@
 	//	NSLog(@"values inside getData");
 
 
-//	NSLog(@"values %@",values);	
+	NSLog(@"values %@",values);	
     
 	NSMutableArray *nodes = [NSMutableArray arrayWithCapacity:values.count];
 	for (int i = 0; i < values.count; i++) {
@@ -197,6 +197,7 @@
 	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.bounds.size.width,self.bounds.size.height);
 //	NSLog(@"nodes %@", nodes);
 	if (nodes && nodes.count > 0) {
+		NSLog(@"hereeee");
 		[self calcNodePositions:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)
 						  nodes:nodes
 						  width:ceil(self.bounds.size.width)
@@ -219,7 +220,7 @@
 #pragma mark Public methods
 
 - (void)reloadData {
-//	NSLog(@"turning turning");
+	NSLog(@"turning turning");
 	[self resizeNodes];
 }
 
@@ -235,6 +236,7 @@
 	if ([delegate respondsToSelector:@selector(treemapView:tapped:)])
 		[delegate treemapView:self tapped:index];
 }
+
 
 #pragma mark -
 
