@@ -56,7 +56,7 @@
 		textLabel.adjustsFontSizeToFitWidth = NO;
 		
 		
-		[self.aView addSubview:textLabel];
+	//	[self.aView addSubview:textLabel];
 		//setting it arbitrarily. 
 		self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, frame.size.width, 10)];
 		
@@ -100,6 +100,7 @@
 }
 
 
+
 -(void) flipIt
 {
 	NSLog(@"here");
@@ -127,7 +128,7 @@
 	//self.imageView.alpha = 0.0;
 	CGRect boundRect2 = CGRectMake(0, 0, rect.size.width, rect.size.height);
 
-	
+	self.contentMode = UIViewContentModeCenter;
 	[UIView beginAnimations:@"UIBase Hide" context:nil];
 	[UIView setAnimationDelegate:self];
 	[UIView setAnimationDuration:.5f]; 

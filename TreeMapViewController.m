@@ -128,6 +128,7 @@
     //NSDictionary *fourthPage = (NSDictionary *)[parsed_json3 objectForKey:@"paging"];
 
 	
+	
 	[parser release];
 
     self.fruits = [[NSMutableArray alloc] initWithCapacity:2];
@@ -152,7 +153,7 @@
 			
     }
 		
-	
+	NSLog(@"fruits: %@", self.fruits);
 	/*Bring the contacts back to 15 according to the values of @value!*/
 	[self filterEntries:fruits];
 
@@ -270,7 +271,7 @@
 	NSLog(@"Queue finished");
 	imagesLoaded = YES;
 	//TODO: just comment out the reload here.
-	//[(TreemapView *)self.treeMapView reloadData];
+	[(TreemapView *)self.treeMapView reloadData];
 	
 }
 
