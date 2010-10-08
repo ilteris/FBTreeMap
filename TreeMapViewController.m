@@ -19,7 +19,7 @@
 @synthesize destinationPaths;
 @synthesize treeMapView;
 @synthesize myWebView;
-
+@synthesize plistArray;
 //fcebook
 @synthesize fbGraph;
 @synthesize feedPostId;
@@ -208,7 +208,7 @@
 	{
 		//images
 		NSString *get_string = [NSString stringWithFormat:@"%@/picture", [[[fruits objectAtIndex:i] objectForKey:@"from"] objectForKey:@"id"]];
-		NSLog(@"getString: %@",get_string);
+	//	NSLog(@"getString: %@",get_string);
 		NSMutableDictionary *variables = [NSMutableDictionary dictionaryWithCapacity:1];
 		
 		[variables setObject:@"large" forKey:@"type"];
@@ -243,14 +243,28 @@
 		//add like and destination values to a nsdictionary and add this to an array and then write to a plist file.
 		//cell.downloadDestinationPath = [request downloadDestinationPath];
 		//NSLog(@"cell.downloadDestinationPath %@", cell.downloadDestinationPath);
-		NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
-		NSString *documentsDirectory = [paths objectAtIndex: 0];
+		
+		
 		NSLog(@"likes : %@", [[fruits objectAtIndex:imageNo] objectForKey:@"likes"]);
 		
 		NSLog(@"[request downloadDestinationPath]: %@", [request downloadDestinationPath]);
+		NSString *tempFileName = [NSString stringWithFormat:@"%i.png",imageNo];
+		
+		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:tempFileName, @"filename", [[fruits objectAtIndex:imageNo] objectForKey:@"likes"], @"likes", nil];
+		
+		
+		if(self.plistArray == nil) //check if the plist is empty 
+		{ 
+			self.plistArray = [[NSMutableArray alloc] initWithCapacity:1]; //if it's empty, alloc/init
+			
+		}
+		
+		
+		[self.plistArray insertObject:dict atIndex:0];
 		
 		//NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"likes"]];
-		//TODO: add to the plist here?
+		//TODO: add to the plist here? Not really, create an array and add the dictionaries here to the array and once 
+		//queue is completed write all of the stuff to the plist file. 
 	}
 	
 }
@@ -270,7 +284,25 @@
 {
 	NSLog(@"Queue finished");
 	imagesLoaded = YES;
-	//TODO: just comment out the reload here.
+
+	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex: 0];
+	NSString *plistFile = [documentsDirectory stringByAppendingPathComponent: @"data.plist"];
+	//NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
+	//plist file consists of objects of dictionaries wrapped in an array
+	
+	[self.plistArray writeToFile:plistFile atomically:NO];
+	/*
+	if(array == nil) //check if the plist is empty 
+	{ 
+		//array = [[NSMutableArray alloc] initWithCapacity:1]; //if it's empty, alloc/init
+		
+	}
+	
+	array = plistArray; // 
+	*/
+	
+	
 	[(TreemapView *)self.treeMapView reloadData];
 	
 }
@@ -486,13 +518,27 @@
 	{
 		//need to fill the fruits 
 		//get the plist
-		NSBundle *bundle = [NSBundle mainBundle];
-		NSString *plistPath = [bundle pathForResource:@"data" ofType:@"plist"];
-		NSArray *array = [[NSArray alloc] initWithContentsOfFile:plistPath];
+		//TODO: need to check if plist exists or not.
 		
+		NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
+		NSString *documentsDirectory = [paths objectAtIndex: 0];
+		NSString *plistFile = [documentsDirectory stringByAppendingPathComponent: @"data.plist"];
+		NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
+
+		if([array count] == 0)
+		{
+			NSBundle *bundle = [NSBundle mainBundle];
+			NSString *plistPath = [bundle pathForResource:@"data" ofType:@"plist"];
+			array = [[NSArray alloc] initWithContentsOfFile:plistPath];
+			
+		}
+		
+				
 		self.fruits = [[NSMutableArray alloc] initWithCapacity:array.count];
 		self.destinationPaths = [NSMutableArray arrayWithCapacity:array.count];
 		NSLog(@"array %@", array);
+		
+		
 		for (NSDictionary *dic in array) 
 		{
 			NSMutableDictionary *mDic = [NSMutableDictionary dictionaryWithDictionary:dic];

@@ -34,6 +34,8 @@
 	BOOL failed;
 	BOOL imagesLoaded;
 	
+	NSMutableArray *plistArray;
+	
 	
 	
 }
@@ -41,6 +43,7 @@
 @property (nonatomic, retain) NSMutableArray *fruits;
 @property (nonatomic, retain) NSMutableArray *cells;
 @property (nonatomic, retain) NSMutableArray *destinationPaths;
+@property (nonatomic, retain) NSMutableArray *plistArray;
 
 //facebook
 @property (nonatomic, retain) FbGraph *fbGraph;
