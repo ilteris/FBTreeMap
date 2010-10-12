@@ -47,7 +47,7 @@
 	self.fbGraph = [[FbGraph alloc] initWithFbClientID:client_id];
 	
 	//begin the authentication process.....
-	//[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,user_videos,publish_stream,offline_access"];
+	//[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,read_stream,user_status, user_videos,publish_stream,offline_access"];
 	
 	/**
 	 * OR you may wish to 'anchor' the login UIWebView to a window not at the root of your application...
@@ -58,7 +58,7 @@
 
 	
 	//[self.view addSubview:self.myWebView];
-	[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,read_stream,user_status,offline_access" andSuperView:self.myWebView];
+	[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,read_stream,user_status,user_videos,publish_stream, offline_access" andSuperView:self.myWebView];
 
 	
 }

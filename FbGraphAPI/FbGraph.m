@@ -46,6 +46,7 @@
 @synthesize accessToken;
 @synthesize webView;
 
+
 @synthesize callbackObject;
 @synthesize callbackSelector;
 
@@ -74,7 +75,7 @@
 	self.webView = aWebView;
 	
 	
-   // NSLog(@"aWebView %@", aWebView);
+    NSLog(@"aWebView %@", aWebView);
 	[webView loadRequest:request];	
 	[super_view addSubview:webView];
      
@@ -293,7 +294,7 @@
 	
 	//get the url string
 	NSString *url_string = [((_webView.request).URL) absoluteString];
-
+	NSLog(@"url string %@", url_string);
 	//looking for "access_token="
 	NSRange access_token_range = [url_string rangeOfString:@"access_token="];
 	

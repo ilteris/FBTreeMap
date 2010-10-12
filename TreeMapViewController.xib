@@ -41,19 +41,6 @@
 				<int key="NSvFlags">292</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<object class="IBUIWebView" id="181512699">
-						<reference key="NSNextResponder" ref="93669837"/>
-						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{0, -10}, {768, 1024}}</string>
-						<reference key="NSSuperview" ref="93669837"/>
-						<object class="NSColor" key="IBUIBackgroundColor">
-							<int key="NSColorSpace">1</int>
-							<bytes key="NSRGB">MSAxIDEAA</bytes>
-						</object>
-						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<int key="IBUIDataDetectorTypes">1</int>
-						<bool key="IBUIDetectsPhoneNumbers">YES</bool>
-					</object>
 					<object class="IBUIView" id="766721923">
 						<reference key="NSNextResponder" ref="93669837"/>
 						<int key="NSvFlags">319</int>
@@ -71,6 +58,19 @@
 							<int key="IBUIStatusBarStyle">2</int>
 						</object>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+					</object>
+					<object class="IBUIWebView" id="181512699">
+						<reference key="NSNextResponder" ref="93669837"/>
+						<int key="NSvFlags">319</int>
+						<string key="NSFrame">{{0, -10}, {768, 1024}}</string>
+						<reference key="NSSuperview" ref="93669837"/>
+						<object class="NSColor" key="IBUIBackgroundColor">
+							<int key="NSColorSpace">1</int>
+							<bytes key="NSRGB">MSAxIDEAA</bytes>
+						</object>
+						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+						<int key="IBUIDataDetectorTypes">1</int>
+						<bool key="IBUIDetectsPhoneNumbers">YES</bool>
 					</object>
 				</object>
 				<string key="NSFrameSize">{768, 1004}</string>
@@ -151,8 +151,8 @@
 						<reference key="object" ref="93669837"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="181512699"/>
 							<reference ref="766721923"/>
+							<reference ref="181512699"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -190,12 +190,10 @@
 					<string>TreemapView</string>
 					<string>{{86, 103}, {768, 1024}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAAAAAAAAxHqAAA</bytes>
-					</object>
+					<object class="NSAffineTransform"/>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAAAAAAAAxH+AAA</bytes>
+						<bytes key="NSTransformStruct">AQAAAADBIAAAA</bytes>
 					</object>
 				</object>
 			</object>
