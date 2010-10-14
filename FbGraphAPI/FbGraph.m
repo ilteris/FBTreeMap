@@ -67,6 +67,7 @@
 	NSURL *url = [NSURL URLWithString:url_string];
 	NSURLRequest *request = [NSURLRequest requestWithURL:url];
 	
+
 	CGRect webFrame = [super_view frame];
 	
 	webFrame.origin.y = 0;
@@ -75,18 +76,21 @@
 	self.webView = aWebView;
 	
 	
-    NSLog(@"aWebView %@", aWebView);
-	[webView loadRequest:request];	
-	[super_view addSubview:webView];
-     
+    NSLog(@"super_view %@", super_view);
+
 	
+	[webView loadRequest:request];	
+	//TODO: find a condition not to load this. 
+	// it creates the white for 1 sec. loading the web and then removeing it. 
+	//TODO: bring back in if you want facebook access.
+	//[super_view addSubview:webView ];
 }
 
 -(void)authenticateUserWithCallbackObject:(id)anObject andSelector:(SEL)selector andExtendedPermissions:(NSString *)extended_permissions {
 	
 	UIWindow* window = [UIApplication sharedApplication].keyWindow;
 	
-   // NSLog(@" windows: %@", [[UIApplication sharedApplication] windows]); //(null)
+   //NSLog(@" windows: %@", [[UIApplication sharedApplication] windows]); //(null)
     if (!window) {
         
 		window = [[UIApplication sharedApplication].windows objectAtIndex:0];
@@ -94,6 +98,7 @@
 	
 	[self authenticateUserWithCallbackObject:anObject andSelector:selector andExtendedPermissions:extended_permissions andSuperView:window];
 }
+
 
 - (FbGraphResponse *)doGraphGet:(NSString *)action withGetVars:(NSDictionary *)get_vars {
 
@@ -120,7 +125,7 @@
 		url_string = [NSString stringWithFormat:@"%@access_token=%@", url_string, self.accessToken];
        //  NSLog(@"action %@", url_string);
     }
-	NSLog(@"url_string %@", url_string);
+
 	//encode the string
 	url_string = [url_string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	
@@ -287,6 +292,9 @@
 #pragma mark UIWebViewDelegate Function
 - (void)webViewDidFinishLoad:(UIWebView *)_webView {
 	
+	
+	NSLog(@"webViewDidFinishLoad");
+	
 	/**
 	 * Since there's some server side redirecting involved, this method/function will be called several times
 	 * we're only interested when we see a url like:  http://www.facebook.com/connect/login_success.html#access_token=..........
@@ -294,7 +302,7 @@
 	
 	//get the url string
 	NSString *url_string = [((_webView.request).URL) absoluteString];
-	NSLog(@"url string %@", url_string);
+
 	//looking for "access_token="
 	NSRange access_token_range = [url_string rangeOfString:@"access_token="];
 	
@@ -318,7 +326,7 @@
 
 
 		//store our request token....
-		NSLog(@"token:  %@", access_token);	
+
 		self.accessToken = access_token;
 		
 		//remove our window

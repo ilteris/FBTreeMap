@@ -28,13 +28,17 @@
 	//when you press delete me/feed this is the post that's deleted
 	NSString *feedPostId;
 	
-	IBOutlet UIWebView *myWebView;
+
 	IBOutlet UIView *treeMapView;
+	IBOutlet UIWebView *myWebView;
 	
 	BOOL failed;
 	BOOL imagesLoaded;
 	
 	NSMutableArray *plistArray;
+	
+	IBOutlet UIImageView *menu;
+	
 	
 	
 	
@@ -48,9 +52,11 @@
 //facebook
 @property (nonatomic, retain) FbGraph *fbGraph;
 @property (nonatomic, retain) NSString *feedPostId;
-@property (nonatomic, retain) IBOutlet UIWebView *myWebView;
-@property (nonatomic, retain) IBOutlet UIView *treeMapView;
 
+@property (nonatomic, retain) IBOutlet UIView *treeMapView;
+@property (nonatomic, retain) IBOutlet UIWebView *myWebView;
+
+@property (nonatomic, retain) IBOutlet UIImageView *menu;
 
 - (void)resizeView;
 

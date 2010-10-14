@@ -33,7 +33,7 @@
 		self.imageViewB = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width - 4, frame.size.height-4)];
 
 		[self.aView addSubview:imageViewA];
-		self.bView.backgroundColor = [UIColor redColor];
+		self.bView.backgroundColor = [UIColor whiteColor];
 		self.downloadDestinationPath = [NSString stringWithFormat:@""];
 		
 		loaded = false;
@@ -42,7 +42,7 @@
 
 		//self.layer.borderColor = [[UIColor whiteColor] CGColor];
 
-		self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:.3] CGColor];
+		self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.5] CGColor];
 		self.textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width - 4, frame.size.height-4)];
 
 		
@@ -105,15 +105,20 @@
 {
 	NSLog(@"here");
 	
+	self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.0] CGColor];
+	
 	[UIView beginAnimations:nil context:NULL]; 
 	
 	[UIView setAnimationDuration:0.5]; 
 	
 	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:self cache:YES]; 
+	[UIView setAnimationDidStopSelector:@selector(animationDidStop)];
 	
 	[self exchangeSubviewAtIndex:1 withSubviewAtIndex:0];
 
 	[UIView commitAnimations]; 
+	
+	//TODO: need to put back the border once the animation is done.
 	
 }
 
@@ -137,14 +142,14 @@
 	self.frame = rect;
 	//self.transform = CGAffineTransformMakeScale(.8, .8);
 	[UIView commitAnimations];	
-	
-	
 }
+
 
 - (void)animationDidStop {
 	NSLog(@"animationDidStop");
 	
-	self.imageViewA.image = [self.imageViewB.image imageCroppedToFitSize:self.frame.size];;
+	self.imageViewA.image = [self.imageViewB.image imageCroppedToFitSize:self.frame.size];
+	//self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.3] CGColor];
 }
 
 

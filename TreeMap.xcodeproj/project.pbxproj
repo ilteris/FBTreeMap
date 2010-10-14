@@ -31,6 +31,9 @@
 		F061196D125296B6008C7D07 /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F0611823125294DA008C7D07 /* libz.1.2.3.dylib */; };
 		F061197C12529973008C7D07 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F061197B12529973008C7D07 /* Reachability.m */; };
 		F06A1CD31200AE3B001E46AE /* todo.txt in Resources */ = {isa = PBXBuildFile; fileRef = F06A1CD21200AE3B001E46AE /* todo.txt */; };
+		F0CDA9161267BAA700D03C50 /* pm_menu_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = F0CDA9151267BAA700D03C50 /* pm_menu_bg.png */; };
+		F0CDA9331267C33300D03C50 /* 1_heart.png in Resources */ = {isa = PBXBuildFile; fileRef = F0CDA9311267C33300D03C50 /* 1_heart.png */; };
+		F0CDA9341267C33300D03C50 /* 2_heart.png in Resources */ = {isa = PBXBuildFile; fileRef = F0CDA9321267C33300D03C50 /* 2_heart.png */; };
 		F0F00BDF1215D57100DB0EF9 /* UIImage+ProportionalFill.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F00BDC1215D57100DB0EF9 /* UIImage+ProportionalFill.m */; };
 		F0F00BE01215D57100DB0EF9 /* UIImage+Tint.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F00BDE1215D57100DB0EF9 /* UIImage+Tint.m */; };
 		F0F00C75121AE12900DB0EF9 /* original.png in Resources */ = {isa = PBXBuildFile; fileRef = F0F00C74121AE12900DB0EF9 /* original.png */; };
@@ -91,6 +94,10 @@
 		F061197A12529973008C7D07 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		F061197B12529973008C7D07 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		F06A1CD21200AE3B001E46AE /* todo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = todo.txt; sourceTree = "<group>"; };
+		F0CDA9151267BAA700D03C50 /* pm_menu_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pm_menu_bg.png; sourceTree = "<group>"; };
+		F0CDA9311267C33300D03C50 /* 1_heart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1_heart.png; sourceTree = "<group>"; };
+		F0CDA9321267C33300D03C50 /* 2_heart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2_heart.png; sourceTree = "<group>"; };
+		F0ECFA2C1266557D0075C90F /* NSMutableArray_Shuffling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMutableArray_Shuffling.h; sourceTree = "<group>"; };
 		F0F00BDB1215D57100DB0EF9 /* UIImage+ProportionalFill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ProportionalFill.h"; sourceTree = "<group>"; };
 		F0F00BDC1215D57100DB0EF9 /* UIImage+ProportionalFill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ProportionalFill.m"; sourceTree = "<group>"; };
 		F0F00BDD1215D57100DB0EF9 /* UIImage+Tint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Tint.h"; sourceTree = "<group>"; };
@@ -194,6 +201,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F0CDA9151267BAA700D03C50 /* pm_menu_bg.png */,
+				F0CDA9311267C33300D03C50 /* 1_heart.png */,
+				F0CDA9321267C33300D03C50 /* 2_heart.png */,
 				F033EA5A118A25230020F23D /* data.plist */,
 				F033EA4D118A24C30020F23D /* TreeMapViewController.xib */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
@@ -256,6 +266,7 @@
 				F0F00BDC1215D57100DB0EF9 /* UIImage+ProportionalFill.m */,
 				F0F00BDD1215D57100DB0EF9 /* UIImage+Tint.h */,
 				F0F00BDE1215D57100DB0EF9 /* UIImage+Tint.m */,
+				F0ECFA2C1266557D0075C90F /* NSMutableArray_Shuffling.h */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -344,6 +355,9 @@
 				F033EA5B118A25230020F23D /* data.plist in Resources */,
 				F06A1CD31200AE3B001E46AE /* todo.txt in Resources */,
 				F0F00C75121AE12900DB0EF9 /* original.png in Resources */,
+				F0CDA9161267BAA700D03C50 /* pm_menu_bg.png in Resources */,
+				F0CDA9331267C33300D03C50 /* 1_heart.png in Resources */,
+				F0CDA9341267C33300D03C50 /* 2_heart.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

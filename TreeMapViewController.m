@@ -7,9 +7,10 @@
 #import "RegexKitLite.h"
 #import "ASIHTTPRequest.h"
 #import "ASINetworkQueue.h"
+#import "NSMutableArray_Shuffling.h"
 
 
-#define numberOfObjects (10)
+#define numberOfObjects (8)
 
 
 @implementation TreeMapViewController
@@ -18,13 +19,14 @@
 @synthesize cells;
 @synthesize destinationPaths;
 @synthesize treeMapView;
-@synthesize myWebView;
+
 @synthesize plistArray;
 //fcebook
 @synthesize fbGraph;
 @synthesize feedPostId;
+@synthesize myWebView;
 
-
+@synthesize menu;
 
 #pragma mark -
 #pragma mark facebook delegate
@@ -36,7 +38,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 	
-	imagesLoaded - FALSE;
+	imagesLoaded = FALSE;
 	
 	/*Facebook Application ID*/
 	NSString *client_id = @"128496757192973";
@@ -46,6 +48,11 @@
 	//alloc and initalize our FbGraph instance
 	self.fbGraph = [[FbGraph alloc] initWithFbClientID:client_id];
 	
+	UIImage *menuBgImage=[[UIImage imageNamed:@"pm_menu_bg.png"] stretchableImageWithLeftCapWidth:10 topCapHeight:5];
+	
+	menu.image = menuBgImage;
+	
+	[menu setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
 	//begin the authentication process.....
 	//[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,read_stream,user_status, user_videos,publish_stream,offline_access"];
 	
@@ -58,9 +65,9 @@
 
 	
 	//[self.view addSubview:self.myWebView];
-	[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,read_stream,user_status,user_videos,publish_stream, offline_access" andSuperView:self.myWebView];
-
-	
+//	[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,read_stream,user_status,user_videos,publish_stream, offline_access" andSuperView:self.view];
+	[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,user_videos,publish_stream,offline_access" andSuperView:self.view];
+	NSLog(@"self.view %@", self.treeMapView);	
 }
 
 #pragma mark -
@@ -76,12 +83,11 @@
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Note" message:@"For the simplest code, I've written all output to the 'Debugger Console'." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 	[alert show];
 	[alert release];
-
 	*/
 	
 	NSLog(@"------------>CONGRATULATIONS<------------, You're logged into Facebook...  Your oAuth token is:  %@", fbGraph.accessToken);
 	
-	[self.myWebView removeFromSuperview];
+	//[self.myWebView removeFromSuperview];
 	//[self.view addSubview:self.treeMapView];
 	
 	[self getMeButtonPressed];
@@ -156,6 +162,7 @@
 	NSLog(@"fruits: %@", self.fruits);
 	/*Bring the contacts back to 15 according to the values of @value!*/
 	[self filterEntries:fruits];
+	[fruits shuffle];
 
 	//[(TreemapView *)self.view reloadData];
 	[self downloadImages];
@@ -247,7 +254,7 @@
 		
 		NSLog(@"likes : %@", [[fruits objectAtIndex:imageNo] objectForKey:@"likes"]);
 		
-		NSLog(@"[request downloadDestinationPath]: %@", [request downloadDestinationPath]);
+		//NSLog(@"[request downloadDestinationPath]: %@", [request downloadDestinationPath]);
 		NSString *tempFileName = [NSString stringWithFormat:@"%i.png",imageNo];
 		
 		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:tempFileName, @"filename", [[fruits objectAtIndex:imageNo] objectForKey:@"likes"], @"likes", nil];
@@ -279,7 +286,7 @@
 	}
 }
 
-
+                      
 - (void)queueComplete:(ASINetworkQueue*)queue
 {
 	NSLog(@"Queue finished");
@@ -292,17 +299,6 @@
 	//plist file consists of objects of dictionaries wrapped in an array
 	
 	[self.plistArray writeToFile:plistFile atomically:NO];
-	/*
-	if(array == nil) //check if the plist is empty 
-	{ 
-		//array = [[NSMutableArray alloc] initWithCapacity:1]; //if it's empty, alloc/init
-		
-	}
-	
-	array = plistArray; // 
-	*/
-	
-	
 	[(TreemapView *)self.treeMapView reloadData];
 	
 }
@@ -498,7 +494,7 @@
 {
 	
 	// resize rectangles with animation
-	 
+	// NSLog(@"resizeView");
 	[UIView beginAnimations:@"reload" context:nil];
 	[UIView setAnimationDuration:0.5];
 	
@@ -506,7 +502,7 @@
 	
 	[UIView commitAnimations];
 	
-	NSLog(@"resizeView");
+	
 }
 
 #pragma mark TreemapView data source
@@ -529,7 +525,8 @@
 		{
 			NSBundle *bundle = [NSBundle mainBundle];
 			NSString *plistPath = [bundle pathForResource:@"data" ofType:@"plist"];
-			array = [[NSArray alloc] initWithContentsOfFile:plistPath];
+			array = [[NSMutableArray alloc] initWithContentsOfFile:plistPath];
+			NSLog(@"array count is zero");
 			
 		}
 		
@@ -546,7 +543,7 @@
 		 }
 	}
 	
-	NSLog(@"fruits %@", fruits);
+	//NSLog(@"fruits %@", fruits);
 	
 	//these values go to the treemapview in order to be used for calculating the sizes of the cells
 	// no need to store those in the cellModel.
@@ -555,7 +552,7 @@
 
 	for (NSDictionary *dic in fruits) 
 	 {
-		 NSLog(@"fruit: %@", [dic objectForKey:@"likes"]);
+		// NSLog(@"fruit: %@", [dic objectForKey:@"likes"]);
 		 //passing the file names from the plist here. hmmmm.
 		 
 		// [self.destinationPaths addObject:[dic objectForKey:@"destinationPath"]];
@@ -585,9 +582,10 @@
 	//NSString *fn = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[destinationPaths objectAtIndex:index]];
 	//NSSearchPathForDirectoriesInDomains
 					
-	NSLog(@"fn %@", fn);
+
 	UIImage *img = [UIImage imageWithContentsOfFile:fn];
 	
+
 	//cell.downloadDestinationPath = fn;
 	cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 
