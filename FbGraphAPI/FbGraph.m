@@ -86,6 +86,8 @@
 	//[super_view addSubview:webView ];
 }
 
+
+
 -(void)authenticateUserWithCallbackObject:(id)anObject andSelector:(SEL)selector andExtendedPermissions:(NSString *)extended_permissions {
 	
 	UIWindow* window = [UIApplication sharedApplication].keyWindow;
@@ -303,6 +305,7 @@
 	//get the url string
 	NSString *url_string = [((_webView.request).URL) absoluteString];
 
+	NSLog(@"url_string %@", url_string);
 	//looking for "access_token="
 	NSRange access_token_range = [url_string rangeOfString:@"access_token="];
 	

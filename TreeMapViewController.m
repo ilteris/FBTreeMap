@@ -10,11 +10,11 @@
 #import "NSMutableArray_Shuffling.h"
 
 
-#define numberOfObjects (8)
+#define numberOfObjects (10)
 
 
 @implementation TreeMapViewController
-
+   
 @synthesize fruits;
 @synthesize cells;
 @synthesize destinationPaths;
@@ -27,6 +27,11 @@
 @synthesize myWebView;
 
 @synthesize menu;
+@synthesize comment_btn;
+@synthesize like_btn;
+@synthesize refresh_btn;
+
+@synthesize jsonArray;
 
 #pragma mark -
 #pragma mark facebook delegate
@@ -38,12 +43,14 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 	
-	imagesLoaded = FALSE;
+	imagesLoaded = NO;
+	
+	displayMode = NO;
 	
 	/*Facebook Application ID*/
 	NSString *client_id = @"128496757192973";
 	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
-	
+	like_btn.selected = true;
 	
 	//alloc and initalize our FbGraph instance
 	self.fbGraph = [[FbGraph alloc] initWithFbClientID:client_id];
@@ -90,7 +97,7 @@
 	//[self.myWebView removeFromSuperview];
 	//[self.view addSubview:self.treeMapView];
 	
-	[self getMeButtonPressed];
+	[self getMeButtonPressed:@"likes"];
 }
 
 /**
@@ -98,7 +105,7 @@
  **/
 
 
--(void)getMeButtonPressed
+-(void)getMeButtonPressed:(NSString*)key
 {
 	
 	NSLog(@"getMeButtonPressed");
@@ -137,33 +144,49 @@
 	
 	[parser release];
 
-    self.fruits = [[NSMutableArray alloc] initWithCapacity:2];
+  
+	self.jsonArray = [[NSMutableArray alloc] initWithCapacity:2];
+	
+	
     for (NSDictionary *item in firstPageData) 
 	{
 	
-       		[fruits addObject:item];
+       		[jsonArray addObject:item];
 
     }
 	
 	for (NSDictionary *item in secondPageData) 
 	{
 		
-     	[fruits addObject:item];
+     	[jsonArray addObject:item];
 		
     }
 	
 	for (NSDictionary *item in thirdPageData) 
 	{
 		
-   		[fruits addObject:item];
+   		[jsonArray addObject:item];
 			
     }
 		
-	NSLog(@"fruits: %@", self.fruits);
+
 	/*Bring the contacts back to 15 according to the values of @value!*/
-	[self filterEntries:fruits];
+	//make sure to keep a clone of the original array somewhere because it's needed 
+	//so that you can filter it out according to comments
+	
+	//so it's better to clone it and send that array to be filtered. and return it back.
+	
+	//cloned array is fruits. 
+	
+	self.fruits = [[NSMutableArray alloc] initWithCapacity:2];
+	self.fruits = [self filterEntries:self.jsonArray accordingTo:key];
+
+	
+	
+	//NSLog(@"self.fruits %@", self.fruits);
 	[fruits shuffle];
 
+	
 	//[(TreemapView *)self.view reloadData];
 	[self downloadImages];
 }
@@ -171,21 +194,33 @@
 
 
 
--(void) filterEntries:(NSMutableArray*)mutableArray
+-(NSMutableArray*) filterEntries:(NSMutableArray*)mutableArray accordingTo:(NSString*)key
 {
 	//here we are sorting according to value.
 	
-	
-	
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"likes" ascending: NO];
-	[mutableArray sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
+
+
+	NSMutableArray *tempArr = [mutableArray mutableCopy];
+
+	NSLog(@"key : %@", key);
+	// [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:key ascending: NO];
+	//NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"comments.count" ascending: NO];
+	[tempArr sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
 	[sortDescriptor release];
 	
 	// here  we are getting rid of the rest of the objects after numberOfObjects
+	//check if the array is larger than numberof Objects
 	
-	[mutableArray removeObjectsInRange: NSMakeRange(numberOfObjects,[mutableArray count]-numberOfObjects)];
+	//get rid of the zeros. 
+	if ([tempArr count] >= numberOfObjects) 
+	{
+		[tempArr removeObjectsInRange: NSMakeRange(numberOfObjects,[mutableArray count]-numberOfObjects)];
+	}
 	
+	NSLog(@"tempArr: %@", tempArr);
 	
+	return [tempArr autorelease];
 }
 
 
@@ -240,7 +275,6 @@
 	if (img) 
 	{
 
-	
 		int imageNo =  [[[request userInfo] objectForKey:@"ImageNumber"] intValue]; 
 		
 		TreemapViewCell *cell = [self.cells objectAtIndex:imageNo];
@@ -252,7 +286,7 @@
 		//NSLog(@"cell.downloadDestinationPath %@", cell.downloadDestinationPath);
 		
 		
-		NSLog(@"likes : %@", [[fruits objectAtIndex:imageNo] objectForKey:@"likes"]);
+		//NSLog(@"likes : %@", [[fruits objectAtIndex:imageNo] objectForKey:@"likes"]);
 		
 		//NSLog(@"[request downloadDestinationPath]: %@", [request downloadDestinationPath]);
 		NSString *tempFileName = [NSString stringWithFormat:@"%i.png",imageNo];
@@ -273,8 +307,62 @@
 		//TODO: add to the plist here? Not really, create an array and add the dictionaries here to the array and once 
 		//queue is completed write all of the stuff to the plist file. 
 	}
-	
+
 }
+
+
+- (IBAction)refreshDisplay
+{
+	//if there's no action going on.
+	// in the future, make sure this doesn't get called a few times.
+	if(imagesLoaded)	
+	{
+		//resetting the self.plistArray so we don't add to the old plistArray.
+		self.plistArray = [[NSMutableArray alloc] initWithCapacity:1];
+		//currentDisplayMode
+		if(displayMode) //if the comments mode is on
+		{
+			[self getMeButtonPressed:@"comments.count"];
+		}
+		else
+		{
+			[self getMeButtonPressed:@"likes"];
+		}
+
+	}
+}
+
+- (IBAction)displayComments
+{
+	//if there's no action going on.
+	// in the future, make sure this doesn't get called a few times.
+	if(imagesLoaded)	
+	{
+		//resetting the self.plistArray so we don't add to the old plistArray.
+		self.plistArray = [[NSMutableArray alloc] initWithCapacity:1];
+		displayMode = YES;
+		[self getMeButtonPressed:@"comments.count"];
+	}
+}
+
+
+
+- (IBAction)displayLikes
+{
+	//if there's no action going on.
+	// in the future, make sure this doesn't get called a few times.
+	if(imagesLoaded)	
+	{
+		//resetting the self.plistArray so we don't add to the old plistArray.
+		self.plistArray = [[NSMutableArray alloc] initWithCapacity:1];
+		displayMode = NO; //setting likesDisplay
+		[self getMeButtonPressed:@"likes"];
+	}
+}
+
+
+
+
 
 - (void)imageFetchFailed:(ASIHTTPRequest *)request
 {
@@ -442,8 +530,8 @@
 	
 	//NSLog(@"cell bounds: %.0f, %.0f, %3.0f, %3.0f", cell.frame.origin.x, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
 	
-	cell.nameLabel.text = [NSString stringWithFormat:@"%@ has %@ likes" ,[[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"], [[fruits objectAtIndex:index] objectForKey:@"likes"]];
-//	cell.valueLabel.text = [NSString stringWithFormat:@"%@ comments", [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]];
+	cell.nameLabel.text = [NSString stringWithFormat:@"%@ has %@ likes %@ comments" ,[[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"], [[fruits objectAtIndex:index] objectForKey:@"likes"], [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]];
+	//cell.valueLabel.text = [NSString stringWithFormat:@"%@ comments", [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]];
 	//if([cell.valueLabel.text isEqual:@"(null) comments"]) cell.valueLabel.text = [NSString stringWithFormat:@"0 comments"];
 	//cell.backgroundColor = [UIColor colorWithHue:(float)index / (fruits.count + 3) saturation:1 brightness:0.75 alpha:.3];
 
@@ -514,29 +602,35 @@
 	{
 		//need to fill the fruits 
 		//get the plist
-		//TODO: need to check if plist exists or not.
+
 		
 		NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
 		NSString *documentsDirectory = [paths objectAtIndex: 0];
 		NSString *plistFile = [documentsDirectory stringByAppendingPathComponent: @"data.plist"];
 		NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
 
-		if([array count] == 0)
+		if([array count] == 0) //if the plist doesn't exist meaning we just launched the app for the first time.
+			//in this case we are using our plist file that's  bundled with the app.
 		{
 			NSBundle *bundle = [NSBundle mainBundle];
 			NSString *plistPath = [bundle pathForResource:@"data" ofType:@"plist"];
 			array = [[NSMutableArray alloc] initWithContentsOfFile:plistPath];
 			NSLog(@"array count is zero");
 			
+			//set the displayMode here. Like mode for now.
+			displayMode = 0; //set it to like
+			
 		}
 		
-				
+		//trying to get the paths of the filenames and like counts here.
+		
 		self.fruits = [[NSMutableArray alloc] initWithCapacity:array.count];
 		self.destinationPaths = [NSMutableArray arrayWithCapacity:array.count];
 		NSLog(@"array %@", array);
+		NSLog(@"fruits %@", fruits);
 		
-		
-		for (NSDictionary *dic in array) 
+		//fruits is empty here.
+		for (NSDictionary *dic in array)  
 		{
 			NSMutableDictionary *mDic = [NSMutableDictionary dictionaryWithDictionary:dic];
 			[fruits addObject:mDic];
@@ -546,7 +640,6 @@
 	//NSLog(@"fruits %@", fruits);
 	
 	//these values go to the treemapview in order to be used for calculating the sizes of the cells
-	// no need to store those in the cellModel.
 	NSMutableArray *values = [NSMutableArray arrayWithCapacity:fruits.count];
 	
 
@@ -554,6 +647,7 @@
 	 {
 		// NSLog(@"fruit: %@", [dic objectForKey:@"likes"]);
 		 //passing the file names from the plist here. hmmmm.
+		 
 		 
 		// [self.destinationPaths addObject:[dic objectForKey:@"destinationPath"]];
 		 if([dic objectForKey:@"likes"]) 

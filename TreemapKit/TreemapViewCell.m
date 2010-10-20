@@ -38,7 +38,7 @@
 		
 		loaded = false;
 		
-		self.layer.borderWidth = 1;
+		self.layer.borderWidth = .5;
 
 		//self.layer.borderColor = [[UIColor whiteColor] CGColor];
 
@@ -58,15 +58,15 @@
 		
 	//	[self.aView addSubview:textLabel];
 		//setting it arbitrarily. 
-		self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, frame.size.width, 10)];
+		self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 10)];
 		
 		
 		nameLabel.font = [UIFont boldSystemFontOfSize:10];
 		nameLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
 		nameLabel.textAlignment = UITextAlignmentLeft;
 		nameLabel.textColor = [UIColor whiteColor];
-
-		nameLabel.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.5];
+		nameLabel.backgroundColor = [UIColor clearColor];
+		//nameLabel.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.5];
 		
 		nameLabel.lineBreakMode = UILineBreakModeWordWrap;
 		nameLabel.adjustsFontSizeToFitWidth = NO;
@@ -82,10 +82,11 @@
 		valueLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
 		valueLabel.textAlignment = UITextAlignmentLeft;
 		valueLabel.textColor = [UIColor whiteColor];
-		valueLabel.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.3];
+		//valueLabel.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.3];
 		valueLabel.lineBreakMode = UILineBreakModeCharacterWrap;
 		valueLabel.adjustsFontSizeToFitWidth = YES;
-		
+		valueLabel.backgroundColor = [UIColor clearColor];
+
 		valueLabel.alpha = .8;
 				
 		
@@ -159,10 +160,10 @@
 	[super layoutSubviews];
 
 	textLabel.frame = CGRectMake(0, (self.frame.size.height-textLabel.frame.size.height) - 15, self.frame.size.width-10, self.textLabel.frame.size.height);
-	nameLabel.frame = CGRectMake(0, 10, self.nameLabel.frame.size.width, self.nameLabel.frame.size.height);
+	nameLabel.frame = CGRectMake(5, 10, self.nameLabel.frame.size.width, self.nameLabel.frame.size.height);
 
 	
-	valueLabel.frame = CGRectMake(0, 20, self.frame.size.width, self.valueLabel.frame.size.height);
+	valueLabel.frame = CGRectMake(0, 0, self.frame.size.width, self.valueLabel.frame.size.height);
 	imageViewA.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
 	aView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
 	bView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);

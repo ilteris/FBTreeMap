@@ -17,7 +17,7 @@
 
 @interface TreeMapViewController : UIViewController   <TreemapViewDelegate, TreemapViewDataSource, UIWebViewDelegate> {
     ASINetworkQueue *networkQueue;
-	NSMutableArray *fruits;
+
 	NSMutableArray *cells;
 	NSMutableArray *destinationPaths;
 	
@@ -36,10 +36,17 @@
 	BOOL imagesLoaded;
 	
 	NSMutableArray *plistArray;
+	NSMutableArray *fruits;
+	NSMutableArray *jsonArray;
+	
 	
 	IBOutlet UIImageView *menu;
+	IBOutlet UIButton *like_btn;
+	IBOutlet UIButton *comment_btn;
+	IBOutlet UIButton *refresh_btn;
 	
-	
+
+	BOOL displayMode; //either comment mode or like mode. 1 is comment mode 0 is like mode
 	
 	
 }
@@ -48,10 +55,16 @@
 @property (nonatomic, retain) NSMutableArray *cells;
 @property (nonatomic, retain) NSMutableArray *destinationPaths;
 @property (nonatomic, retain) NSMutableArray *plistArray;
+@property (nonatomic, retain) NSMutableArray *jsonArray;
 
 //facebook
 @property (nonatomic, retain) FbGraph *fbGraph;
 @property (nonatomic, retain) NSString *feedPostId;
+
+@property (nonatomic, retain) IBOutlet UIButton *like_btn;
+@property (nonatomic, retain) IBOutlet UIButton *comment_btn;
+@property (nonatomic, retain) IBOutlet UIButton *refresh_btn;
+
 
 @property (nonatomic, retain) IBOutlet UIView *treeMapView;
 @property (nonatomic, retain) IBOutlet UIWebView *myWebView;
@@ -60,10 +73,13 @@
 
 - (void)resizeView;
 
--(void)getMeButtonPressed;
+-(void)getMeButtonPressed:(NSString*)key;
 
--(void) filterEntries:(NSMutableArray*)mutableArray;
+-(NSMutableArray*) filterEntries:(NSMutableArray*)mutableArray accordingTo:(NSString*)key;
 
 - (void) downloadImages;
 
+- (IBAction)refreshDisplay;
+- (IBAction)displayLikes;
+- (IBAction)displayComments;
 @end
