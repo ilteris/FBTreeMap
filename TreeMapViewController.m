@@ -37,7 +37,6 @@
 #pragma mark facebook delegate
 - (void)viewDidLoad {
     [super viewDidLoad];
-	
 }
 
 
