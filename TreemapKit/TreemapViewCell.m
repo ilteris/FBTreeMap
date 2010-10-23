@@ -42,7 +42,7 @@
 
 		//self.layer.borderColor = [[UIColor whiteColor] CGColor];
 
-		self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.5] CGColor];
+		self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:1] CGColor];
 		self.textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width - 4, frame.size.height-4)];
 
 		

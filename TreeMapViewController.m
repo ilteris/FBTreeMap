@@ -10,7 +10,7 @@
 #import "NSMutableArray_Shuffling.h"
 
 
-#define numberOfObjects (10)
+#define numberOfObjects (8)
 
 
 @implementation TreeMapViewController
