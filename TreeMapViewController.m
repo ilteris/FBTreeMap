@@ -268,6 +268,8 @@
 	
 }
 
+#pragma mark imageDownload Delegates 
+
 - (void)imageFetchComplete:(ASIHTTPRequest *)request
 {
 	UIImage *img = [UIImage imageWithContentsOfFile:[request downloadDestinationPath]];
@@ -310,6 +312,38 @@
 }
 
 
+
+- (void)imageFetchFailed:(ASIHTTPRequest *)request
+{
+	if (!failed) {
+		if ([[request error] domain] != NetworkRequestErrorDomain || [[request error] code] != ASIRequestCancelledErrorType) {
+			UIAlertView *alertView = [[[UIAlertView alloc] initWithTitle:@"Download failed" message:@"Failed to download images" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+			[alertView show];
+		}		failed = YES;
+	}
+}
+
+
+- (void)queueComplete:(ASINetworkQueue*)queue
+{
+	NSLog(@"Queue finished");
+	imagesLoaded = YES;
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex: 0];
+	NSString *plistFile = [documentsDirectory stringByAppendingPathComponent: @"data.plist"];
+	//NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
+	//plist file consists of objects of dictionaries wrapped in an array
+	
+	[self.plistArray writeToFile:plistFile atomically:NO];
+	[(TreemapView *)self.treeMapView reloadData];
+	
+}
+
+#pragma mark -
+
+
+
 - (IBAction)refreshDisplay
 {
 	//if there's no action going on.
@@ -333,6 +367,7 @@
 
 - (IBAction)displayComments
 {
+	/*
 	//if there's no action going on.
 	// in the future, make sure this doesn't get called a few times.
 	if(imagesLoaded)	
@@ -342,6 +377,7 @@
 		displayMode = YES;
 		[self getMeButtonPressed:@"comments.count"];
 	}
+	 */
 }
 
 
@@ -362,33 +398,6 @@
 
 
 
-
-- (void)imageFetchFailed:(ASIHTTPRequest *)request
-{
-	if (!failed) {
-		if ([[request error] domain] != NetworkRequestErrorDomain || [[request error] code] != ASIRequestCancelledErrorType) {
-			UIAlertView *alertView = [[[UIAlertView alloc] initWithTitle:@"Download failed" message:@"Failed to download images" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
-			[alertView show];
-		}		failed = YES;
-	}
-}
-
-                      
-- (void)queueComplete:(ASINetworkQueue*)queue
-{
-	NSLog(@"Queue finished");
-	imagesLoaded = YES;
-
-	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths objectAtIndex: 0];
-	NSString *plistFile = [documentsDirectory stringByAppendingPathComponent: @"data.plist"];
-	//NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
-	//plist file consists of objects of dictionaries wrapped in an array
-	
-	[self.plistArray writeToFile:plistFile atomically:NO];
-	[(TreemapView *)self.treeMapView reloadData];
-	
-}
 
 
 
