@@ -23,24 +23,32 @@
 		NSLog(@"nodes %@", nodes);
 		NSInteger index = [[[nodes objectAtIndex:0] objectForKey:@"index"] intValue];
  //      	NSInteger index = [[[nodes objectAtIndex:0] objectForKey:@"index"] integerValue];
-     //   NSLog(@"index here is %i", index);
-		if (createNode) {
+        NSLog(@"index here is %i", index);
+		NSLog(@"self.subviews %@", self.subviews);
+		if (createNode) 
+		{
 			TreemapViewCell *cell = [dataSource treemapView:self cellForIndex:index forRect:rect];
-     //       NSLog(@"createNode");
+			NSLog(@"createNode");
 			cell.index = index;
 			cell.delegate = self;
+			
 			[self addSubview:cell];
+			
+			NSLog(@"cell %@", cell);
+			NSLog(@"index here is %i", index);
+			
 		}
 		else 
 		{
 			//THIS GETS CALLED ON THE UPDATE
 			
+			NSLog(@"updateNode");
+			NSLog(@"nodes count %i", [nodes count]);
+			NSLog(@"self.subviews count %i", [self.subviews count]);
 			
 			//TODO: animate it here.
 			TreemapViewCell *cell = [self.subviews objectAtIndex:index];
 			
-		
-			NSLog(@"wait a second???");
 			[cell moveAndScale:rect];
 
 						
@@ -190,25 +198,30 @@
 	}
 }
 
+//changed to withCreate:NO ---> YES;
 - (void)resizeNodes {
 	NSLog(@"resizing nodes");
+	
 	NSArray *nodes = [self getData];
 	
 	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.bounds.size.width,self.bounds.size.height);
 //	NSLog(@"nodes %@", nodes);
-	if (nodes && nodes.count > 0) {
-		NSLog(@"hereeee");
+	if (nodes && nodes.count > 0) 
+	{
+		NSLog(@"calling calcNodePositions");
+		
 		[self calcNodePositions:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)
 						  nodes:nodes
 						  width:ceil(self.bounds.size.width)
 						 height:ceil(self.bounds.size.height)
 						  depth:0
-					 withCreate:NO];
+					 withCreate:YES];
 	}
 }
 
 - (void)removeNodes {
-	for (UIView *view in self.subviews) {
+	for (UIView *view in self.subviews) 
+	{
 		[view removeFromSuperview];
 	}
 }
@@ -221,6 +234,7 @@
 
 - (void)reloadData {
 	NSLog(@"turning turning");
+	[self removeNodes];
 	[self resizeNodes];
 }
 

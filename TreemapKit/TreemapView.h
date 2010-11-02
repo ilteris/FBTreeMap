@@ -18,6 +18,7 @@
 - (void)reloadData;
 - (void)resizeNodes;
 - (BOOL)initialized;
+- (void)removeNodes;
 
 @end
 

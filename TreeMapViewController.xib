@@ -105,6 +105,7 @@
 							<string key="NSClassName">NSImage</string>
 							<string key="NSResourceName">2_comments.png</string>
 						</object>
+						<reference key="IBUIDisabledImage" ref="595276803"/>
 						<reference key="IBUISelectedImage" ref="595276803"/>
 						<object class="NSCustomResource" key="IBUINormalImage">
 							<string key="NSClassName">NSImage</string>

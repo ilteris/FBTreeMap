@@ -42,14 +42,31 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 	
-	imagesLoaded = NO;
+	imagesLoaded = YES;
 	
-	displayMode = NO;
+	//get this value from NSDefaults.
+	NSLog(@"displayModedisplayMode %i", displayMode);
+	displayMode = [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]; // 0 =likes 1 =comments 
 	
+	if(!displayMode) //likes
+	{
+		like_btn.enabled =  NO;
+		comment_btn.enabled =  YES;
+	}
+	
+	else //comments
+	{
+		like_btn.enabled =  YES;
+		comment_btn.enabled =  NO;
+	}
+
+	
+	NSLog(@"displayModedisplayMode %i", displayMode);	
 	/*Facebook Application ID*/
 	NSString *client_id = @"128496757192973";
 	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
-	like_btn.selected = true;
+	//like_btn.selected = YES;
+	//like_btn.enabled =  NO;
 	
 	//alloc and initalize our FbGraph instance
 	self.fbGraph = [[FbGraph alloc] initWithFbClientID:client_id];
@@ -82,7 +99,7 @@
  * This function is called by FbGraph after it's finished the authentication process
  **/
 - (void)fbGraphCallback:(id)sender {
-	
+	 
 	NSLog(@"fbGraphCallback");
 	//pop a message letting them know most of the info will be dumped in the log
 	/* 
@@ -96,7 +113,7 @@
 	//[self.myWebView removeFromSuperview];
 	//[self.view addSubview:self.treeMapView];
 	
-	[self getMeButtonPressed:@"likes"];
+	//[self getMeButtonPressed:@"likes"];
 }
 
 /**
@@ -117,9 +134,7 @@
 	SBJSON *parser = [[SBJSON alloc] init];
 	NSDictionary *parsed_json = [parser objectWithString:fb_graph_response.htmlResponse error:nil];	
 	
-	
-	
-    
+	    
 	//there's 2 additional dictionaries inside this one on the first level ('data' and 'paging')
 	NSDictionary *firstPageData = (NSDictionary *)[parsed_json objectForKey:@"data"];
     NSDictionary *secondPage = (NSDictionary *)[parsed_json objectForKey:@"paging"];
@@ -177,23 +192,24 @@
 	
 	//cloned array is fruits. 
 	
+	NSLog(@"key is %@", key);
 	self.fruits = [[NSMutableArray alloc] initWithCapacity:2];
 	self.fruits = [self filterEntries:self.jsonArray accordingTo:key];
 
 	
 	
-	//NSLog(@"self.fruits %@", self.fruits);
+//	NSLog(@"self.fruits %@", self.fruits);
 	[fruits shuffle];
 
 	
 	//[(TreemapView *)self.view reloadData];
-	[self downloadImages];
+	[self downloadAccordingToKey:key];
 }
 
 
 
 
--(NSMutableArray*) filterEntries:(NSMutableArray*)mutableArray accordingTo:(NSString*)key
+-(NSMutableArray*)filterEntries:(NSMutableArray*)mutableArray accordingTo:(NSString*)key
 {
 	//here we are sorting according to value.
 	
@@ -217,19 +233,22 @@
 		[tempArr removeObjectsInRange: NSMakeRange(numberOfObjects,[mutableArray count]-numberOfObjects)];
 	}
 	
-	NSLog(@"tempArr: %@", tempArr);
+	//NSLog(@"tempArr: %@", tempArr);
 	
 	return [tempArr autorelease];
 }
 
 
-- (void) downloadImages
+- (void) downloadAccordingToKey:(NSString*)key
 {
 	//NSLog(@"fruits %@", fruits);
-	
+
+	imagesLoaded = NO;
+
 	if (!networkQueue) {
 		networkQueue = [[ASINetworkQueue alloc] init];	
 	}
+	
 	
 	failed = NO;
 	[networkQueue reset];
@@ -259,13 +278,12 @@
 		NSLog(@"url_string %@", url_string);
 		
 		request = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:url_string]] autorelease];
-		[request setUserInfo:[NSDictionary dictionaryWithObject:[NSNumber   
-																 numberWithInt:i] forKey:@"ImageNumber"]]; 
+		[request setUserInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber   
+																 numberWithInt:i], @"ImageNumber",key, @"key",nil]]; 
 		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%i.png",i]]];
 	//	[request setDownloadProgressDelegate:imageProgressIndicator1];
 		[networkQueue addOperation:request];
 	}
-	
 }
 
 #pragma mark imageDownload Delegates 
@@ -277,9 +295,10 @@
 	{
 
 		int imageNo =  [[[request userInfo] objectForKey:@"ImageNumber"] intValue]; 
-		
-		TreemapViewCell *cell = [self.cells objectAtIndex:imageNo];
-		cell.imageViewB.image = [img imageCroppedToFitSize:cell.frame.size];
+
+		NSLog(@"request %@", [request userInfo] );
+	//	TreemapViewCell *cell = [self.cells objectAtIndex:imageNo];
+	//	cell.imageViewB.image = [img imageCroppedToFitSize:cell.frame.size];
 		
 		//cell.imageView.image = [self scaleAndCropFrame:cell.frame withUIImage:img];
 		//add like and destination values to a nsdictionary and add this to an array and then write to a plist file.
@@ -291,8 +310,30 @@
 		
 		//NSLog(@"[request downloadDestinationPath]: %@", [request downloadDestinationPath]);
 		NSString *tempFileName = [NSString stringWithFormat:@"%i.png",imageNo];
+		NSString *likeKey;
+		NSString *valuesForCategory;
+		NSString *key = [[request userInfo] objectForKey:@"key"];
 		
-		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:tempFileName, @"filename", [[fruits objectAtIndex:imageNo] objectForKey:@"likes"], @"likes", nil];
+		if(!displayMode)//0//likes
+		{
+
+			valuesForCategory = [NSString stringWithFormat:@"%@",[[fruits objectAtIndex:imageNo] objectForKey:@"likes"]];
+
+			likeKey = [NSString stringWithFormat:@"likes"];
+			NSLog(@"displayMode is 0");
+		}
+		else //displayMode is 1//comments 
+		{
+			NSLog(@"displayMode is 1");
+			valuesForCategory = [NSString stringWithFormat:@"%@",[[[fruits objectAtIndex:imageNo] objectForKey:@"comments"] objectForKey:@"count"]];
+			likeKey = [NSString stringWithFormat:@"comments"];
+		}
+
+		NSLog(@"key is %@", [[request userInfo] objectForKey:@"key"]);
+		NSLog(@"image No is %i", imageNo);
+		NSLog(@"[[fruits objectAtIndex:imageNo] comments %@", [[[fruits objectAtIndex:imageNo] objectForKey:@"comments"] objectForKey:@"count"]);
+		NSLog(@" [[fruits objectAtIndex:imageNo] objectForKey:key] : %@", [[fruits objectAtIndex:imageNo] objectForKey:key]);
+		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:tempFileName, @"filename", valuesForCategory, likeKey, nil];
 		
 		
 		if(self.plistArray == nil) //check if the plist is empty 
@@ -301,7 +342,7 @@
 			
 		}
 		
-		
+		NSLog(@"dict %@", dict);
 		[self.plistArray insertObject:dict atIndex:0];
 		
 		//NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"likes"]];
@@ -335,6 +376,7 @@
 	//NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
 	//plist file consists of objects of dictionaries wrapped in an array
 	
+	NSLog(@"self.plistArray %@", self.plistArray);
 	[self.plistArray writeToFile:plistFile atomically:NO];
 	[(TreemapView *)self.treeMapView reloadData];
 	
@@ -367,32 +409,41 @@
 
 - (IBAction)displayComments
 {
-	/*
+	like_btn.enabled =  YES;
+	comment_btn.enabled =  NO;
+	
 	//if there's no action going on.
 	// in the future, make sure this doesn't get called a few times.
 	if(imagesLoaded)	
 	{
 		//resetting the self.plistArray so we don't add to the old plistArray.
 		self.plistArray = [[NSMutableArray alloc] initWithCapacity:1];
-		displayMode = YES;
+		displayMode = 1; //set it to comments
+		[[NSUserDefaults standardUserDefaults] setInteger:displayMode forKey:@"displayMode"];
 		[self getMeButtonPressed:@"comments.count"];
 	}
-	 */
+	 
 }
 
 
 
 - (IBAction)displayLikes
 {
+	like_btn.enabled =  NO;
+	comment_btn.enabled =  YES;
+	
+	
 	//if there's no action going on.
 	// in the future, make sure this doesn't get called a few times.
 	if(imagesLoaded)	
 	{
 		//resetting the self.plistArray so we don't add to the old plistArray.
 		self.plistArray = [[NSMutableArray alloc] initWithCapacity:1];
-		displayMode = NO; //setting likesDisplay
+		displayMode = 0; //setting likesDisplay
+		[[NSUserDefaults standardUserDefaults] setInteger:displayMode forKey:@"displayMode"];
 		[self getMeButtonPressed:@"likes"];
 	}
+	 
 }
 
 
@@ -417,15 +468,15 @@
 	//if type is status
 	//if type is photo
 	//if type is video
-	NSLog(@"---start here");
-	NSLog(@"index %i", index);
-	NSLog(@"type %@", [[fruits objectAtIndex:index] objectForKey:@"type"]);
+	//NSLog(@"---start here");
+	//NSLog(@"index %i", index);
+	//NSLog(@"type %@", [[fruits objectAtIndex:index] objectForKey:@"type"]);
 	
-	NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
+	//NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
 	//if the type === status
 	if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"status"])
 	{
-		NSLog(@"STATUS");
+	//	NSLog(@"STATUS");
 		//NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
 		
 		CGSize maximumLabelSize = CGSizeMake(cell.frame.size.width-(10*2),9999);
@@ -437,35 +488,35 @@
 		CGRect newFrame = cell.textLabel.frame;
 		newFrame.size.height = expectedLabelSize.height;
 		cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
-		NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
+		//NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
 		cell.textLabel.frame = newFrame;
 		
-		NSLog(@"---end here.");
+	//	NSLog(@"---end here.");
 	}//if the type === link
 	else if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"link"])
 	{
-		NSLog(@"LINK");
+	//	NSLog(@"LINK");
 		if([[[fruits objectAtIndex:index] objectForKey:@"link"] isEqual:@"http://www.facebook.com/"])
 		{//if the link is internal link
-			NSLog(@"INTERNAL_LINK");
+		//	NSLog(@"INTERNAL_LINK");
 			cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
-			NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
-			NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
+		//	NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
+		//	NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
 			//if it's the internal link then it could still be internal but the link part is different?
 			//doublecheck
 			
 			
-			NSLog(@"---end here.");
+		//	NSLog(@"---end here.");
 		}
 		else
 		{ //the link is external link.
 			//grab the second part of the link.
-			NSLog(@"EXTERNAL_LINK");
+		//	NSLog(@"EXTERNAL_LINK");
 			
 			
 			//NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
-			NSLog(@"link is %@", [[fruits objectAtIndex:index] objectForKey:@"link"]);
-			NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
+		//	NSLog(@"link is %@", [[fruits objectAtIndex:index] objectForKey:@"link"]);
+		//	NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
 			/*
 			 NSString *deviceToken = [[[[[fruits objectAtIndex:index] objectForKey:@"picture"] stringByReplacingOccurrencesOfString:@"%2F"withString:@"/"] 
 			 stringByReplacingOccurrencesOfString:@"%3A" withString:@":"] 
@@ -475,24 +526,24 @@
 			//done removing the percent escapes
 			NSString *filePath = [[[fruits objectAtIndex:index] objectForKey:@"picture"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 			//get the second url now:
-			NSLog(@"picture is ----> %@", filePath);
+		//	NSLog(@"picture is ----> %@", filePath);
 			
 			NSString *regexString   = @"url=(.+)";
 			//also you can use look behind assertation.
 			//(?<=url=).+
 			NSString *matchedString   = [filePath stringByMatching:regexString capture:1L];
 	
-			NSLog(@"regexString is ----> %@", matchedString);
-			NSLog(@"---end here.");
+		//	NSLog(@"regexString is ----> %@", matchedString);
+		//	NSLog(@"---end here.");
 		}
 	}//if the type === video
 	else if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"video"])
 	{
 		
 		//TODO: the video could be external OR internal, check it here!
-		NSLog(@"VIDEO");
-		NSLog(@"link of video is %@", [[fruits objectAtIndex:index] objectForKey:@"link"]);
-		NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
+	//	NSLog(@"VIDEO");
+	//	NSLog(@"link of video is %@", [[fruits objectAtIndex:index] objectForKey:@"link"]);
+	//	NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
 		
 		/*
 		NSString *deviceToken = [[[[[fruits objectAtIndex:index] objectForKey:@"picture"] stringByReplacingOccurrencesOfString:@"%2F"withString:@"/"] 
@@ -503,7 +554,7 @@
 		//done removing the percent escapes
 		NSString *filePath = [[[fruits objectAtIndex:index] objectForKey:@"picture"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 		//get the second url now:
-		NSLog(@"picture is ----> %@", filePath);
+	//	NSLog(@"picture is ----> %@", filePath);
 		
 		NSString *regexString   = @"url=(.+)";
 		//also you can use look behind assertation.
@@ -513,20 +564,20 @@
 		
 		
 		
-		NSLog(@"picture is ----> %@", matchedString);
+	//	NSLog(@"picture is ----> %@", matchedString);
 		
 		
 		
-		NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
-		NSLog(@"---end here.");
+	//	NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
+	//	NSLog(@"---end here.");
 		cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
 	}
 	 else if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"photo"])
 	 {
-	 NSLog(@"PHOTO");
-	 NSLog(@"link of photo is %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
+	// NSLog(@"PHOTO");
+	// NSLog(@"link of photo is %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
 	 //the photo ends with _s but need to replace that with _n and load it. 
-		 NSLog(@"---end here.");	 
+	//	 NSLog(@"---end here.");	 
 	// NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
 	// cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
 	 }
@@ -602,12 +653,15 @@
 }
 
 #pragma mark TreemapView data source
-//this gets called when resizing to get the datasource or creating the first time too. 
+//values that are passed to treemapview --> when resizing to get the datasource or creating the first time too. 
 - (NSArray *)valuesForTreemapView:(TreemapView *)treemapView 
 {
 	NSLog(@"valuesForTreemapView");
-	if (!fruits) //meaning just launched the app. 
-	{
+	
+	//TODO: check if the fruits is null when it's coming here/
+	
+	//if (!fruits) //meaning I just launched the app. 
+//	{
 		//need to fill the fruits 
 		//get the plist
 
@@ -616,8 +670,11 @@
 		NSString *documentsDirectory = [paths objectAtIndex: 0];
 		NSString *plistFile = [documentsDirectory stringByAppendingPathComponent: @"data.plist"];
 		NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
-
-		if([array count] == 0) //if the plist doesn't exist meaning we just launched the app for the first time.
+		
+		NSLog(@"displayMode %i", displayMode);
+		
+		//if the plist doesn't exist meaning we just launched the app FOR THE FIRST TIME.
+		if([array count] == 0) 
 			//in this case we are using our plist file that's  bundled with the app.
 		{
 			NSBundle *bundle = [NSBundle mainBundle];
@@ -625,8 +682,9 @@
 			array = [[NSMutableArray alloc] initWithContentsOfFile:plistPath];
 			NSLog(@"array count is zero");
 			
+			
 			//set the displayMode here. Like mode for now.
-			displayMode = 0; //set it to like
+			//displayMode = 0; //set it to like
 			
 		}
 		
@@ -634,39 +692,67 @@
 		
 		self.fruits = [[NSMutableArray alloc] initWithCapacity:array.count];
 		self.destinationPaths = [NSMutableArray arrayWithCapacity:array.count];
-		NSLog(@"array %@", array);
-		NSLog(@"fruits %@", fruits);
+		//NSLog(@"array %@", array);
+		//NSLog(@"fruits %@", fruits);
 		
 		//fruits is empty here.
 		for (NSDictionary *dic in array)  
 		{
 			NSMutableDictionary *mDic = [NSMutableDictionary dictionaryWithDictionary:dic];
 			[fruits addObject:mDic];
-		 }
-	}
+		}
+	//} //endif
 	
 	//NSLog(@"fruits %@", fruits);
 	
 	//these values go to the treemapview in order to be used for calculating the sizes of the cells
 	NSMutableArray *values = [NSMutableArray arrayWithCapacity:fruits.count];
 	
-
-	for (NSDictionary *dic in fruits) 
-	 {
-		// NSLog(@"fruit: %@", [dic objectForKey:@"likes"]);
-		 //passing the file names from the plist here. hmmmm.
-		 
-		 
-		// [self.destinationPaths addObject:[dic objectForKey:@"destinationPath"]];
-		 if([dic objectForKey:@"likes"]) 
-		 {
-			 [values addObject:[dic objectForKey:@"likes"]];
-		 }
-		 else 
-		 {
-			[values addObject:@"0"];
-		 }
+	if(!displayMode) // meaning its set to likes 
+	{
+		for (NSDictionary *dic in fruits) 
+		{
+			// NSLog(@"fruit: %@", [dic objectForKey:@"likes"]);
+			//passing the file names from the plist here. hmmmm.
+			
+			//@"comments.count"
+			
+			
+			// [self.destinationPaths addObject:[dic objectForKey:@"destinationPath"]];
+			if([dic objectForKey:@"likes"]) 
+			{
+				[values addObject:[dic objectForKey:@"likes"]];
+			}
+			else 
+			{
+				[values addObject:@"0"];
+			}
+		}	
 	}
+	else //set to comments
+	{
+		for (NSDictionary *dic in fruits) 
+		{
+			// NSLog(@"fruit: %@", [dic objectForKey:@"likes"]);
+			//passing the file names from the plist here. hmmmm.
+			
+			//@"comments.count"
+			
+			
+			// [self.destinationPaths addObject:[dic objectForKey:@"destinationPath"]];
+			if([dic objectForKey:@"comments"]) 
+			{
+				[values addObject:[dic objectForKey:@"comments"]];
+			}
+			else 
+			{
+				[values addObject:@"0"];
+			}
+		}
+	}//endelse
+	NSLog(@"values %@", values);
+
+	
 	return values;
 }
 
@@ -675,28 +761,31 @@
 - (TreemapViewCell *)treemapView:(TreemapView *)treemapView cellForIndex:(NSInteger)index forRect:(CGRect)rect {
 	TreemapViewCell *cell = [[TreemapViewCell alloc] initWithFrame:rect];
 	
+	
+	NSLog(@"treemapView cellForIndex");
 	//here give the document thingie so that we can load the images from the plist file.
 	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex: 0];
 	
+
 	NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"filename"]];
-	
+	NSLog(@"fruits is here %@", fn);
 	//NSString *fn = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[destinationPaths objectAtIndex:index]];
 	//NSSearchPathForDirectoriesInDomains
-					
-
+	
+	
 	UIImage *img = [UIImage imageWithContentsOfFile:fn];
 	
-
+	
 	//cell.downloadDestinationPath = fn;
 	cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
-
+	
 	[self.cells addObject:cell];
 	[cell release];
 	
 	//load the local images first here.
 	
-	[self updateCell:cell forIndex:index];
+//	[self updateCell:cell forIndex:index];
 	return cell;
 }
 

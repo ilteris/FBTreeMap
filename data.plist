@@ -7,11 +7,15 @@
 		<string>0.png</string>
 		<key>likes</key>
 		<integer>1</integer>
+		<key>comments</key>
+		<integer>1</integer>
 	</dict>
 	<dict>
 		<key>filename</key>
 		<string>1.png</string>
 		<key>likes</key>
+		<integer>1</integer>
+		<key>comments</key>
 		<integer>1</integer>
 	</dict>
 	<dict>
@@ -19,17 +23,23 @@
 		<string>2.png</string>
 		<key>likes</key>
 		<integer>4</integer>
+		<key>comments</key>
+		<integer>1</integer>
 	</dict>
 	<dict>
 		<key>filename</key>
 		<string>3.png</string>
 		<key>likes</key>
 		<integer>2</integer>
+		<key>comments</key>
+		<integer>1</integer>
 	</dict>
 	<dict>
 		<key>filename</key>
 		<string>4.png</string>
 		<key>likes</key>
+		<integer>1</integer>
+		<key>comments</key>
 		<integer>1</integer>
 	</dict>
 	<dict>
@@ -37,11 +47,15 @@
 		<string>5.png</string>
 		<key>likes</key>
 		<integer>3</integer>
+		<key>comments</key>
+		<integer>1</integer>
 	</dict>
 	<dict>
 		<key>filename</key>
 		<string>6.png</string>
 		<key>likes</key>
+		<integer>1</integer>
+		<key>comments</key>
 		<integer>1</integer>
 	</dict>
 	<dict>
@@ -49,18 +63,24 @@
 		<string>7.png</string>
 		<key>likes</key>
 		<integer>4</integer>
+		<key>comments</key>
+		<integer>1</integer>
 	</dict>
 	<dict>
 		<key>filename</key>
 		<string>8.png</string>
 		<key>likes</key>
 		<integer>4</integer>
+		<key>comments</key>
+		<integer>1</integer>
 	</dict>
 	<dict>
 		<key>filename</key>
 		<string>9.png</string>
 		<key>likes</key>
 		<integer>2</integer>
+		<key>comments</key>
+		<integer>1</integer>
 	</dict>
 </array>
 </plist>

@@ -106,7 +106,7 @@
 {
 	NSLog(@"here");
 	
-	self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.0] CGColor];
+	//self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.0] CGColor];
 	
 	[UIView beginAnimations:nil context:NULL]; 
 	
@@ -148,7 +148,7 @@
 
 - (void)animationDidStop {
 	NSLog(@"animationDidStop");
-	
+	self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:1] CGColor];
 	self.imageViewA.image = [self.imageViewB.image imageCroppedToFitSize:self.frame.size];
 	//self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.3] CGColor];
 }

@@ -77,8 +77,7 @@
 
 -(NSMutableArray*) filterEntries:(NSMutableArray*)mutableArray accordingTo:(NSString*)key;
 
-- (void) downloadImages;
-
+- (void) downloadAccordingToKey:(NSString*)key;
 - (IBAction)refreshDisplay;
 - (IBAction)displayLikes;
 - (IBAction)displayComments;
