@@ -12,6 +12,10 @@
 #import "FbGraph.h"
 #import "RegexKitLite.h"
 
+#import "FBConnect.h"
+
+
+
 @class ASINetworkQueue;
 
 
@@ -40,13 +44,9 @@
 	NSMutableArray *jsonArray;
 	
 	
-	IBOutlet UIImageView *menu;
-	IBOutlet UIButton *like_btn;
-	IBOutlet UIButton *comment_btn;
-	IBOutlet UIButton *refresh_btn;
+	
 	
 
-	BOOL displayMode; //either comment mode or like mode. 1 is comment mode 0 is like mode
 	
 	
 }
@@ -61,15 +61,13 @@
 @property (nonatomic, retain) FbGraph *fbGraph;
 @property (nonatomic, retain) NSString *feedPostId;
 
-@property (nonatomic, retain) IBOutlet UIButton *like_btn;
-@property (nonatomic, retain) IBOutlet UIButton *comment_btn;
-@property (nonatomic, retain) IBOutlet UIButton *refresh_btn;
+
 
 
 @property (nonatomic, retain) IBOutlet UIView *treeMapView;
 @property (nonatomic, retain) IBOutlet UIWebView *myWebView;
 
-@property (nonatomic, retain) IBOutlet UIImageView *menu;
+
 
 - (void)resizeView;
 
@@ -78,7 +76,5 @@
 -(NSMutableArray*) filterEntries:(NSMutableArray*)mutableArray accordingTo:(NSString*)key;
 
 - (void) downloadAccordingToKey:(NSString*)key;
-- (IBAction)refreshDisplay;
-- (IBAction)displayLikes;
-- (IBAction)displayComments;
+
 @end

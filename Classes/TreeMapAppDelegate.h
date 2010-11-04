@@ -10,13 +10,16 @@
 
 
 @class TreeMapViewController;
+@class MainViewController;
+
 
 @interface TreeMapAppDelegate : NSObject <UIApplicationDelegate> {
     UIWindow *window;
-	TreeMapViewController *viewController;
+	TreeMapViewController *treeMapViewController;
+	MainViewController *mainViewController;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet TreeMapViewController *viewController;
+
 @end
 

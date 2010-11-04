@@ -13,7 +13,7 @@
 #define numberOfObjects (8)
 
 
-static NSString* kAppId =  @"128496757192973";
+
 
 
 
@@ -31,10 +31,7 @@ static NSString* kAppId =  @"128496757192973";
 @synthesize feedPostId;
 @synthesize myWebView;
 
-@synthesize menu;
-@synthesize comment_btn;
-@synthesize like_btn;
-@synthesize refresh_btn;
+
 
 @synthesize jsonArray;
 
@@ -43,39 +40,21 @@ static NSString* kAppId =  @"128496757192973";
 - (void)viewDidLoad {
     [super viewDidLoad];
 	imagesLoaded = YES;
-	displayMode = [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]; // 0 =likes 1 =comments 
-	//get this value from NSDefaults.
-	
-	
-	
-	if(!displayMode) //likes
-	{
-		like_btn.enabled =  NO;
-		comment_btn.enabled =  YES;
-	}
-	
-	else //comments
-	{
-		like_btn.enabled =  YES;
-		comment_btn.enabled =  NO;
-	}
-	
+
+
+
 	
 	
 	/*Facebook Application ID*/
-	NSString *client_id = @"128496757192973";
+	//NSString *client_id = @"128496757192973";
 	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
 
 
 	
 	//alloc and initalize our FbGraph instance
-	self.fbGraph = [[FbGraph alloc] initWithFbClientID:client_id];
+	//self.fbGraph = [[FbGraph alloc] initWithFbClientID:client_id];
 	
-	UIImage *menuBgImage=[[UIImage imageNamed:@"pm_menu_bg.png"] stretchableImageWithLeftCapWidth:10 topCapHeight:5];
 	
-	menu.image = menuBgImage;
-	
-	[menu setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
 	//begin the authentication process.....
 	//[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,read_stream,user_status, user_videos,publish_stream,offline_access"];
 	
@@ -89,7 +68,7 @@ static NSString* kAppId =  @"128496757192973";
 	
 	//[self.view addSubview:self.myWebView];
 	//	[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,read_stream,user_status,user_videos,publish_stream, offline_access" andSuperView:self.view];
-	[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,user_videos,publish_stream,offline_access" andSuperView:self.view];
+	//[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,user_videos,publish_stream,offline_access" andSuperView:self.view];
 	
 	
 }
@@ -320,7 +299,7 @@ static NSString* kAppId =  @"128496757192973";
 		NSString *valuesForCategory;
 		NSString *key = [[request userInfo] objectForKey:@"key"];
 		
-		if(!displayMode)//0//likes
+		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])//0//likes
 		{
 
 			valuesForCategory = [NSString stringWithFormat:@"%@",[[fruits objectAtIndex:imageNo] objectForKey:@"likes"]];
@@ -386,70 +365,6 @@ static NSString* kAppId =  @"128496757192973";
 	[self.plistArray writeToFile:plistFile atomically:NO];
 	[(TreemapView *)self.treeMapView reloadData];
 	
-}
-
-#pragma mark -
-
-
-
-- (IBAction)refreshDisplay
-{
-	//if there's no action going on.
-	// in the future, make sure this doesn't get called a few times.
-	if(imagesLoaded)	
-	{
-		//resetting the self.plistArray so we don't add to the old plistArray.
-		self.plistArray = [[NSMutableArray alloc] initWithCapacity:1];
-		//currentDisplayMode
-		if(displayMode) //if the comments mode is on
-		{
-			[self getMeButtonPressed:@"comments.count"];
-		}
-		else
-		{
-			[self getMeButtonPressed:@"likes"];
-		}
-
-	}
-}
-
-- (IBAction)displayComments
-{
-	like_btn.enabled =  YES;
-	comment_btn.enabled =  NO;
-	
-	//if there's no action going on.
-	// in the future, make sure this doesn't get called a few times.
-	if(imagesLoaded)	
-	{
-		//resetting the self.plistArray so we don't add to the old plistArray.
-		self.plistArray = [[NSMutableArray alloc] initWithCapacity:1];
-		displayMode = 1; //set it to comments
-		[[NSUserDefaults standardUserDefaults] setInteger:displayMode forKey:@"displayMode"];
-		[self getMeButtonPressed:@"comments.count"];
-	}
-	 
-}
-
-
-
-- (IBAction)displayLikes
-{
-	like_btn.enabled =  NO;
-	comment_btn.enabled =  YES;
-	
-	
-	//if there's no action going on.
-	// in the future, make sure this doesn't get called a few times.
-	if(imagesLoaded)	
-	{
-		//resetting the self.plistArray so we don't add to the old plistArray.
-		self.plistArray = [[NSMutableArray alloc] initWithCapacity:1];
-		displayMode = 0; //setting likesDisplay
-		[[NSUserDefaults standardUserDefaults] setInteger:displayMode forKey:@"displayMode"];
-		[self getMeButtonPressed:@"likes"];
-	}
-	 
 }
 
 
@@ -677,7 +592,7 @@ static NSString* kAppId =  @"128496757192973";
 		NSString *plistFile = [documentsDirectory stringByAppendingPathComponent: @"data.plist"];
 		NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
 		
-		NSLog(@"displayMode %i", displayMode);
+
 		
 		//if the plist doesn't exist meaning we just launched the app FOR THE FIRST TIME.
 		if([array count] == 0) 
@@ -714,7 +629,7 @@ static NSString* kAppId =  @"128496757192973";
 	//these values go to the treemapview in order to be used for calculating the sizes of the cells
 	NSMutableArray *values = [NSMutableArray arrayWithCapacity:fruits.count];
 	
-	if(!displayMode) // meaning its set to likes 
+	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 	{
 		for (NSDictionary *dic in fruits) 
 		{
@@ -804,6 +719,11 @@ static NSString* kAppId =  @"128496757192973";
 
 
 
+
+
+
+
+
 #pragma mark -
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -814,7 +734,8 @@ static NSString* kAppId =  @"128496757192973";
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
 {
-	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
+	
+	NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
 
 	if([(TreemapView*)self.treeMapView initialized]) [self resizeView];
 }
