@@ -13,6 +13,11 @@
 #define numberOfObjects (8)
 
 
+static NSString* kAppId =  @"128496757192973";
+
+
+
+
 @implementation TreeMapViewController
    
 @synthesize fruits;
@@ -37,16 +42,11 @@
 #pragma mark facebook delegate
 - (void)viewDidLoad {
     [super viewDidLoad];
-}
-
-
-- (void)viewDidAppear:(BOOL)animated {
-	
 	imagesLoaded = YES;
-	
-	//get this value from NSDefaults.
-	NSLog(@"displayModedisplayMode %i", displayMode);
 	displayMode = [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]; // 0 =likes 1 =comments 
+	//get this value from NSDefaults.
+	
+	
 	
 	if(!displayMode) //likes
 	{
@@ -59,14 +59,14 @@
 		like_btn.enabled =  YES;
 		comment_btn.enabled =  NO;
 	}
-
 	
-	NSLog(@"displayModedisplayMode %i", displayMode);	
+	
+	
 	/*Facebook Application ID*/
 	NSString *client_id = @"128496757192973";
 	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
-	//like_btn.selected = YES;
-	//like_btn.enabled =  NO;
+
+
 	
 	//alloc and initalize our FbGraph instance
 	self.fbGraph = [[FbGraph alloc] initWithFbClientID:client_id];
@@ -85,12 +85,18 @@
 	 *
 	 * Feel free to try both methods here, simply (un)comment out the appropriate one.....
 	 **/
-
+	
 	
 	//[self.view addSubview:self.myWebView];
-//	[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,read_stream,user_status,user_videos,publish_stream, offline_access" andSuperView:self.view];
+	//	[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,read_stream,user_status,user_videos,publish_stream, offline_access" andSuperView:self.view];
 	[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,user_videos,publish_stream,offline_access" andSuperView:self.view];
-	NSLog(@"self.view %@", self.treeMapView);	
+	
+	
+}
+
+
+- (void)viewDidAppear:(BOOL)animated {
+	
 }
 
 #pragma mark -

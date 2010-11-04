@@ -39,6 +39,8 @@
 #import "SBJSON.h"
 #import "FbGraphFile.h"
 
+#import "ASIHTTPRequest.h"
+
 @implementation FbGraph
 
 @synthesize facebookClientID;
@@ -100,6 +102,8 @@
 	
 	[self authenticateUserWithCallbackObject:anObject andSelector:selector andExtendedPermissions:extended_permissions andSuperView:window];
 }
+
+
 
 
 - (FbGraphResponse *)doGraphGet:(NSString *)action withGetVars:(NSDictionary *)get_vars {
@@ -171,6 +175,55 @@
 
 - (FbGraphResponse *)doGraphGetWithUrlString:(NSString *)url_string {
 	
+	
+	FbGraphResponse *return_value = [[FbGraphResponse alloc] init];
+	
+	/*
+	NSURL *url = [NSURL URLWithString:url_string];
+	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+	[request setDelegate:self];
+	[request startAsynchronous];
+	*/
+	
+	
+	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url_string] cachePolicy:NSURLRequestReloadIgnoringLocalCacheData 
+                                         timeoutInterval:60];
+	
+	NSError *err;
+	NSURLResponse *resp;
+	NSData *response = [NSURLConnection sendSynchronousRequest:request returningResponse:&resp error:&err];
+	
+	if (resp != nil) {
+		if ([resp.MIMEType isEqualToString:@"image/jpeg"]) {
+			
+			NSLog(@"MIMEType image");
+			UIImage *image = [UIImage imageWithData:response];
+			return_value.imageResponse = image;
+			
+		} else if ([resp.MIMEType isEqualToString:@"text/javascript"]) {
+			NSLog(@"MIMEType text");
+			return_value.htmlResponse = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
+		} else {
+			NSLog(@"MIMEType elses");
+			return_value.htmlResponse = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
+		}
+		
+	} else if (err != nil) {
+		
+		return_value.error = err;
+	}
+
+	return return_value;
+	
+}
+
+
+
+
+/*
+
+- (FbGraphResponse *)doGraphGetWithUrlString:(NSString *)url_string {
+	
 	FbGraphResponse *return_value = [[FbGraphResponse alloc] init];
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url_string] cachePolicy:NSURLRequestReloadIgnoringLocalCacheData 
                                          timeoutInterval:60];
@@ -181,10 +234,10 @@
 	
 	if (resp != nil) {
 		
-		/**
-		 * In the case we request a picture (avatar) the Graph API will return to us the actual image
-		 * bits versus a url to the image.....
-		 **/
+		
+		// * In the case we request a picture (avatar) the Graph API will return to us the actual image
+		// * bits versus a url to the image.....
+		
 		if ([resp.MIMEType isEqualToString:@"image/jpeg"]) {
 			
 			UIImage *image = [UIImage imageWithData:response];
@@ -205,6 +258,8 @@
 	return return_value;
 	
 }
+
+*/
 
 - (FbGraphResponse *)doGraphPost:(NSString *)action withPostVars:(NSDictionary *)post_vars {
 	

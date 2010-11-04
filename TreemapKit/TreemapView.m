@@ -20,31 +20,31 @@
 //    NSLog(@"nodes %@", nodes);
 	if (nodes.count <= 1) {
 		NSLog(@"inside");
-		NSLog(@"nodes %@", nodes);
+	//	NSLog(@"nodes %@", nodes);
 		NSInteger index = [[[nodes objectAtIndex:0] objectForKey:@"index"] intValue];
  //      	NSInteger index = [[[nodes objectAtIndex:0] objectForKey:@"index"] integerValue];
-        NSLog(@"index here is %i", index);
-		NSLog(@"self.subviews %@", self.subviews);
+  //      NSLog(@"index here is %i", index);
+	//	NSLog(@"self.subviews %@", self.subviews);
 		if (createNode) 
 		{
 			TreemapViewCell *cell = [dataSource treemapView:self cellForIndex:index forRect:rect];
-			NSLog(@"createNode");
+		//	NSLog(@"createNode");
 			cell.index = index;
 			cell.delegate = self;
 			
 			[self addSubview:cell];
 			
-			NSLog(@"cell %@", cell);
-			NSLog(@"index here is %i", index);
+		//	NSLog(@"cell %@", cell);
+		//	NSLog(@"index here is %i", index);
 			
 		}
 		else 
 		{
 			//THIS GETS CALLED ON THE UPDATE
 			
-			NSLog(@"updateNode");
-			NSLog(@"nodes count %i", [nodes count]);
-			NSLog(@"self.subviews count %i", [self.subviews count]);
+		//	NSLog(@"updateNode");
+		//	NSLog(@"nodes count %i", [nodes count]);
+		//	NSLog(@"self.subviews count %i", [self.subviews count]);
 			
 			//TODO: animate it here.
 			TreemapViewCell *cell = [self.subviews objectAtIndex:index];
@@ -164,7 +164,7 @@
 	//	NSLog(@"values inside getData");
 
 
-	NSLog(@"values %@",values);	
+	//NSLog(@"values %@",values);	
     
 	NSMutableArray *nodes = [NSMutableArray arrayWithCapacity:values.count];
 	for (int i = 0; i < values.count; i++) {

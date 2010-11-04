@@ -125,10 +125,10 @@
 
 -(void) moveAndScale:(CGRect)rect
 {
-	NSLog(@"moveAndScale");
+	//NSLog(@"moveAndScale");
 
-	NSLog(@"cell.frame: %@", NSStringFromCGRect(self.bounds));
-	NSLog(@"rect %@", NSStringFromCGRect(rect));
+	//NSLog(@"cell.frame: %@", NSStringFromCGRect(self.bounds));
+	//NSLog(@"rect %@", NSStringFromCGRect(rect));
 	
 	
 	//self.imageView.alpha = 0.0;
