@@ -24,6 +24,7 @@
 		F01C0AB31281D2A200CF1476 /* FBLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C0AA71281D2A200CF1476 /* FBLoginDialog.m */; };
 		F01C0AB41281D2A200CF1476 /* FBDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C0AA91281D2A200CF1476 /* FBDialog.m */; };
 		F01C0AE21281D62A00CF1476 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C0AE11281D62A00CF1476 /* Session.m */; };
+		F01C0E08128321AD00CF1476 /* FBConnect.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F01C0E07128321AD00CF1476 /* FBConnect.bundle */; };
 		F033EA4E118A24C30020F23D /* TreeMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F033EA4C118A24C30020F23D /* TreeMapViewController.m */; };
 		F033EA4F118A24C30020F23D /* TreeMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F033EA4D118A24C30020F23D /* TreeMapViewController.xib */; };
 		F033EA5B118A25230020F23D /* data.plist in Resources */ = {isa = PBXBuildFile; fileRef = F033EA5A118A25230020F23D /* data.plist */; };
@@ -94,6 +95,7 @@
 		F01C0AA91281D2A200CF1476 /* FBDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBDialog.m; sourceTree = "<group>"; };
 		F01C0AE01281D62A00CF1476 /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
 		F01C0AE11281D62A00CF1476 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
+		F01C0E07128321AD00CF1476 /* FBConnect.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = FBConnect.bundle; sourceTree = "<group>"; };
 		F033EA4B118A24C30020F23D /* TreeMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TreeMapViewController.h; path = ../TreeMapViewController.h; sourceTree = "<group>"; };
 		F033EA4C118A24C30020F23D /* TreeMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TreeMapViewController.m; path = ../TreeMapViewController.m; sourceTree = "<group>"; };
 		F033EA4D118A24C30020F23D /* TreeMapViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TreeMapViewController.xib; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 			children = (
 				F01C0AE01281D62A00CF1476 /* Session.h */,
 				F01C0AE11281D62A00CF1476 /* Session.m */,
+				F01C0E07128321AD00CF1476 /* FBConnect.bundle */,
 				F01C0A911281D2A200CF1476 /* FBConnect */,
 				F06116FB12524695008C7D07 /* ASINetwork */,
 				F033EA67118A25DF0020F23D /* TreemapKit */,
@@ -413,6 +416,7 @@
 				F055E594126CD3B50056DA6E /* 1_heart_btn.png in Resources */,
 				F055E595126CD3B50056DA6E /* 2_heart_btn.png in Resources */,
 				F01C0AAA1281D2A200CF1476 /* FBDialog.bundle in Resources */,
+				F01C0E08128321AD00CF1476 /* FBConnect.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
