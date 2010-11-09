@@ -41,10 +41,6 @@
     [super viewDidLoad];
 	imagesLoaded = YES;
 
-
-
-	
-	
 	/*Facebook Application ID*/
 	//NSString *client_id = @"128496757192973";
 	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
@@ -77,299 +73,6 @@
 - (void)viewDidAppear:(BOOL)animated {
 	
 }
-
-#pragma mark -
-#pragma mark FbGraph Callback Function
-/**
- * This function is called by FbGraph after it's finished the authentication process
- **/
-- (void)fbGraphCallback:(id)sender {
-	 
-	NSLog(@"fbGraphCallback");
-	//pop a message letting them know most of the info will be dumped in the log
-	/* 
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Note" message:@"For the simplest code, I've written all output to the 'Debugger Console'." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-	[alert show];
-	[alert release];
-	*/
-	
-	NSLog(@"------------>CONGRATULATIONS<------------, You're logged into Facebook...  Your oAuth token is:  %@", fbGraph.accessToken);
-	
-	//[self.myWebView removeFromSuperview];
-	//[self.view addSubview:self.treeMapView];
-	
-	//[self getMeButtonPressed:@"likes"];
-}
-
-/**
- * DOC:  http://developers.facebook.com/docs/reference/api/photo
- **/
-
-
--(void)getMeButtonPressed:(NSString*)key
-{
-	
-	NSLog(@"getMeButtonPressed");
-	
-	FbGraphResponse *fb_graph_response = [fbGraph doGraphGet:@"me/home" withGetVars:nil];
-//	NSLog(@"fb_graph_response:  %@", fb_graph_response.htmlResponse);
-    
-	
-	//parse the json into a NSDictionary
-	SBJSON *parser = [[SBJSON alloc] init];
-	NSDictionary *parsed_json = [parser objectWithString:fb_graph_response.htmlResponse error:nil];	
-	
-	    
-	//there's 2 additional dictionaries inside this one on the first level ('data' and 'paging')
-	NSDictionary *firstPageData = (NSDictionary *)[parsed_json objectForKey:@"data"];
-    NSDictionary *secondPage = (NSDictionary *)[parsed_json objectForKey:@"paging"];
-	FbGraphResponse *fb_graph_response_page2 = [fbGraph doGraphGetWithUrlString:[secondPage objectForKey:@"next"]];
-	NSDictionary *parsed_json2 = [parser objectWithString:fb_graph_response_page2.htmlResponse error:nil];	
-	
-	
-		
-	
-
-	NSDictionary *secondPageData = (NSDictionary *)[parsed_json2 objectForKey:@"data"];
-    NSDictionary *thirdPage = (NSDictionary *)[parsed_json2 objectForKey:@"paging"];
-	
-	FbGraphResponse *fb_graph_response_page3 = [fbGraph doGraphGetWithUrlString:[thirdPage objectForKey:@"next"]];
-	NSDictionary *parsed_json3 = [parser objectWithString:fb_graph_response_page3.htmlResponse error:nil];	
-	
-	NSDictionary *thirdPageData = (NSDictionary *)[parsed_json3 objectForKey:@"data"];
-    //NSDictionary *fourthPage = (NSDictionary *)[parsed_json3 objectForKey:@"paging"];
-
-	
-	
-	[parser release];
-
-  
-	self.jsonArray = [[NSMutableArray alloc] initWithCapacity:2];
-	
-	
-    for (NSDictionary *item in firstPageData) 
-	{
-	
-       		[jsonArray addObject:item];
-
-    }
-	
-	for (NSDictionary *item in secondPageData) 
-	{
-		
-     	[jsonArray addObject:item];
-		
-    }
-	
-	for (NSDictionary *item in thirdPageData) 
-	{
-		
-   		[jsonArray addObject:item];
-			
-    }
-		
-
-	/*Bring the contacts back to 15 according to the values of @value!*/
-	//make sure to keep a clone of the original array somewhere because it's needed 
-	//so that you can filter it out according to comments
-	
-	//so it's better to clone it and send that array to be filtered. and return it back.
-	
-	//cloned array is fruits. 
-	
-	NSLog(@"key is %@", key);
-	self.fruits = [[NSMutableArray alloc] initWithCapacity:2];
-	self.fruits = [self filterEntries:self.jsonArray accordingTo:key];
-
-	
-	
-//	NSLog(@"self.fruits %@", self.fruits);
-	[fruits shuffle];
-
-	
-	//[(TreemapView *)self.view reloadData];
-	[self downloadAccordingToKey:key];
-}
-
-
-
-
--(NSMutableArray*)filterEntries:(NSMutableArray*)mutableArray accordingTo:(NSString*)key
-{
-	//here we are sorting according to value.
-	
-
-
-	NSMutableArray *tempArr = [mutableArray mutableCopy];
-
-	NSLog(@"key : %@", key);
-	// [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:key ascending: NO];
-	//NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"comments.count" ascending: NO];
-	[tempArr sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
-	[sortDescriptor release];
-	
-	// here  we are getting rid of the rest of the objects after numberOfObjects
-	//check if the array is larger than numberof Objects
-	
-	//get rid of the zeros. 
-	if ([tempArr count] >= numberOfObjects) 
-	{
-		[tempArr removeObjectsInRange: NSMakeRange(numberOfObjects,[mutableArray count]-numberOfObjects)];
-	}
-	
-	//NSLog(@"tempArr: %@", tempArr);
-	
-	return [tempArr autorelease];
-}
-
-
-- (void) downloadAccordingToKey:(NSString*)key
-{
-	//NSLog(@"fruits %@", fruits);
-
-	imagesLoaded = NO;
-
-	if (!networkQueue) {
-		networkQueue = [[ASINetworkQueue alloc] init];	
-	}
-	
-	
-	failed = NO;
-	[networkQueue reset];
-	//[networkQueue setDownloadProgressDelegate:progressIndicator];
-	[networkQueue setRequestDidFinishSelector:@selector(imageFetchComplete:)];
-	[networkQueue setRequestDidFailSelector:@selector(imageFetchFailed:)];
-	[networkQueue setQueueDidFinishSelector:@selector(queueComplete:)]; 
-	//[networkQueue setShowAccurateProgress:[accurateProgress isOn]];
-	[networkQueue setDelegate:self];
-	
-	ASIHTTPRequest *request;
-	[networkQueue go];
-	
-	
-	
-	for (NSInteger i = 0; i < [fruits count]; i++)
-	{
-		//images
-		NSString *get_string = [NSString stringWithFormat:@"%@/picture", [[[fruits objectAtIndex:i] objectForKey:@"from"] objectForKey:@"id"]];
-	//	NSLog(@"getString: %@",get_string);
-		NSMutableDictionary *variables = [NSMutableDictionary dictionaryWithCapacity:1];
-		
-		[variables setObject:@"large" forKey:@"type"];
-		
-		NSString *url_string = [fbGraph returnURL:get_string withGetVars:variables];
-		//need to send the full url here as a ASIRequest.
-		NSLog(@"url_string %@", url_string);
-		
-		request = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:url_string]] autorelease];
-		[request setUserInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber   
-																 numberWithInt:i], @"ImageNumber",key, @"key",nil]]; 
-		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%i.png",i]]];
-	//	[request setDownloadProgressDelegate:imageProgressIndicator1];
-		[networkQueue addOperation:request];
-	}
-}
-
-#pragma mark imageDownload Delegates 
-
-- (void)imageFetchComplete:(ASIHTTPRequest *)request
-{
-	UIImage *img = [UIImage imageWithContentsOfFile:[request downloadDestinationPath]];
-	if (img) 
-	{
-
-		int imageNo =  [[[request userInfo] objectForKey:@"ImageNumber"] intValue]; 
-
-		NSLog(@"request %@", [request userInfo] );
-	//	TreemapViewCell *cell = [self.cells objectAtIndex:imageNo];
-	//	cell.imageViewB.image = [img imageCroppedToFitSize:cell.frame.size];
-		
-		//cell.imageView.image = [self scaleAndCropFrame:cell.frame withUIImage:img];
-		//add like and destination values to a nsdictionary and add this to an array and then write to a plist file.
-		//cell.downloadDestinationPath = [request downloadDestinationPath];
-		//NSLog(@"cell.downloadDestinationPath %@", cell.downloadDestinationPath);
-		
-		
-		//NSLog(@"likes : %@", [[fruits objectAtIndex:imageNo] objectForKey:@"likes"]);
-		
-		//NSLog(@"[request downloadDestinationPath]: %@", [request downloadDestinationPath]);
-		NSString *tempFileName = [NSString stringWithFormat:@"%i.png",imageNo];
-		NSString *likeKey;
-		NSString *valuesForCategory;
-		NSString *key = [[request userInfo] objectForKey:@"key"];
-		
-		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])//0//likes
-		{
-
-			valuesForCategory = [NSString stringWithFormat:@"%@",[[fruits objectAtIndex:imageNo] objectForKey:@"likes"]];
-
-			likeKey = [NSString stringWithFormat:@"likes"];
-			NSLog(@"displayMode is 0");
-		}
-		else //displayMode is 1//comments 
-		{
-			NSLog(@"displayMode is 1");
-			valuesForCategory = [NSString stringWithFormat:@"%@",[[[fruits objectAtIndex:imageNo] objectForKey:@"comments"] objectForKey:@"count"]];
-			likeKey = [NSString stringWithFormat:@"comments"];
-		}
-
-		NSLog(@"key is %@", [[request userInfo] objectForKey:@"key"]);
-		NSLog(@"image No is %i", imageNo);
-		NSLog(@"[[fruits objectAtIndex:imageNo] comments %@", [[[fruits objectAtIndex:imageNo] objectForKey:@"comments"] objectForKey:@"count"]);
-		NSLog(@" [[fruits objectAtIndex:imageNo] objectForKey:key] : %@", [[fruits objectAtIndex:imageNo] objectForKey:key]);
-		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:tempFileName, @"filename", valuesForCategory, likeKey, nil];
-		
-		
-		if(self.plistArray == nil) //check if the plist is empty 
-		{ 
-			self.plistArray = [[NSMutableArray alloc] initWithCapacity:1]; //if it's empty, alloc/init
-			
-		}
-		
-		NSLog(@"dict %@", dict);
-		[self.plistArray insertObject:dict atIndex:0];
-		
-		//NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"likes"]];
-		//TODO: add to the plist here? Not really, create an array and add the dictionaries here to the array and once 
-		//queue is completed write all of the stuff to the plist file. 
-	}
-
-}
-
-
-
-- (void)imageFetchFailed:(ASIHTTPRequest *)request
-{
-	if (!failed) {
-		if ([[request error] domain] != NetworkRequestErrorDomain || [[request error] code] != ASIRequestCancelledErrorType) {
-			UIAlertView *alertView = [[[UIAlertView alloc] initWithTitle:@"Download failed" message:@"Failed to download images" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
-			[alertView show];
-		}		failed = YES;
-	}
-}
-
-
-- (void)queueComplete:(ASINetworkQueue*)queue
-{
-	NSLog(@"Queue finished");
-	imagesLoaded = YES;
-	
-	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths objectAtIndex: 0];
-	NSString *plistFile = [documentsDirectory stringByAppendingPathComponent: @"data.plist"];
-	//NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
-	//plist file consists of objects of dictionaries wrapped in an array
-	
-	NSLog(@"self.plistArray %@", self.plistArray);
-	[self.plistArray writeToFile:plistFile atomically:NO];
-	[(TreemapView *)self.treeMapView reloadData];
-	
-}
-
-
-
-
 
 
 
@@ -574,7 +277,8 @@
 }
 
 #pragma mark TreemapView data source
-//values that are passed to treemapview --> when resizing to get the datasource or creating the first time too. 
+//values that are passed to treemapview --> anytime there's an action with the tableview, source gets called first.
+
 - (NSArray *)valuesForTreemapView:(TreemapView *)treemapView 
 {
 	NSLog(@"valuesForTreemapView");
@@ -603,20 +307,17 @@
 			array = [[NSMutableArray alloc] initWithContentsOfFile:plistPath];
 			NSLog(@"array count is zero");
 			
-			
-			//set the displayMode here. Like mode for now.
-			//displayMode = 0; //set it to like
-			
 		}
 		
 		//trying to get the paths of the filenames and like counts here.
 		
-		self.fruits = [[NSMutableArray alloc] initWithCapacity:array.count];
-		self.destinationPaths = [NSMutableArray arrayWithCapacity:array.count];
+		self.fruits = [[NSMutableArray alloc] initWithCapacity:1];
+		self.destinationPaths = [NSMutableArray arrayWithCapacity:1];
 		//NSLog(@"array %@", array);
 		//NSLog(@"fruits %@", fruits);
 		
-		//fruits is empty here.
+	
+		//fruits is yet empty here.
 		for (NSDictionary *dic in array)  
 		{
 			NSMutableDictionary *mDic = [NSMutableDictionary dictionaryWithDictionary:dic];
@@ -624,7 +325,7 @@
 		}
 	//} //endif
 	
-	//NSLog(@"fruits %@", fruits);
+
 	
 	//these values go to the treemapview in order to be used for calculating the sizes of the cells
 	NSMutableArray *values = [NSMutableArray arrayWithCapacity:fruits.count];
@@ -640,14 +341,11 @@
 			
 			
 			// [self.destinationPaths addObject:[dic objectForKey:@"destinationPath"]];
-			if([dic objectForKey:@"likes"]) 
+			if(![[dic objectForKey:@"likes"] isEqual:@"0"]) 
 			{
 				[values addObject:[dic objectForKey:@"likes"]];
 			}
-			else 
-			{
-				[values addObject:@"0"];
-			}
+			
 		}	
 	}
 	else //set to comments
@@ -661,14 +359,11 @@
 			
 			
 			// [self.destinationPaths addObject:[dic objectForKey:@"destinationPath"]];
-			if([dic objectForKey:@"comments"]) 
+			if(![[dic objectForKey:@"comments"] isEqual:@"0"]) 
 			{
 				[values addObject:[dic objectForKey:@"comments"]];
 			}
-			else 
-			{
-				[values addObject:@"0"];
-			}
+			
 		}
 	}//endelse
 	NSLog(@"values %@", values);
@@ -678,7 +373,7 @@
 }
 
 
-//this gets called on the creation/initially. 
+//this gets called @creation for each of the cell. 
 - (TreemapViewCell *)treemapView:(TreemapView *)treemapView cellForIndex:(NSInteger)index forRect:(CGRect)rect {
 	TreemapViewCell *cell = [[TreemapViewCell alloc] initWithFrame:rect];
 	
@@ -687,14 +382,13 @@
 	//here give the document thingie so that we can load the images from the plist file.
 	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex: 0];
-	
-
+	//match the indexes through the cellForIndex/fruits objectAtIndex.
 	NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"filename"]];
-	NSLog(@"fruits is here %@", fn);
+	//NSLog(@"fruits is here %@", fn);
 	//NSString *fn = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[destinationPaths objectAtIndex:index]];
 	//NSSearchPathForDirectoriesInDomains
 	
-	
+	//get the image from the filename.
 	UIImage *img = [UIImage imageWithContentsOfFile:fn];
 	
 	
@@ -735,7 +429,7 @@
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
 {
 	
-	NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
+	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
 
 	if([(TreemapView*)self.treeMapView initialized]) [self resizeView];
 }

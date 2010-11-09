@@ -25,6 +25,7 @@
                  uid = _uid,
          friendsList = _friendsList,
          friendsInfo = _friendsInfo,
+		likesAndCommentsInfo = _likesAndCommentsInfo,
     userInfoDelegate = _userInfoDelegate;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +58,8 @@
  */
 - (void) requestAllInfo 
 {
-  [self requestUid];
+	[self requestUid];
+	//[self requestCountOf:(NSString*)entity];
 }
 
 /**
@@ -66,7 +68,8 @@
  * Currently the authorization flow does not return a user id anymore. This is
  * an intermediate solution to get the logged in user id.
  */
-- (void) requestUid{
+- (void) requestUid
+{
   UserRequestResult *userRequestResult = 
     [[[[UserRequestResult alloc] initializeWithDelegate:self] autorelease] retain];
   [_facebook requestWithGraphPath:@"me" andDelegate:userRequestResult];
@@ -77,7 +80,9 @@
  *
  * Use FQL to query detailed friends information
  */
-- (void) requestFriendsDetail{
+- (void) requestFriendsDetail
+{
+	NSLog(@"requestFriendsDetail");
   FriendsRequestResult *friendsRequestResult = 
     [[[[FriendsRequestResult alloc] initializeWithDelegate:self] autorelease] retain];
    
@@ -92,26 +97,116 @@
                        andDelegate: friendsRequestResult]; 
 }
 
-/**
- * UserRequestDelegate
+
+
+/** 
+ * Request Likes and Comments from stream
+ *
+ * Use FQL to query detailed friends information
  */
-- (void)userRequestCompleteWithUid:(NSString *)uid {
-  self.uid = uid;
-  [self requestFriendsDetail];
+
+- (void) requestCountOf:(NSInteger)entity
+{
+	
+	NSLog(@"requestCountOf:(NSString*)entity");
+	LikesAndCommentsRequestResult *likesAndCommentsRequestResult = 
+	[[[[LikesAndCommentsRequestResult alloc] initializeWithDelegate:self andSection:entity] autorelease] retain];
+	
+	NSString *query = @"SELECT actor_id, post_id,likes, comments, message FROM stream WHERE source_id IN(";
+	query = [query stringByAppendingFormat:@"SELECT target_id FROM connection WHERE source_id=%@) AND is_hidden = 0 LIMIT 80", _uid];
+	
+	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+								   query, @"query",
+								   nil];
+	
+	[_facebook requestWithMethodName:@"fql.query"
+						   andParams:params
+					   andHttpMethod:@"POST"
+						 andDelegate:likesAndCommentsRequestResult];
+	
+	
+	/*
+	SELECT actor_id, post_id,likes, comments, message 
+	FROM stream WHERE source_id in 
+	(SELECT target_id 
+	 FROM connection 
+	 WHERE source_id=836255) 
+	AND is_hidden = 0 
+	LIMIT 80
+	
+	*/
+	/*
+	
+	
+	NSString *query = @"SELECT uid, name, is_app_user, pic_square, status FROM user WHERE uid IN (";
+	query = [query stringByAppendingFormat:@"SELECT uid2 FROM friend WHERE uid1 = %@)", _uid];
+	NSMutableDictionary * params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+									query, @"query",
+									nil];
+	[_facebook requestWithMethodName: @"fql.query" 
+						   andParams: params
+					   andHttpMethod: @"POST" 
+						 andDelegate: friendsRequestResult]; 
+	 */
 }
 
-- (void)userRequestFailed {
-  if ([self.userInfoDelegate respondsToSelector:@selector(userInfoFailToLoad)]) {
-    [_userInfoDelegate userInfoFailToLoad];
-  }
+
+
+/**
+ * LikesAndCommentsRequestDelegate
+ */
+- (void)likesAndCommentsRequestCompleteWithInfo:(NSMutableArray*)info
+{
+	_likesAndCommentsInfo = [info retain];
+	NSLog(@"likesAndCommentsRequestCompleteWithInfo %@", info);
+	if ([self.userInfoDelegate respondsToSelector:@selector(likesAndCommentsDidLoad)]) 
+	{
+		[_userInfoDelegate likesAndCommentsDidLoad];
+	}
+	
 }
+
+
+
+
+/**
+ * UID request
+ */
+- (void)userRequestCompleteWithUid:(NSString *)uid 
+{
+	self.uid = uid;
+	//[self requestCountOf:(NSString*)entity];
+ // [self requestFriendsDetail];
+	
+	if ([self.userInfoDelegate respondsToSelector:@selector(userInfoDidLoad)]) 
+	{
+		[_userInfoDelegate userInfoDidLoad];
+	}
+	
+	
+}
+
+
+
+- (void)userRequestFailed 
+{
+	if ([self.userInfoDelegate respondsToSelector:@selector(userInfoFailToLoad)]) 
+	{
+		[_userInfoDelegate userInfoFailToLoad];
+	}
+}
+
+
+
 
 /**
  * FriendsRequestDelegate
  */
-- (void)FriendsRequestCompleteWithFriendsInfo:(NSMutableArray *)friendsInfo {
+- (void)FriendsRequestCompleteWithFriendsInfo:(NSMutableArray *)friendsInfo 
+{
   _friendsInfo = [friendsInfo retain];
-  if ([self.userInfoDelegate respondsToSelector:@selector(userInfoDidLoad)]) {
+  if ([self.userInfoDelegate respondsToSelector:@selector(userInfoDidLoad)]) 
+  {
     [_userInfoDelegate userInfoDidLoad];
   }
 }

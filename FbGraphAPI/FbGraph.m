@@ -144,12 +144,14 @@
 	NSString *url_string = [NSString stringWithFormat:@"https://graph.facebook.com/%@?", action];
 	
 	//tack on any get vars we have...
-	if ( (get_vars != nil) && ([get_vars count] > 0) ) {
+	if ( (get_vars != nil) && ([get_vars count] > 0) ) 
+	{
 		
 		NSEnumerator *enumerator = [get_vars keyEnumerator];
 		NSString *key;
 		NSString *value;
-		while ((key = (NSString *)[enumerator nextObject])) {
+		while ((key = (NSString *)[enumerator nextObject])) 
+		{
 			
 			value = (NSString *)[get_vars objectForKey:key];
 			url_string = [NSString stringWithFormat:@"%@%@=%@&", url_string, key, value];

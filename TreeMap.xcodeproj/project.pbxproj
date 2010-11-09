@@ -31,6 +31,7 @@
 		F01C0EB2128329EB00CF1476 /* FBLoginButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C0EB1128329EB00CF1476 /* FBLoginButton.m */; };
 		F01C0EB912832A0500CF1476 /* UserRequestResult.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C0EB612832A0500CF1476 /* UserRequestResult.m */; };
 		F01C0EBA12832A0500CF1476 /* FriendsRequestResult.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C0EB812832A0500CF1476 /* FriendsRequestResult.m */; };
+		F01C121B1289A6C800CF1476 /* LikesAndCommentsRequestResult.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C121A1289A6C800CF1476 /* LikesAndCommentsRequestResult.m */; };
 		F033EA4E118A24C30020F23D /* TreeMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F033EA4C118A24C30020F23D /* TreeMapViewController.m */; };
 		F033EA4F118A24C30020F23D /* TreeMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F033EA4D118A24C30020F23D /* TreeMapViewController.xib */; };
 		F033EA5B118A25230020F23D /* data.plist in Resources */ = {isa = PBXBuildFile; fileRef = F033EA5A118A25230020F23D /* data.plist */; };
@@ -113,6 +114,9 @@
 		F01C0EB612832A0500CF1476 /* UserRequestResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserRequestResult.m; sourceTree = "<group>"; };
 		F01C0EB712832A0500CF1476 /* FriendsRequestResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsRequestResult.h; sourceTree = "<group>"; };
 		F01C0EB812832A0500CF1476 /* FriendsRequestResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendsRequestResult.m; sourceTree = "<group>"; };
+		F01C12161289A69200CF1476 /* LikesAndCommentsRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LikesAndCommentsRequest.h; sourceTree = "<group>"; };
+		F01C12191289A6C800CF1476 /* LikesAndCommentsRequestResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LikesAndCommentsRequestResult.h; sourceTree = "<group>"; };
+		F01C121A1289A6C800CF1476 /* LikesAndCommentsRequestResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LikesAndCommentsRequestResult.m; sourceTree = "<group>"; };
 		F033EA4B118A24C30020F23D /* TreeMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TreeMapViewController.h; path = ../TreeMapViewController.h; sourceTree = "<group>"; };
 		F033EA4C118A24C30020F23D /* TreeMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TreeMapViewController.m; path = ../TreeMapViewController.m; sourceTree = "<group>"; };
 		F033EA4D118A24C30020F23D /* TreeMapViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TreeMapViewController.xib; path = ../TreeMapViewController.xib; sourceTree = "<group>"; };
@@ -224,6 +228,8 @@
 				F01C0EB0128329EB00CF1476 /* FBLoginButton.h */,
 				F01C0EB1128329EB00CF1476 /* FBLoginButton.m */,
 				F01C0EB512832A0500CF1476 /* UserRequestResult.h */,
+				F01C12191289A6C800CF1476 /* LikesAndCommentsRequestResult.h */,
+				F01C121A1289A6C800CF1476 /* LikesAndCommentsRequestResult.m */,
 				F01C0EB612832A0500CF1476 /* UserRequestResult.m */,
 				F01C0EB712832A0500CF1476 /* FriendsRequestResult.h */,
 				F01C0EB812832A0500CF1476 /* FriendsRequestResult.m */,
@@ -242,6 +248,7 @@
 				F061195E1252966D008C7D07 /* SystemConfiguration.framework */,
 				F061196212529696008C7D07 /* MobileCoreServices.framework */,
 				F06119661252969D008C7D07 /* CoreServices.framework */,
+				F01C12161289A69200CF1476 /* LikesAndCommentsRequest.h */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -490,6 +497,7 @@
 				F01C0EB2128329EB00CF1476 /* FBLoginButton.m in Sources */,
 				F01C0EB912832A0500CF1476 /* UserRequestResult.m in Sources */,
 				F01C0EBA12832A0500CF1476 /* FriendsRequestResult.m in Sources */,
+				F01C121B1289A6C800CF1476 /* LikesAndCommentsRequestResult.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

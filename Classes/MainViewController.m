@@ -51,6 +51,10 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
+	
+	[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"displayMode"];
+	
+	
 	 _session = [[Session alloc] init];
 	_facebook = [[_session restore] retain];
 	
@@ -58,14 +62,12 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 		_facebook = [[Facebook alloc] init];
 		NSLog(@"facebook is nil");
 		_fbButton.isLoggedIn = NO;
-	//	_addRunButton.hidden = YES;
-		//[self.view addSubview:self.logoutView];
+
+
 	} else {
 		NSLog(@"facebook is not nil");
 		_fbButton.isLoggedIn = YES;
-	//	_addRunButton.hidden = NO;
 		[self fbDidLogin];
-		///s[self.view addSubview:self.loginView];
 	}
 	
 	 [_fbButton updateImage];
@@ -94,6 +96,15 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 	[menu setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
 	
 	menu.image = menuBgImage;
+	
+	
+	_treemapViewController = [[TreeMapViewController alloc] init];
+	[_treemapViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight];
+	
+	[self.treemapViewController viewWillAppear:YES];
+	[self.containerView addSubview:self.treemapViewController.view];
+	
+	
 
 }
 
@@ -115,16 +126,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 		//resetting the self.plistArray so we don't add to the old plistArray.
 		//self.plistArray = [[NSMutableArray alloc] initWithCapacity:1];
 		//currentDisplayMode
-		if([[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) //if the comments mode is on
-		{
-			//[self getMeButtonPressed:@"comments.count"];
-		}
-		else
-		{
-			//[self getMeButtonPressed:@"likes"];
-		}
-		
-
+		[_userInfo requestCountOf:[[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]];
 }
 
 - (IBAction)displayComments: (id) sender
@@ -135,23 +137,10 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 	
 	//if there's no action going on.
 	// in the future, make sure this doesn't get called a few times.
-
-
-		//resetting the self.plistArray so we don't add to the old plistArray.
-		//self.plistArray = [[NSMutableArray alloc] initWithCapacity:1];
 		
-		[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"displayMode"];
-		//[self getMeButtonPressed:@"comments.count"];
-		/*
-		 NSMutableDictionary * params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-		 @"SELECT uid,name FROM user WHERE uid=4", @"query",
-		 nil];
-		 [_facebook requestWithMethodName: @"fql.query" 
-		 andParams: params
-		 andHttpMethod: @"POST" 
-		 andDelegate: self]; 
-		 */
+	[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"displayMode"];
 
+	[_userInfo requestCountOf:[[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]];
 	
 }
 
@@ -172,9 +161,9 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 		//self.plistArray = [[NSMutableArray alloc] initWithCapacity:1];
 		
 		[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"displayMode"];
+		[_userInfo requestCountOf:[[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]];
 		//[self getMeButtonPressed:@"likes"];
 
-	
 }
 
 
@@ -245,7 +234,8 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 /**
  * FBSessionDelegate
  */ 
--(void) fbDidLogin {
+-(void) fbDidLogin 
+{
 	
 	 _fbButton.isLoggedIn         = YES;
 	 [_fbButton updateImage];
@@ -254,13 +244,16 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 	_userInfo = [[[[UserInfo alloc] initializeWithFacebook:_facebook andDelegate: self] 
 				  autorelease] 
 				 retain];
-	[_userInfo requestAllInfo];
+	//[_userInfo requestCountOf:(NSString*)entity];
+	//[_userInfo requestAllInfo];
+	[_userInfo requestUid];
 }
 
 /**
  * FBSessionDelegate
  */ 
--(void) fbDidLogout {
+-(void) fbDidLogout 
+{
 	 [_session unsave];
 	_fbButton.isLoggedIn         = NO;
 	[_fbButton updateImage];
@@ -284,27 +277,14 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 /*
  * UserInfoLoadDelegate
  */
-- (void)userInfoDidLoad 
+
+
+- (void)likesAndCommentsDidLoad
 {
-	[_session setSessionWithFacebook:_facebook andUid:_userInfo.uid];
-	[_session save];
-	
-	NSLog(@"loading the new view");
+	NSLog(@"likesAndCommentsDidLoad");
 	
 	
-	_treemapViewController = [[TreeMapViewController alloc] init];
-	//_treemapViewController.view.frame = CGRectMake(0, 0, 320, 460);
-	//CGRect myFrame = self.view.frame;
-	//myFrame.origin.y = 20.0;
-	//_treemapViewController.view.frame = myFrame;
-	
-	[_treemapViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight];
-	
-	[self.treemapViewController viewWillAppear:YES];
-	[self.containerView addSubview:self.treemapViewController.view];
-	
-	
-	
+	[(TreemapView*)self.treemapViewController.treeMapView reloadData];
 	/*
 	 [_session setSessionWithFacebook:_facebook andUid:_userInfo.uid];
 	 [_session save];
@@ -316,6 +296,21 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 	 [self.myRunController viewWillAppear:YES];
 	 [_loginView addSubview:self.myRunController.view];
 	 */
+
+	
+	
+}
+- (void)userInfoDidLoad 
+{
+	[_session setSessionWithFacebook:_facebook andUid:_userInfo.uid];
+	[_session save];
+	
+
+	
+	
+	int val = [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"];
+	[_userInfo requestCountOf:val];
+	
 }
 
 - (void)userInfoFailToLoad 
