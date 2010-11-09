@@ -31,7 +31,7 @@
 - (void)request:(FBRequest*)request didLoad:(id)result{
 	
    // NSMutableArray *fruits = [[[NSMutableArray alloc] init] autorelease];
-	//NSLog(@"result %@", result);
+	
 	
     for (NSDictionary *info in result) {
 		
@@ -89,6 +89,8 @@
 	
 	//@@@@@@@ 3- download the images.
 	//imagesLoaded = NO;
+	
+	NSLog(@"tempArr %@", tempArr);
 	
 	if (!networkQueue) {
 		networkQueue = [[ASINetworkQueue alloc] init];	

@@ -52,7 +52,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 {
     [super viewDidLoad];
 	
-	[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"displayMode"];
+	//[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"displayMode"];
 	
 	
 	 _session = [[Session alloc] init];
