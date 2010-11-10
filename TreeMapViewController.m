@@ -328,8 +328,10 @@
 
 	
 	//these values go to the treemapview in order to be used for calculating the sizes of the cells
-	NSMutableArray *values = [NSMutableArray arrayWithCapacity:fruits.count];
+	NSMutableArray *values = [NSMutableArray arrayWithCapacity:1];
 	
+	NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
+
 	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 	{
 		for (NSDictionary *dic in fruits) 
@@ -343,13 +345,14 @@
 			// [self.destinationPaths addObject:[dic objectForKey:@"destinationPath"]];
 			if(![[dic objectForKey:@"likes"] isEqual:@"0"]) 
 			{
+				NSLog(@"dic is %@", dic);
 				[values addObject:[dic objectForKey:@"likes"]];
 			}
-			
 		}	
 	}
 	else //set to comments
 	{
+		NSLog(@"comments");
 		for (NSDictionary *dic in fruits) 
 		{
 			// NSLog(@"fruit: %@", [dic objectForKey:@"likes"]);
@@ -361,6 +364,7 @@
 			// [self.destinationPaths addObject:[dic objectForKey:@"destinationPath"]];
 			if(![[dic objectForKey:@"comments"] isEqual:@"0"]) 
 			{
+				//NSLog(@"dic is %@", dic);
 				[values addObject:[dic objectForKey:@"comments"]];
 			}
 			
@@ -374,7 +378,8 @@
 
 
 //this gets called @creation for each of the cell. 
-- (TreemapViewCell *)treemapView:(TreemapView *)treemapView cellForIndex:(NSInteger)index forRect:(CGRect)rect {
+- (TreemapViewCell *)treemapView:(TreemapView *)treemapView cellForIndex:(NSInteger)index forRect:(CGRect)rect 
+{
 	TreemapViewCell *cell = [[TreemapViewCell alloc] initWithFrame:rect];
 	
 	
@@ -385,7 +390,7 @@
 	//match the indexes through the cellForIndex/fruits objectAtIndex.
 	NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"filename"]];
 	//NSLog(@"fruits is here %@", fn);
-	//NSString *fn = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",[destinationPaths objectAtIndex:index]];
+
 	//NSSearchPathForDirectoriesInDomains
 	
 	//get the image from the filename.
@@ -394,7 +399,20 @@
 	
 	//cell.downloadDestinationPath = fn;
 	cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
+	NSString *tText;
+	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
+	{
+		 tText = [[fruits objectAtIndex:index] objectForKey:@"likes"];
+
+	}
+	else
+	{
+		tText = [[fruits objectAtIndex:index] objectForKey:@"comments"];
+
+	}
 	
+	
+	cell.textLabel.text = tText;
 	[self.cells addObject:cell];
 	[cell release];
 	
@@ -406,8 +424,8 @@
 
 
 //this gets called on the update 
-- (void)treemapView:(TreemapView *)treemapView updateCell:(TreemapViewCell *)cell forIndex:(NSInteger)index forRect:(CGRect)rect {
-
+- (void)treemapView:(TreemapView *)treemapView updateCell:(TreemapViewCell *)cell forIndex:(NSInteger)index forRect:(CGRect)rect 
+{
 	[self updateCell:cell forIndex:index];
 }
 
@@ -431,7 +449,7 @@
 	
 	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
 
-	if([(TreemapView*)self.treeMapView initialized]) [self resizeView];
+	//if([(TreemapView*)self.treeMapView initialized]) [self resizeView];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation

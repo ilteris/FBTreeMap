@@ -22,6 +22,10 @@
 	
 	BOOL loaded;
 	
+	UIButton *_like_btn;
+	
+	
+	
 	id <TreemapViewCellDelegate> delegate;
 }
 

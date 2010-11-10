@@ -28,7 +28,7 @@
 		if (createNode) 
 		{
 			TreemapViewCell *cell = [dataSource treemapView:self cellForIndex:index forRect:rect];
-		//	NSLog(@"createNode");
+			NSLog(@"createNode");
 			cell.index = index;
 			cell.delegate = self;
 			

@@ -71,10 +71,10 @@
 
 - (void)resizeView;
 
--(void)getMeButtonPressed:(NSString*)key;
 
--(NSMutableArray*) filterEntries:(NSMutableArray*)mutableArray accordingTo:(NSString*)key;
 
-- (void) downloadAccordingToKey:(NSString*)key;
+
+
+
 
 @end

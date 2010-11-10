@@ -76,7 +76,9 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 	
 	//displayMode
 	displayMode = [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]; // 0 =likes 1 =comments 
-
+	NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
+	
+	
 	if(!displayMode) //likes
 	{
 		like_btn.enabled =  NO;
@@ -139,6 +141,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 	// in the future, make sure this doesn't get called a few times.
 		
 	[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"displayMode"];
+	NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
 
 	[_userInfo requestCountOf:[[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]];
 	
@@ -161,6 +164,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 		//self.plistArray = [[NSMutableArray alloc] initWithCapacity:1];
 		
 		[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"displayMode"];
+		NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
 		[_userInfo requestCountOf:[[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]];
 		//[self getMeButtonPressed:@"likes"];
 
@@ -182,8 +186,8 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
 {
 	
-	NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
-	NSLog(@"self.treemapViewController %@", self.treemapViewController);
+	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
+	//NSLog(@"self.treemapViewController %@", self.treemapViewController);
 	if([(TreemapView*)self.treemapViewController.treeMapView initialized]) [self.treemapViewController resizeView];
 }
 

@@ -19,6 +19,7 @@
 @synthesize downloadDestinationPath;
 @synthesize loaded;
 
+
 #pragma mark -
 
 - (id)initWithFrame:(CGRect)frame {
@@ -43,37 +44,81 @@
 		//self.layer.borderColor = [[UIColor whiteColor] CGColor];
 
 		self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:1] CGColor];
-		self.textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width - 4, frame.size.height-4)];
+		self.textLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, self.frame.size.height - 50, 56, 48)];
+
+		NSLog(@"current display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
+ 		NSLog(@"textlabel frame is %@", NSStringFromCGRect(self.textLabel.frame));
+		//CGRect textFrame = self.textLabel.frame;
+		//textFrame.origin.x +=  5;
+		//textFrame.origin.y =  self.frame.size.height - 50;
+		//textLabel.frame = textFrame;
+		NSLog(@"textlabel frame after is %@", NSStringFromCGRect(self.textLabel.frame));		
+		
+		//_like_btn = [[UIButton alloc] initWithFrame:CGRectMake(50, self.frame.size.height - 50, 56, 48)];
+		
+		
+		_like_btn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+		// self.autoresizingMask = UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight;
+//		_like_btn.frame = CGRectMake(textLabel.bounds.origin.x + textLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 50, 56.0, 48.0);
+		NSLog(@"self.textLabel.bounds.size.width %i", self.textLabel.frame.size.width);
+		
+		_like_btn.frame = CGRectMake(self.textLabel.frame.origin.x + self.textLabel.bounds.size.width, 0, 56.0, 48.0);
+
+		//_like_btn.frame = CGRectMake(0,0, 56.0, 48.0);
+		
+		
+		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
+		{
+			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"1_like_red" ofType:@"png"]];
+			[_like_btn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+			[tImage release];
+		}
+		else 
+		{
+			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"1_comment_blue" ofType:@"png"]];
+			[_like_btn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+			[tImage release];
+		}
 
 		
+		
+		//textLabel.contentMode = UIViewContentModeRedraw;
 		textLabel.numberOfLines = 0;
-		textLabel.font = [UIFont boldSystemFontOfSize:14];
-		textLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
-		textLabel.textAlignment = UITextAlignmentCenter;
+		textLabel.font = [UIFont boldSystemFontOfSize:50];
+		//textLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
+		//textLabel.textAlignment = UITextAlignmentLeft;
 		textLabel.textColor = [UIColor whiteColor];
 		textLabel.backgroundColor = [UIColor clearColor];
+		textLabel.shadowColor  = [UIColor blackColor];
+		textLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		
 		textLabel.lineBreakMode = UILineBreakModeWordWrap;
 		textLabel.adjustsFontSizeToFitWidth = NO;
+		//textLabel.text = @"5";
 		
+		[self.aView addSubview:textLabel];
 		
-	//	[self.aView addSubview:textLabel];
+		[self.aView addSubview:_like_btn];
+		
 		//setting it arbitrarily. 
-		self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 10)];
+		self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.aView.frame.size.width, self.aView.frame.size.height)];
 		
 		
-		nameLabel.font = [UIFont boldSystemFontOfSize:10];
-		nameLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
+		nameLabel.font = [UIFont boldSystemFontOfSize:50];
+		//nameLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
 		nameLabel.textAlignment = UITextAlignmentLeft;
 		nameLabel.textColor = [UIColor whiteColor];
 		nameLabel.backgroundColor = [UIColor clearColor];
+		nameLabel.shadowColor  = [UIColor blackColor];
+		nameLabel.shadowOffset = CGSizeMake(0.0, -1.0);
 		//nameLabel.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.5];
 		
 		nameLabel.lineBreakMode = UILineBreakModeWordWrap;
-		nameLabel.adjustsFontSizeToFitWidth = NO;
+		nameLabel.adjustsFontSizeToFitWidth = YES;
 		
 		nameLabel.alpha = .8;
 		
-
+		nameLabel.text = @"TEST";
 		
 		[self.aView addSubview:nameLabel];
 
@@ -104,7 +149,7 @@
 
 -(void) flipIt
 {
-	NSLog(@"here");
+
 	
 	//self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.0] CGColor];
 	
@@ -146,6 +191,9 @@
 }
 
 
+
+
+
 - (void)animationDidStop {
 	NSLog(@"animationDidStop");
 	self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:1] CGColor];
@@ -154,13 +202,14 @@
 }
 
 
-
-
 - (void)layoutSubviews {
 	[super layoutSubviews];
 
-	textLabel.frame = CGRectMake(0, (self.frame.size.height-textLabel.frame.size.height) - 15, self.frame.size.width-10, self.textLabel.frame.size.height);
-	nameLabel.frame = CGRectMake(5, 10, self.nameLabel.frame.size.width, self.nameLabel.frame.size.height);
+	
+	
+	//textLabel.frame = CGRectMake(15, self.aView.frame.size.height - 50, textLabel.bounds.size.width, textLabel.bounds.size.height);
+	
+	//nameLabel.frame = CGRectMake(5, 10, self.nameLabel.frame.size.width, self.nameLabel.frame.size.height);
 
 	
 	valueLabel.frame = CGRectMake(0, 0, self.frame.size.width, self.valueLabel.frame.size.height);
