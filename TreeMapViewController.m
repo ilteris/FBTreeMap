@@ -263,15 +263,15 @@
 
 - (void)resizeView
 {
-	
+	NSLog(@"resizeView");
 	// resize rectangles with animation
 	// NSLog(@"resizeView");
-	[UIView beginAnimations:@"reload" context:nil];
-	[UIView setAnimationDuration:0.5];
-	
+	//[UIView beginAnimations:@"reload" context:nil];
+	//[UIView setAnimationDuration:0.5];
+	[UIView setAnimationsEnabled:NO];
 	[(TreemapView *)self.treeMapView reloadData];
-	
-	[UIView commitAnimations];
+	[UIView setAnimationsEnabled:YES];
+	//[UIView commitAnimations];
 	
 	
 }

@@ -59,10 +59,13 @@
 		
 		_like_btn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
 		// self.autoresizingMask = UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight;
-//		_like_btn.frame = CGRectMake(textLabel.bounds.origin.x + textLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 50, 56.0, 48.0);
-		NSLog(@"self.textLabel.bounds.size.width %i", self.textLabel.frame.size.width);
+		_like_btn.frame = CGRectMake(textLabel.bounds.origin.x + textLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 50, 56.0, 48.0);
+		NSLog(@"_like_btn.frame %@", NSStringFromCGRect(_like_btn.frame));
 		
-		_like_btn.frame = CGRectMake(self.textLabel.frame.origin.x + self.textLabel.bounds.size.width, 0, 56.0, 48.0);
+//		_like_btn.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
+//		_like_btn.frame = CGRectMake(self.textLabel.frame.origin.x + self.textLabel.bounds.size.width, 0, 56.0, 48.0);
+		
+		NSLog(@"_like_btn.frame %@", NSStringFromCGRect(_like_btn.frame));
 
 		//_like_btn.frame = CGRectMake(0,0, 56.0, 48.0);
 		
@@ -84,7 +87,7 @@
 		
 		//textLabel.contentMode = UIViewContentModeRedraw;
 		textLabel.numberOfLines = 0;
-		textLabel.font = [UIFont boldSystemFontOfSize:50];
+		textLabel.font = [UIFont boldSystemFontOfSize:60];
 		//textLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
 		//textLabel.textAlignment = UITextAlignmentLeft;
 		textLabel.textColor = [UIColor whiteColor];
@@ -101,10 +104,10 @@
 		[self.aView addSubview:_like_btn];
 		
 		//setting it arbitrarily. 
-		self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.aView.frame.size.width, self.aView.frame.size.height)];
+		self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, self.aView.frame.size.width-20, self.aView.frame.size.height)];
 		
 		
-		nameLabel.font = [UIFont boldSystemFontOfSize:50];
+		nameLabel.font = [UIFont boldSystemFontOfSize:30];
 		//nameLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
 		nameLabel.textAlignment = UITextAlignmentLeft;
 		nameLabel.textColor = [UIColor whiteColor];
@@ -115,10 +118,11 @@
 		
 		nameLabel.lineBreakMode = UILineBreakModeWordWrap;
 		nameLabel.adjustsFontSizeToFitWidth = YES;
+		nameLabel.numberOfLines = 3;
 		
 		nameLabel.alpha = .8;
 		
-		nameLabel.text = @"TEST";
+		nameLabel.text = @"";
 		
 		[self.aView addSubview:nameLabel];
 
@@ -210,6 +214,8 @@
 	//textLabel.frame = CGRectMake(15, self.aView.frame.size.height - 50, textLabel.bounds.size.width, textLabel.bounds.size.height);
 	
 	//nameLabel.frame = CGRectMake(5, 10, self.nameLabel.frame.size.width, self.nameLabel.frame.size.height);
+
+	//_like_btn.frame = CGRectMake(textLabel.bounds.origin.x + textLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 50, 56.0, 48.0);
 
 	
 	valueLabel.frame = CGRectMake(0, 0, self.frame.size.width, self.valueLabel.frame.size.height);
