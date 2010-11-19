@@ -7,7 +7,7 @@
 @implementation TreemapViewCell
 
 @synthesize valueLabel;
-@synthesize textLabel;
+@synthesize countLabel;
 @synthesize nameLabel;
 @synthesize imageViewA;
 @synthesize imageViewB;
@@ -41,33 +41,27 @@
 		
 		self.layer.borderWidth = .5;
 
-		//self.layer.borderColor = [[UIColor whiteColor] CGColor];
+
 
 		self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:1] CGColor];
-		self.textLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, self.frame.size.height - 50, 56, 48)];
+		self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(11, self.frame.size.height - 61, 200, 48)];
 
-		NSLog(@"current display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
- 		NSLog(@"textlabel frame is %@", NSStringFromCGRect(self.textLabel.frame));
-		//CGRect textFrame = self.textLabel.frame;
-		//textFrame.origin.x +=  5;
-		//textFrame.origin.y =  self.frame.size.height - 50;
-		//textLabel.frame = textFrame;
-		NSLog(@"textlabel frame after is %@", NSStringFromCGRect(self.textLabel.frame));		
-		
-		//_like_btn = [[UIButton alloc] initWithFrame:CGRectMake(50, self.frame.size.height - 50, 56, 48)];
+		countLabel.numberOfLines = 0;
+		countLabel.font = [UIFont boldSystemFontOfSize:62];
 		
 		
+
+
+		countLabel.textColor = [UIColor whiteColor];
+		countLabel.backgroundColor = [UIColor clearColor];
+		countLabel.shadowColor  = [UIColor blackColor];
+		countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		countLabel.adjustsFontSizeToFitWidth = NO;
+
+			
+	
 		_like_btn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
-		// self.autoresizingMask = UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight;
-		_like_btn.frame = CGRectMake(textLabel.bounds.origin.x + textLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 50, 56.0, 48.0);
-		NSLog(@"_like_btn.frame %@", NSStringFromCGRect(_like_btn.frame));
-		
-//		_like_btn.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
-//		_like_btn.frame = CGRectMake(self.textLabel.frame.origin.x + self.textLabel.bounds.size.width, 0, 56.0, 48.0);
-		
-		NSLog(@"_like_btn.frame %@", NSStringFromCGRect(_like_btn.frame));
-
-		//_like_btn.frame = CGRectMake(0,0, 56.0, 48.0);
+		_like_btn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
 		
 		
 		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
@@ -83,31 +77,39 @@
 			[tImage release];
 		}
 
+	
+		nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0)];
 		
+		//CGSize theSize = [nameLabel sizeWithFont:[UIFont systemFontOfSize:30.0] constrainedToSize:CGSizeMake(310.0f, FLT_MAX) lineBreakMode:UILineBreakModeWordWrap];
+
+		//Calculate the expected size based on the font and linebreak mode of your label
+				
 		
-		//textLabel.contentMode = UIViewContentModeRedraw;
-		textLabel.numberOfLines = 0;
-		textLabel.font = [UIFont boldSystemFontOfSize:60];
-		//textLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
-		//textLabel.textAlignment = UITextAlignmentLeft;
-		textLabel.textColor = [UIColor whiteColor];
-		textLabel.backgroundColor = [UIColor clearColor];
-		textLabel.shadowColor  = [UIColor blackColor];
-		textLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+
+		NSLog(@"frame size: %@", NSStringFromCGSize(self.frame.size));
 		
-		textLabel.lineBreakMode = UILineBreakModeWordWrap;
-		textLabel.adjustsFontSizeToFitWidth = NO;
-		//textLabel.text = @"5";
+		if(self.frame.size.width > 400 && self.frame.size.height > 200)
+		{
+			NSLog(@"status big");
+			nameLabel.font = [UIFont boldSystemFontOfSize:48];
+			nameLabel.text = @"Hello this is a text";
+		}
+		else if(((self.frame.size.height > 130 && self.frame.size.height < 200) && self.frame.size.width > 113) || ((self.frame.size.width > 113 && self.frame.size.width < 400) && self.frame.size.height > 200))
+		{
+			NSLog(@"status small");
+			nameLabel.font = [UIFont boldSystemFontOfSize:24];
+			nameLabel.text = @"Hello this is a text";
+		}
+		else if(self.frame.size.width < 113 || self.frame.size.height < 130)
+		{
+			NSLog(@"status none");
+			//nameLabel.font = [UIFont boldSystemFontOfSize:0];
+			//don't display anything
+			//display only user profile.
+		}
+
 		
-		[self.aView addSubview:textLabel];
-		
-		[self.aView addSubview:_like_btn];
-		
-		//setting it arbitrarily. 
-		self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, self.aView.frame.size.width-20, self.aView.frame.size.height)];
-		
-		
-		nameLabel.font = [UIFont boldSystemFontOfSize:30];
+		//nameLabel.font = [UIFont boldSystemFontOfSize:24];
 		//nameLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
 		nameLabel.textAlignment = UITextAlignmentLeft;
 		nameLabel.textColor = [UIColor whiteColor];
@@ -117,15 +119,19 @@
 		//nameLabel.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.5];
 		
 		nameLabel.lineBreakMode = UILineBreakModeWordWrap;
-		nameLabel.adjustsFontSizeToFitWidth = YES;
-		nameLabel.numberOfLines = 3;
+		nameLabel.adjustsFontSizeToFitWidth = NO;
+		nameLabel.numberOfLines = 10;
 		
-		nameLabel.alpha = .8;
+		nameLabel.alpha = 1;
 		
-		nameLabel.text = @"";
+			
 		
+		
+		[self.aView addSubview:countLabel];
+		[self.aView addSubview:_like_btn];
 		[self.aView addSubview:nameLabel];
 
+		
 		self.valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 10)];
 		valueLabel.font = [UIFont boldSystemFontOfSize:10];
 		valueLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
@@ -209,14 +215,27 @@
 - (void)layoutSubviews {
 	[super layoutSubviews];
 
+//	countLabel.text = @"1290";	
+	
+	// calculate the position of the icon according to the width of the countLabel.
+	// can you set the width of the countLabel ==>countLabelWidth  to countLabel's width?
+	CGSize countLabelWidth = [countLabel.text sizeWithFont:countLabel.font forWidth:countLabel.frame.size.width lineBreakMode:countLabel.lineBreakMode];
+	CGRect _like_btn_frame = _like_btn.frame;
+	_like_btn_frame.origin.x = countLabel.frame.origin.x + countLabelWidth.width + 4;
+	_like_btn.frame = _like_btn_frame;
 	
 	
-	//textLabel.frame = CGRectMake(15, self.aView.frame.size.height - 50, textLabel.bounds.size.width, textLabel.bounds.size.height);
+	//set the height for the namelabel.
+	CGSize maximumLabelSize = CGSizeMake(self.frame.size.width,self.frame.size.height);
+	CGSize expectedLabelSize = [nameLabel.text sizeWithFont:nameLabel.font 
+										  constrainedToSize:maximumLabelSize 
+											  lineBreakMode:nameLabel.lineBreakMode]; 
 	
-	//nameLabel.frame = CGRectMake(5, 10, self.nameLabel.frame.size.width, self.nameLabel.frame.size.height);
-
-	//_like_btn.frame = CGRectMake(textLabel.bounds.origin.x + textLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 50, 56.0, 48.0);
-
+	//adjust the label the the new height.
+	CGRect newFrame = nameLabel.frame;
+	newFrame.size.height = expectedLabelSize.height;
+	nameLabel.frame = newFrame;
+	
 	
 	valueLabel.frame = CGRectMake(0, 0, self.frame.size.width, self.valueLabel.frame.size.height);
 	imageViewA.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
@@ -232,7 +251,7 @@
 
 - (void)dealloc {
 	[valueLabel release];
-	[textLabel release];
+	[countLabel release];
 	[nameLabel release];
 	[imageViewA release];
 	[imageViewB release];

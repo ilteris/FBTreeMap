@@ -109,11 +109,11 @@
 										  constrainedToSize:maximumLabelSize 
 											  lineBreakMode:UILineBreakModeWordWrap]; 
 		//adjust the label to the new height.
-		CGRect newFrame = cell.textLabel.frame;
+		CGRect newFrame = cell.countLabel.frame;
 		newFrame.size.height = expectedLabelSize.height;
-		cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
+		cell.countLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
 		//NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
-		cell.textLabel.frame = newFrame;
+		cell.countLabel.frame = newFrame;
 		
 	//	NSLog(@"---end here.");
 	}//if the type === link
@@ -123,7 +123,7 @@
 		if([[[fruits objectAtIndex:index] objectForKey:@"link"] isEqual:@"http://www.facebook.com/"])
 		{//if the link is internal link
 		//	NSLog(@"INTERNAL_LINK");
-			cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
+			cell.countLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
 		//	NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
 		//	NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
 			//if it's the internal link then it could still be internal but the link part is different?
@@ -194,7 +194,7 @@
 		
 	//	NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
 	//	NSLog(@"---end here.");
-		cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
+		cell.countLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
 	}
 	 else if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"photo"])
 	 {
@@ -203,7 +203,7 @@
 	 //the photo ends with _s but need to replace that with _n and load it. 
 	//	 NSLog(@"---end here.");	 
 	// NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
-	// cell.textLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
+	// cell.countLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
 	 }
 	 
 	
@@ -364,7 +364,7 @@
 			// [self.destinationPaths addObject:[dic objectForKey:@"destinationPath"]];
 			if(![[dic objectForKey:@"comments"] isEqual:@"0"]) 
 			{
-				//NSLog(@"dic is %@", dic);
+				NSLog(@"dic is %@", dic);
 				[values addObject:[dic objectForKey:@"comments"]];
 			}
 			
@@ -384,35 +384,56 @@
 	
 	
 	NSLog(@"treemapView cellForIndex");
-	//here give the document thingie so that we can load the images from the plist file.
-	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths objectAtIndex: 0];
-	//match the indexes through the cellForIndex/fruits objectAtIndex.
-	NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"filename"]];
-	//NSLog(@"fruits is here %@", fn);
+	NSLog(@"comments is %@", [[fruits objectAtIndex:index] objectForKey:@"comments"]);
+	NSLog(@"likes is %@", [[fruits objectAtIndex:index] objectForKey:@"likes"]);
 
-	//NSSearchPathForDirectoriesInDomains
+	//here give the document thingie so that we can load the images from the plist file.
 	
-	//get the image from the filename.
-	UIImage *img = [UIImage imageWithContentsOfFile:fn];
-	
-	
-	//cell.downloadDestinationPath = fn;
-	cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 	NSString *tText;
 	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 	{
 		 tText = [[fruits objectAtIndex:index] objectForKey:@"likes"];
-
+		NSLog(@"[[fruits objectAtIndex:index] objectForKey:@likes] %@", [[fruits objectAtIndex:index] objectForKey:@"likes"]);
+		NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
+		NSString *documentsDirectory = [paths objectAtIndex: 0];
+		//match the indexes through the cellForIndex/fruits objectAtIndex.
+		NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"filename"]];
+		//NSLog(@"fruits is here %@", fn);
+		
+		
+		//NSSearchPathForDirectoriesInDomains
+		
+		//get the image from the filename.
+		UIImage *img = [UIImage imageWithContentsOfFile:fn];
+		
+		
+		//cell.downloadDestinationPath = fn;
+		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 	}
 	else
 	{
 		tText = [[fruits objectAtIndex:index] objectForKey:@"comments"];
-
+		NSLog(@"[[fruits objectAtIndex:index] objectForKey:comments] %@", [[fruits objectAtIndex:index] objectForKey:@"comments"]);
+		NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
+		NSString *documentsDirectory = [paths objectAtIndex: 0];
+		//match the indexes through the cellForIndex/fruits objectAtIndex.
+		NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"filename"]];
+		//NSLog(@"fruits is here %@", fn);
+		
+		//NSSearchPathForDirectoriesInDomains
+		
+		//get the image from the filename.
+		UIImage *img = [UIImage imageWithContentsOfFile:fn];
+		
+		
+		//cell.downloadDestinationPath = fn;
+		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
+		
 	}
 	
+	NSLog(@"tXtext %@", tText);
 	
-	cell.textLabel.text = tText;
+	cell.countLabel.text = tText;
 	[self.cells addObject:cell];
 	[cell release];
 	

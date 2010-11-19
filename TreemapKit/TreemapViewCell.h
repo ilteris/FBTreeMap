@@ -4,7 +4,7 @@
 
 @interface TreemapViewCell : UIControl {
 	UILabel *valueLabel;
-	UILabel *textLabel;
+	UILabel *countLabel;
 	UILabel *nameLabel;
 	
 	UIImageView *imageViewA;
@@ -30,7 +30,7 @@
 }
 
 @property (nonatomic, retain) UILabel *valueLabel;
-@property (nonatomic, retain) UILabel *textLabel;
+@property (nonatomic, retain) UILabel *countLabel;
 @property (nonatomic, retain) UILabel *nameLabel;
 
 @property (nonatomic, retain) UIImageView *imageViewA;

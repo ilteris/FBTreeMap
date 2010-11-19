@@ -156,28 +156,6 @@
 		NSString *valuesForCategory;
 
 		
-		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])//0//likes
-		{
-			NSLog(@"displayMode is 0");
-			valuesForCategory = [NSString stringWithFormat:@"%@",[[[[[request userInfo] objectForKey:@"tempArr"] objectAtIndex:imageNo] objectForKey:@"likes"] objectForKey:@"count"]];
-			
-			likeKey = [NSString stringWithFormat:@"likes"];
-			NSLog(@" like count is %@", valuesForCategory);
-			
-		}
-		else //displayMode is 1//comments 
-		{
-			NSLog(@"displayMode is 1");
-			valuesForCategory = [NSString stringWithFormat:@"%@",[[[[[request userInfo] objectForKey:@"tempArr"] objectAtIndex:imageNo] objectForKey:@"comments"] objectForKey:@"count"]];
-			likeKey = [NSString stringWithFormat:@"comments"];
-			NSLog(@" comment count is %@", valuesForCategory);
-		}
-		
-		NSLog(@"key is %@", [[request userInfo] objectForKey:@"key"]);
-		NSLog(@"image No is %i", imageNo);
-		
-		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:tempFileName, @"filename", valuesForCategory, likeKey, nil];
-		
 		
 		if(_plistArray == nil) //check if the plist is empty 
 		{ 
@@ -185,8 +163,53 @@
 			
 		}
 		
-		NSLog(@"dict %@", dict);
-		[_plistArray insertObject:dict atIndex:0];
+		
+		
+		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])//0//likes
+		{
+			NSLog(@"displayMode is 0");
+			valuesForCategory = [NSString stringWithFormat:@"%@",[[[[[request userInfo] objectForKey:@"tempArr"] objectAtIndex:imageNo] objectForKey:@"likes"] objectForKey:@"count"]];
+			
+			likeKey = [NSString stringWithFormat:@"likes"];
+			NSLog(@" like count is %@", valuesForCategory);
+	
+			
+						
+			
+
+		}
+		else //displayMode is 1//comments 
+		{
+			NSLog(@"displayMode is 1");
+			valuesForCategory = [NSString stringWithFormat:@"%@",[[[[[request userInfo] objectForKey:@"tempArr"] objectAtIndex:imageNo] objectForKey:@"comments"] objectForKey:@"count"]];
+			likeKey = [NSString stringWithFormat:@"comments"];
+			NSLog(@" comment count is %@", valuesForCategory);
+			
+			
+			
+		}
+		
+		//if the results are 0 then don't put those in the plist file.
+		
+		if(![valuesForCategory isEqual:@"0"]) 
+		{
+			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:tempFileName, @"filename", valuesForCategory, likeKey, nil];
+			
+			[_plistArray insertObject:dict atIndex:0];
+			NSLog(@"dict %@", dict);	
+		}
+
+		
+		
+		
+		NSLog(@"key is %@", [[request userInfo] objectForKey:@"key"]);
+		NSLog(@"image No is %i", imageNo);
+		
+		
+		
+		
+		
+		
 		
 		//NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"likes"]];
 		//TODO: add to the plist here? Not really, create an array and add the dictionaries here to the array and once 
