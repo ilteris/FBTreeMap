@@ -63,13 +63,35 @@
 	//@@@@@@@ 1- filter and splice!
 	NSMutableArray *tempArr = [result mutableCopy];
 	
-
-	// [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"likes.count" ascending: NO];
-	//NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"comments.count" ascending: NO];
-	[tempArr sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
-	[sortDescriptor release];
+	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])//0//likes
+	{
+		NSLog(@"displayMode is 0");
+		
+		
+		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"likes.count" ascending: NO];
+		//NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"comments.count" ascending: NO];
+		[tempArr sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
+		[sortDescriptor release];
+		
+		
+		
+	}
+	else //displayMode is 1//comments 
+	{
+		NSLog(@"displayMode is 1");
+		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"comments.count" ascending: NO];
+		//NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"comments.count" ascending: NO];
+		[tempArr sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
+		[sortDescriptor release];
+		
+		
+		
+		
+	}
 	
+	NSLog(@"tempArraay %@", tempArr);
+	// [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]
+	NSLog(@"tempArraay2 %@", tempArr);
 //	NSLog(@"tempArr %@", tempArr);
 	// here  we are getting rid of the rest of the objects after numberOfObjects
 	//check if the array is larger than numberof Objects
