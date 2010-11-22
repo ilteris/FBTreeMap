@@ -46,37 +46,47 @@
 	
 	for (NSInteger i=0; i < [streamArray count]; i++)
 	{
-		NSLog(@"1starr uid number is %@", [[streamArray objectAtIndex:i] objectForKey:@"actor_id"]);
+		//NSLog(@"1starr uid number is %@", [[streamArray objectAtIndex:i] objectForKey:@"actor_id"]);
 		for (NSInteger j=0; j < [userArray count]; j++)
 		{
 
-			NSLog(@"2ndarr uid number is %@", [[userArray objectAtIndex:j] objectForKey:@"uid"]);
+			//NSLog(@"2ndarr uid number is %@", [[userArray objectAtIndex:j] objectForKey:@"uid"]);
 
 			if([[[streamArray objectAtIndex:i] objectForKey:@"actor_id"] isEqual:[[userArray objectAtIndex:j] objectForKey:@"uid"]])	
 			{
-				NSLog(@"true it's number ");
-				NSDictionary *_categoryValue;
+				//NSLog(@"true it's number ");
+				NSString *_categoryValue;
 
 				if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])//0//likes
 				{
-					NSLog(@"displayMode is 0");
-					_categoryValue = [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"likes"] objectForKey:@"count"]];
-					NSLog(@"_categoryValue is %@", _categoryValue);
-										
+						NSLog(@"displayMode is 0");		
+					if (!_categoryValue)
+					{
+						_categoryValue = [NSString stringWithFormat:@"2"];
+					}
+					else
+					{
+						_categoryValue = [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"likes"] objectForKey:@"count"]];
+						
+					}
+				
 				}
 				else //displayMode is 1//comments 
 				{
 					NSLog(@"displayMode is 1");
-					_categoryValue = [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"count"]];
-					NSLog(@"_categoryValue is %@", _categoryValue);
-					
-					
+					if (!_categoryValue)
+					{
+						_categoryValue = [NSString stringWithFormat:@"2"];
+					}
+					else
+					{
+						_categoryValue = [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"count"]];
+					}
+	
 				}
 				NSString *_actor_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
 				NSString *_message = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
 				NSString *_from = [NSString stringWithFormat:@"%@",[[userArray objectAtIndex:j] objectForKey:@"name"]];
-				
-				
 				
 				
 				NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -97,79 +107,11 @@
 		
 	}
 	
-	NSLog(@"myArray is %@", myArray);
 	
-	/*
-	for (NSInteger i = 0; i < [result count]; i++) {
-		//for (NSDictionary *info in infok) {
-			//[[tempArr objectAtIndex:1] objectForKey:@"fql_result_set"]
-			NSLog(@"here here");	
-
-	//	NSLog(@"[[[result objectAtIndex:0] objectForKey:@actor_id %	", [[[result objectAtIndex:i] objectForKey:@"fql_result_set"] count]);
-			
-		
-
-		
-		for (NSInteger x=0; x < [[[result objectAtIndex:i] objectForKey:@"fql_result_set"] count]; x++)
-		{
-		
-			
-		//	NSLog(@"info %@", [[[result objectAtIndex:i] objectForKey:@"fql_result_set"] objectAtIndex:x]);																			  
-			NSLog(@"x is %i",x);
-			
-			//[[[[result objectAtIndex:i] objectForKey:@"fql_result_set"] objectAtIndex:x] setValue:@"value forKey:@"objectForKey:@"actor_id"];
-				NSLog(@"actor_id %@", [[[[result objectAtIndex:0] objectForKey:@"fql_result_set"] objectAtIndex:x] objectForKey:@"actor_id"]);	
-				NSLog(@"actor_id %@", [[[[result objectAtIndex:1] objectForKey:@"fql_result_set"] objectAtIndex:x] objectForKey:@"uid"]);	
-			//NSLog(@"allKeys %@", [[[[result objectAtIndex:i] objectForKey:@"fql_result_set"] objectAtIndex:x] allKeys]);	
-				NSLog(@"actor_name %@", [[[[result objectAtIndex:1] objectForKey:@"fql_result_set"] objectAtIndex:x] objectForKey:@"name"]);	
-
-			if(x==0)
-			{
-				NSString *url_string = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&", [[[[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"] objectAtIndex:i] objectForKey:@"actor_id"] ];
-			}
-			/*
-			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-								  tempFileName, @"filename", 
-								  valuesForCategory, likeKey, 
-								  _from, @"from",
-								  _message, @"message",
-								  nil];
-			
-			//adding to the plistArray here.
-			[_plistArray insertObject:dict atIndex:0];
-			 */
-		//	}
-
-		
-//}
+	
 	//NSLog(@"result %@", result);
 	//@@@@@@@ 1- filter and splice!
-	
-	
-	/*
-	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])//0//likes
-	{
-		NSLog(@"displayMode is 0");
-		
-		
-		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"likes.count" ascending: NO];
-		//NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"comments.count" ascending: NO];
-		[[[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"] sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
-		[sortDescriptor release];
-		
-		
-		
-	}
-	else //displayMode is 1//comments 
-	{
-		NSLog(@"displayMode is 1");
-		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"comments.count" ascending: NO];
-		//NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"comments.count" ascending: NO];
-		[[[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"] sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
-		[sortDescriptor release];
-	}
-	
-	 */
+
 	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"categoryValue" ascending: NO];
 	//NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"comments.count" ascending: NO];
 	[myArray sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
@@ -285,7 +227,6 @@
 	
 		
 		NSString *tempFileName = [NSString stringWithFormat:@"%i.png",imageNo];
-		NSString *likeKey;
 		NSString *_categoryValue;
 		NSString *_message;
 		NSString *_from;
@@ -300,29 +241,7 @@
 		
 		//below we should get the type of the posts and then push background or something as the image.
 		
-		/*
-		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])//0//likes
-		{
-			NSLog(@"displayMode is 0");
-			valuesForCategory = [NSString stringWithFormat:@"%@",[[[[[request userInfo] objectForKey:@"tempArr"] objectAtIndex:imageNo] objectForKey:@"likes"] objectForKey:@"count"]];
-			likeKey = [NSString stringWithFormat:@"likes"];
-			
-	
-			
-			
-
-		}
-		else //displayMode is 1//comments 
-		{
-			NSLog(@"displayMode is 1");
-			valuesForCategory = [NSString stringWithFormat:@"%@",[[[[[request userInfo] objectForKey:@"tempArr"] objectAtIndex:imageNo] objectForKey:@"comments"] objectForKey:@"count"]];
-			likeKey = [NSString stringWithFormat:@"comments"];
-			NSLog(@" comment count is %@", valuesForCategory);
-			
-			
-			
-		}
-		 */
+		
 		
 		_categoryValue = [NSString stringWithFormat:@"%@",[[[[request userInfo] objectForKey:@"myArray"] objectAtIndex:imageNo] objectForKey:@"categoryValue"]];
 		//likeKey = [NSString stringWithFormat:@"likes"];
@@ -348,22 +267,6 @@
 			[_plistArray insertObject:dict atIndex:0];
 			//NSLog(@"dict %@", dict);	
 		}
-
-		
-		
-		
-	//	NSLog(@"key is %@", [[request userInfo] objectForKey:@"key"]);
-	//	NSLog(@"image No is %i", imageNo);
-		
-		
-		
-		
-		
-		
-		
-		//NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"likes"]];
-		//TODO: add to the plist here? Not really, create an array and add the dictionaries here to the array and once 
-		//queue is completed write all of the stuff to the plist file. 
 	}
 	
 }
