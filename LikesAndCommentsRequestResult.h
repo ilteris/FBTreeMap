@@ -22,12 +22,13 @@
 	id<LikesAndCommentsRequestDelegate> _likesAndCommentsRequestDelegate;
 }
 
-- (id) initializeWithDelegate:(id <LikesAndCommentsRequestDelegate>)delegate andSection:(NSInteger)val;
+- (id) initializeWithDelegate:(id <LikesAndCommentsRequestDelegate>)delegate;
 							  
 
 @end
 
 @protocol LikesAndCommentsRequestDelegate<NSObject>
 - (void)likesAndCommentsRequestCompleteWithInfo:(NSMutableArray*)info;
+- (void)userRequestFailed;
 @end
 						  

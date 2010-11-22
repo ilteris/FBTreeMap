@@ -105,49 +105,39 @@
  * Use FQL to query detailed friends information
  */
 
-- (void) requestCountOf:(NSInteger)entity
+- (void) requestCountOf
 {
 	
-	NSLog(@"requestCountOf:(NSString*)entity");
+	NSLog(@"requestCountOf");
 	LikesAndCommentsRequestResult *likesAndCommentsRequestResult = 
-	[[[[LikesAndCommentsRequestResult alloc] initializeWithDelegate:self andSection:entity] autorelease] retain];
+	[[[[LikesAndCommentsRequestResult alloc] initializeWithDelegate:self] autorelease] retain];
 	
-	NSString *query = @"SELECT actor_id, post_id,likes, comments, message FROM stream WHERE source_id IN(";
-	query = [query stringByAppendingFormat:@"SELECT target_id FROM connection WHERE source_id=%@) AND is_hidden = 0 LIMIT 80", _uid];
+		
+		
 	
-	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-								   query, @"query",
-								   nil];
+	//NSString *fql = [NSString stringWithFormat:@"{\"user_stream\":\"actor_id, post_id,likes, message, permalink FROM stream WHERE source_id IN(SELECT target_id FROM connection WHERE source_id=%@) AND is_hidden = 0 LIMIT 80\",\"actor_info\":\"SELECT uid, name, pic_square FROM user WHERE uid IN (SELECT actor_id FROM #user_stream)\"}",_uid];
+					
+	// create the multiquery
+	NSLog(@"uid %@", _uid);
+	NSString* friendIDs = @"SELECT actor_id, post_id,likes, message, permalink, attachment FROM stream WHERE source_id IN(";
+	friendIDs = [friendIDs stringByAppendingFormat:@"SELECT target_id FROM connection WHERE source_id=%@) AND is_hidden = 0 LIMIT 80", _uid];
 	
-	[_facebook requestWithMethodName:@"fql.query"
-						   andParams:params
-					   andHttpMethod:@"POST"
-						 andDelegate:likesAndCommentsRequestResult];
+	NSString* namesAndPics = [NSString stringWithFormat:@"SELECT name, uid FROM user WHERE uid IN (SELECT actor_id FROM #friendIDs) "];
+	NSString* queries = [NSString stringWithFormat:@"{\"friendIDs\":\"%@\",\"namesAndPics\":\"%@\"}", friendIDs, namesAndPics];
 	
+	 
+	 NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKeys:queries, @"queries", nil];
 	
-	/*
-	SELECT actor_id, post_id,likes, comments, message 
-	FROM stream WHERE source_id in 
-	(SELECT target_id 
-	 FROM connection 
-	 WHERE source_id=836255) 
-	AND is_hidden = 0 
-	LIMIT 80
+		
 	
-	*/
-	/*
+	// send it out
+	[_facebook requestWithMethodName:@"fql.multiquery" 
+						  andParams:params 
+					  andHttpMethod:@"GET" 
+						andDelegate:likesAndCommentsRequestResult];
 	
+		
 	
-	NSString *query = @"SELECT uid, name, is_app_user, pic_square, status FROM user WHERE uid IN (";
-	query = [query stringByAppendingFormat:@"SELECT uid2 FROM friend WHERE uid1 = %@)", _uid];
-	NSMutableDictionary * params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-									query, @"query",
-									nil];
-	[_facebook requestWithMethodName: @"fql.query" 
-						   andParams: params
-					   andHttpMethod: @"POST" 
-						 andDelegate: friendsRequestResult]; 
-	 */
 }
 
 
@@ -189,7 +179,9 @@
 
 
 - (void)userRequestFailed 
-{
+{	
+	NSLog(@"userRequestFailed %@");
+
 	if ([self.userInfoDelegate respondsToSelector:@selector(userInfoFailToLoad)]) 
 	{
 		[_userInfoDelegate userInfoFailToLoad];

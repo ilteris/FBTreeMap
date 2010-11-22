@@ -50,7 +50,7 @@
 		countLabel.font = [UIFont boldSystemFontOfSize:62];
 		
 		
-
+		
 
 		countLabel.textColor = [UIColor whiteColor];
 		countLabel.backgroundColor = [UIColor clearColor];
@@ -84,7 +84,7 @@
 
 		//Calculate the expected size based on the font and linebreak mode of your label
 				
-		
+		_like_btn.alpha = 0.5;
 
 		NSLog(@"frame size: %@", NSStringFromCGSize(self.frame.size));
 		

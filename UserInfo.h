@@ -52,7 +52,7 @@
 - (id) initializeWithFacebook:(Facebook *)facebook andDelegate:(id<UserInfoLoadDelegate>)delegate;
 - (void) requestAllInfo;
 
-- (void) requestCountOf:(NSInteger)entity;
+- (void) requestCountOf;
 
 
 @end

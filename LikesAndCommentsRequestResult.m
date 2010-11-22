@@ -17,10 +17,9 @@
 
 @implementation LikesAndCommentsRequestResult
 
-- (id) initializeWithDelegate:(id <LikesAndCommentsRequestDelegate>)delegate andSection:(NSInteger)val
+- (id) initializeWithDelegate:(id <LikesAndCommentsRequestDelegate>)delegate
 {
 	self = [super init];
-	_categoryMode = val;
 	_likesAndCommentsRequestDelegate = [delegate retain];
 	return self;
 }
@@ -31,38 +30,123 @@
 - (void)request:(FBRequest*)request didLoad:(id)result{
 	
    // NSMutableArray *fruits = [[[NSMutableArray alloc] init] autorelease];
-	
-	
-    for (NSDictionary *info in result) {
-		
-		//NSLog(@"here here");
-		//NSLog(@"result %@", info);
-		/*
-		
-		if (!([[info objectForKey:@"is_app_user"] boolValue])) {
-			continue;
-		}
-		NSString *friend_id = [NSString stringWithString:[[info objectForKey:@"uid"] stringValue]];
-		NSString *friend_name = nil;
-		if ([info objectForKey:@"name"] != [NSNull null]) {
-			friend_name = [NSString stringWithString:[info objectForKey:@"name"]];
-		} 
-		NSString *friend_pic = [info objectForKey:@"pic_square"];
-		NSString *friend_status = [info objectForKey:@"status"];
-		NSMutableDictionary *friend_info = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-											friend_id,@"uid",
-											friend_name, @"name", 
-											friend_pic, @"pic", 
-											friend_status, @"status", 
-											nil];
-		
-		[friendsInfo addObject:friend_info];
-		  */
-    }
-	
-	//@@@@@@@ 1- filter and splice!
+	//NSLog(@"result %@", result);
 	NSMutableArray *tempArr = [result mutableCopy];
+//	NSMutableArray *myArray = [[NSArray alloc] initWithCapacity:1];
 	
+	
+	
+	NSArray *userArray = [NSArray	arrayWithArray:[[result objectAtIndex:1] objectForKey:@"fql_result_set"]];
+	NSArray *streamArray = [NSArray  arrayWithArray:[[result objectAtIndex:0] objectForKey:@"fql_result_set"]];
+	
+	NSMutableArray *myArray = [[NSMutableArray alloc] initWithCapacity:1];
+	NSLog(@"streamArray %@", streamArray);
+	NSLog(@"userArray %@", userArray);
+	
+	
+	for (NSInteger i=0; i < [streamArray count]; i++)
+	{
+		NSLog(@"1starr uid number is %@", [[streamArray objectAtIndex:i] objectForKey:@"actor_id"]);
+		for (NSInteger j=0; j < [userArray count]; j++)
+		{
+
+			NSLog(@"2ndarr uid number is %@", [[userArray objectAtIndex:j] objectForKey:@"uid"]);
+
+			if([[[streamArray objectAtIndex:i] objectForKey:@"actor_id"] isEqual:[[userArray objectAtIndex:j] objectForKey:@"uid"]])	
+			{
+				NSLog(@"true it's number ");
+				NSDictionary *_categoryValue;
+
+				if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])//0//likes
+				{
+					NSLog(@"displayMode is 0");
+					_categoryValue = [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"likes"] objectForKey:@"count"]];
+					NSLog(@"_categoryValue is %@", _categoryValue);
+										
+				}
+				else //displayMode is 1//comments 
+				{
+					NSLog(@"displayMode is 1");
+					_categoryValue = [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"count"]];
+					NSLog(@"_categoryValue is %@", _categoryValue);
+					
+					
+				}
+				NSString *_actor_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
+				NSString *_message = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
+				NSString *_from = [NSString stringWithFormat:@"%@",[[userArray objectAtIndex:j] objectForKey:@"name"]];
+				
+				
+				
+				
+				NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+									  _actor_id, @"actor_id", 
+									  _categoryValue, @"categoryValue", 
+									  _from, @"from",
+									  _message, @"message",
+									  nil];
+
+				
+				[myArray addObject:dict];
+				
+				break;
+			}
+		}
+		
+		
+		
+	}
+	
+	NSLog(@"myArray is %@", myArray);
+	
+	/*
+	for (NSInteger i = 0; i < [result count]; i++) {
+		//for (NSDictionary *info in infok) {
+			//[[tempArr objectAtIndex:1] objectForKey:@"fql_result_set"]
+			NSLog(@"here here");	
+
+	//	NSLog(@"[[[result objectAtIndex:0] objectForKey:@actor_id %	", [[[result objectAtIndex:i] objectForKey:@"fql_result_set"] count]);
+			
+		
+
+		
+		for (NSInteger x=0; x < [[[result objectAtIndex:i] objectForKey:@"fql_result_set"] count]; x++)
+		{
+		
+			
+		//	NSLog(@"info %@", [[[result objectAtIndex:i] objectForKey:@"fql_result_set"] objectAtIndex:x]);																			  
+			NSLog(@"x is %i",x);
+			
+			//[[[[result objectAtIndex:i] objectForKey:@"fql_result_set"] objectAtIndex:x] setValue:@"value forKey:@"objectForKey:@"actor_id"];
+				NSLog(@"actor_id %@", [[[[result objectAtIndex:0] objectForKey:@"fql_result_set"] objectAtIndex:x] objectForKey:@"actor_id"]);	
+				NSLog(@"actor_id %@", [[[[result objectAtIndex:1] objectForKey:@"fql_result_set"] objectAtIndex:x] objectForKey:@"uid"]);	
+			//NSLog(@"allKeys %@", [[[[result objectAtIndex:i] objectForKey:@"fql_result_set"] objectAtIndex:x] allKeys]);	
+				NSLog(@"actor_name %@", [[[[result objectAtIndex:1] objectForKey:@"fql_result_set"] objectAtIndex:x] objectForKey:@"name"]);	
+
+			if(x==0)
+			{
+				NSString *url_string = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&", [[[[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"] objectAtIndex:i] objectForKey:@"actor_id"] ];
+			}
+			/*
+			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+								  tempFileName, @"filename", 
+								  valuesForCategory, likeKey, 
+								  _from, @"from",
+								  _message, @"message",
+								  nil];
+			
+			//adding to the plistArray here.
+			[_plistArray insertObject:dict atIndex:0];
+			 */
+		//	}
+
+		
+//}
+	//NSLog(@"result %@", result);
+	//@@@@@@@ 1- filter and splice!
+	
+	
+	/*
 	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])//0//likes
 	{
 		NSLog(@"displayMode is 0");
@@ -70,7 +154,7 @@
 		
 		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"likes.count" ascending: NO];
 		//NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"comments.count" ascending: NO];
-		[tempArr sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
+		[[[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"] sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
 		[sortDescriptor release];
 		
 		
@@ -81,26 +165,33 @@
 		NSLog(@"displayMode is 1");
 		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"comments.count" ascending: NO];
 		//NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"comments.count" ascending: NO];
-		[tempArr sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
+		[[[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"] sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
 		[sortDescriptor release];
-		
-		
-		
-		
 	}
 	
-	NSLog(@"tempArraay %@", tempArr);
-	// [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]
-	NSLog(@"tempArraay2 %@", tempArr);
-//	NSLog(@"tempArr %@", tempArr);
+	 */
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"categoryValue" ascending: NO];
+	//NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"comments.count" ascending: NO];
+	[myArray sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
+	[sortDescriptor release];
+	
+	//NSLog(@"names %@", [[tempArr objectAtIndex:1] objectForKey:@"fql_result_set"]);
+
 	// here  we are getting rid of the rest of the objects after numberOfObjects
 	//check if the array is larger than numberof Objects
 	
 	//get rid of the zeros. 
-	if ([tempArr count] >= numberOfObjects) 
+	
+	if ([myArray count] >= numberOfObjects) 
 	{
-		[tempArr removeObjectsInRange: NSMakeRange(numberOfObjects,[result count]-numberOfObjects)];
+		[myArray removeObjectsInRange: NSMakeRange(numberOfObjects,[myArray count]-numberOfObjects)];
 	}
+	/*
+	if ([[[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"] count] >= numberOfObjects) 
+	{
+		[[[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"] removeObjectsInRange: NSMakeRange(numberOfObjects,[[[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"] count]-numberOfObjects)];
+	}
+	 */
 	
 	//NSLog(@"tempArr: %@", tempArr);
 	
@@ -112,11 +203,14 @@
 	//@@@@@@@ 3- download the images.
 	//imagesLoaded = NO;
 	
-	NSLog(@"tempArr %@", tempArr);
+	//NSLog(@"tempArr %@", tempArr);
 	
 	if (!networkQueue) {
 		networkQueue = [[ASINetworkQueue alloc] init];	
 	}
+	
+	
+	
 	
 	
 	//failed = NO;
@@ -133,22 +227,31 @@
 	
 	
 	
-	for (NSInteger i = 0; i < [tempArr count]; i++)
+	for (NSInteger i = 0; i < [myArray count]; i++)
 	{
 		//preparing images for ASIHTTPRequest
 		//TODO: need to convert this so, it brings back the urls for the larger images.
 		//might need to use the REST API for this!
-		NSString *url_string = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&", [[tempArr objectAtIndex:i] objectForKey:@"actor_id"] ];
+		
+		
+		NSString *url_string = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&", [[myArray objectAtIndex:i] objectForKey:@"actor_id"] ];
 
 
 	
 		NSLog(@"url_string %@", url_string);
 		
 		req = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:url_string]] autorelease];
-		[req setUserInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber   
-																		 numberWithInt:i], @"ImageNumber", tempArr, @"tempArr",nil]]; 
+		[req setUserInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+						  [NSNumber numberWithInt:i], @"ImageNumber", 
+						 // [[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"], @"tempArr",
+						 // [[tempArr objectAtIndex:1] objectForKey:@"fql_result_set"], @"names",
+							myArray, @"myArray",
+						  nil]]; 
 		[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%i.png",i]]];
 		[networkQueue addOperation:req];
+		
+		
+		
 	}
 	
 	
@@ -157,6 +260,14 @@
     
     
 }
+
+
+- (void)request:(FBRequest*)request didFailWithError:(NSError*)error {
+	NSLog(@"%@",[error localizedDescription]);
+	[_likesAndCommentsRequestDelegate userRequestFailed];
+}
+
+
 
 
 #pragma mark imageDownload Delegates 
@@ -175,8 +286,9 @@
 		
 		NSString *tempFileName = [NSString stringWithFormat:@"%i.png",imageNo];
 		NSString *likeKey;
-		NSString *valuesForCategory;
-
+		NSString *_categoryValue;
+		NSString *_message;
+		NSString *_from;
 		
 		
 		if(_plistArray == nil) //check if the plist is empty 
@@ -186,17 +298,17 @@
 		}
 		
 		
+		//below we should get the type of the posts and then push background or something as the image.
 		
+		/*
 		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])//0//likes
 		{
 			NSLog(@"displayMode is 0");
 			valuesForCategory = [NSString stringWithFormat:@"%@",[[[[[request userInfo] objectForKey:@"tempArr"] objectAtIndex:imageNo] objectForKey:@"likes"] objectForKey:@"count"]];
-			
 			likeKey = [NSString stringWithFormat:@"likes"];
-			NSLog(@" like count is %@", valuesForCategory);
+			
 	
 			
-						
 			
 
 		}
@@ -210,22 +322,38 @@
 			
 			
 		}
+		 */
+		
+		_categoryValue = [NSString stringWithFormat:@"%@",[[[[request userInfo] objectForKey:@"myArray"] objectAtIndex:imageNo] objectForKey:@"categoryValue"]];
+		//likeKey = [NSString stringWithFormat:@"likes"];
+		
+		//NSLog(@" _message is %@", [[[[request userInfo] objectForKey:@"myArray"] objectAtIndex:imageNo] objectForKey:@"message"] );			
+		_from = [NSString stringWithFormat:@"%@", [[[[request userInfo] objectForKey:@"myArray"] objectAtIndex:imageNo] objectForKey:@"from"]];
+
+		_message = [NSString stringWithFormat:@"%@", [[[[request userInfo] objectForKey:@"myArray"] objectAtIndex:imageNo] objectForKey:@"message"]];
+		//NSLog(@" _message is %@", _message);
 		
 		//if the results are 0 then don't put those in the plist file.
-		
-		if(![valuesForCategory isEqual:@"0"]) 
+		//NSLog(@"names is %@", [[request userInfo] objectForKey:@"names"]);
+		if(![_categoryValue isEqual:@"0"]) 
 		{
-			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:tempFileName, @"filename", valuesForCategory, likeKey, nil];
+			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+								  tempFileName, @"filename", 
+								  _categoryValue, @"categoryValue", 
+								  _from, @"from",
+								  _message, @"message",
+								  nil];
 			
+			//adding to the plistArray here.
 			[_plistArray insertObject:dict atIndex:0];
-			NSLog(@"dict %@", dict);	
+			//NSLog(@"dict %@", dict);	
 		}
 
 		
 		
 		
-		NSLog(@"key is %@", [[request userInfo] objectForKey:@"key"]);
-		NSLog(@"image No is %i", imageNo);
+	//	NSLog(@"key is %@", [[request userInfo] objectForKey:@"key"]);
+	//	NSLog(@"image No is %i", imageNo);
 		
 		
 		

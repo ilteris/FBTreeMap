@@ -332,44 +332,24 @@
 	
 	NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
 
-	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
+
+	for (NSDictionary *dic in fruits) 
 	{
-		for (NSDictionary *dic in fruits) 
+		// NSLog(@"fruit: %@", [dic objectForKey:@"likes"]);
+		//passing the file names from the plist here. hmmmm.
+		
+		//@"comments.count"
+		
+		
+		// [self.destinationPaths addObject:[dic objectForKey:@"destinationPath"]];
+		if(![[dic objectForKey:@"categoryValue"] isEqual:@"0"]) 
 		{
-			// NSLog(@"fruit: %@", [dic objectForKey:@"likes"]);
-			//passing the file names from the plist here. hmmmm.
-			
-			//@"comments.count"
-			
-			
-			// [self.destinationPaths addObject:[dic objectForKey:@"destinationPath"]];
-			if(![[dic objectForKey:@"likes"] isEqual:@"0"]) 
-			{
-				NSLog(@"dic is %@", dic);
-				[values addObject:[dic objectForKey:@"likes"]];
-			}
-		}	
-	}
-	else //set to comments
-	{
-		NSLog(@"comments");
-		for (NSDictionary *dic in fruits) 
-		{
-			// NSLog(@"fruit: %@", [dic objectForKey:@"likes"]);
-			//passing the file names from the plist here. hmmmm.
-			
-			//@"comments.count"
-			
-			
-			// [self.destinationPaths addObject:[dic objectForKey:@"destinationPath"]];
-			if(![[dic objectForKey:@"comments"] isEqual:@"0"]) 
-			{
-				NSLog(@"dic is %@", dic);
-				[values addObject:[dic objectForKey:@"comments"]];
-			}
-			
+			NSLog(@"dic is %@", dic);
+			[values addObject:[dic objectForKey:@"categoryValue"]];
 		}
-	}//endelse
+		
+	}
+
 	NSLog(@"values %@", values);
 
 	
@@ -384,56 +364,34 @@
 	
 	
 	NSLog(@"treemapView cellForIndex");
-	NSLog(@"comments is %@", [[fruits objectAtIndex:index] objectForKey:@"comments"]);
-	NSLog(@"likes is %@", [[fruits objectAtIndex:index] objectForKey:@"likes"]);
+	//NSLog(@"comments is %@", [[fruits objectAtIndex:index] objectForKey:@"comments"]);
+	//NSLog(@"likes is %@", [[fruits objectAtIndex:index] objectForKey:@"likes"]);
 
 	//here give the document thingie so that we can load the images from the plist file.
 	
-	NSString *tText;
-	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
-	{
-		 tText = [[fruits objectAtIndex:index] objectForKey:@"likes"];
-		NSLog(@"[[fruits objectAtIndex:index] objectForKey:@likes] %@", [[fruits objectAtIndex:index] objectForKey:@"likes"]);
-		NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
-		NSString *documentsDirectory = [paths objectAtIndex: 0];
-		//match the indexes through the cellForIndex/fruits objectAtIndex.
-		NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"filename"]];
-		//NSLog(@"fruits is here %@", fn);
-		
-		
-		//NSSearchPathForDirectoriesInDomains
-		
-		//get the image from the filename.
-		UIImage *img = [UIImage imageWithContentsOfFile:fn];
-		
-		
-		//cell.downloadDestinationPath = fn;
-		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
-	}
-	else
-	{
-		tText = [[fruits objectAtIndex:index] objectForKey:@"comments"];
-		NSLog(@"[[fruits objectAtIndex:index] objectForKey:comments] %@", [[fruits objectAtIndex:index] objectForKey:@"comments"]);
-		NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
-		NSString *documentsDirectory = [paths objectAtIndex: 0];
-		//match the indexes through the cellForIndex/fruits objectAtIndex.
-		NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"filename"]];
-		//NSLog(@"fruits is here %@", fn);
-		
-		//NSSearchPathForDirectoriesInDomains
-		
-		//get the image from the filename.
-		UIImage *img = [UIImage imageWithContentsOfFile:fn];
-		
-		
-		//cell.downloadDestinationPath = fn;
-		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
-		
-	}
+	NSString *tText = [[fruits objectAtIndex:index] objectForKey:@"categoryValue"];
+	
+	NSLog(@"[[fruits objectAtIndex:index] objectForKey:comments] %@", [[fruits objectAtIndex:index] objectForKey:@"comments"]);
+	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex: 0];
+	//match the indexes through the cellForIndex/fruits objectAtIndex.
+	NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"filename"]];
+	//NSLog(@"fruits is here %@", fn);
+	
+	//NSSearchPathForDirectoriesInDomains
+	
+	//get the image from the filename.
+	UIImage *img = [UIImage imageWithContentsOfFile:fn];
+	
+	
+	//cell.downloadDestinationPath = fn;
+	cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 	
 	NSLog(@"tXtext %@", tText);
-	
+	NSLog(@"[[fruits objectAtIndex:index] objectForKey:from %@", [[fruits objectAtIndex:index] objectForKey:@"from"]);
+	cell.nameLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
 	cell.countLabel.text = tText;
+	cell.valueLabel.text = [[fruits objectAtIndex:index] objectForKey:@"from"];
 	[self.cells addObject:cell];
 	[cell release];
 	

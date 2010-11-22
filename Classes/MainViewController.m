@@ -52,7 +52,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 {
     [super viewDidLoad];
 	
-	//[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"displayMode"];
+//[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"displayMode"];
 	
 	
 	 _session = [[Session alloc] init];
@@ -62,7 +62,6 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 		_facebook = [[Facebook alloc] init];
 		NSLog(@"facebook is nil");
 		_fbButton.isLoggedIn = NO;
-
 
 	} else {
 		NSLog(@"facebook is not nil");
@@ -128,7 +127,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 		//resetting the self.plistArray so we don't add to the old plistArray.
 		//self.plistArray = [[NSMutableArray alloc] initWithCapacity:1];
 		//currentDisplayMode
-		[_userInfo requestCountOf:[[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]];
+		[_userInfo requestCountOf];
 }
 
 - (IBAction)displayComments: (id) sender
@@ -143,7 +142,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 	[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"displayMode"];
 	NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
 
-	[_userInfo requestCountOf:[[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]];
+	[_userInfo requestCountOf];
 	
 }
 
@@ -165,7 +164,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 		
 		[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"displayMode"];
 		NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
-		[_userInfo requestCountOf:[[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]];
+		[_userInfo requestCountOf];
 		//[self getMeButtonPressed:@"likes"];
 
 }
@@ -308,12 +307,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 {
 	[_session setSessionWithFacebook:_facebook andUid:_userInfo.uid];
 	[_session save];
-	
-
-	
-	
-	int val = [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"];
-	[_userInfo requestCountOf:val];
+	[_userInfo requestCountOf];
 	
 }
 
