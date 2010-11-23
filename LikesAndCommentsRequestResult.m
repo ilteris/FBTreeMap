@@ -104,13 +104,14 @@
 						
 					}
 				
-				}
+				} //weird stuff that could be images,tumblr links etc too.
 				else if([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count] == 5)
 				{
 					NSLog(@"type is %@", [[streamArray objectAtIndex:i] objectForKey:@"attachment"]);
-
+					NSLog(@"[[streamArray objectAtIndex:i] objectForKey:permalink )  %@",[[streamArray objectAtIndex:i] objectForKey:@"permalink"]);
 					
-				}
+					
+				}// it's equal to 1
 				else 
 				{
 					NSLog(@"type is status");
