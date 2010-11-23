@@ -41,7 +41,7 @@
 	
 	NSMutableArray *myArray = [[NSMutableArray alloc] initWithCapacity:1];
 	NSLog(@"streamArray %@", streamArray);
-	NSLog(@"userArray %@", userArray);
+//	NSLog(@"userArray %@", userArray);
 	
 	
 	for (NSInteger i=0; i < [streamArray count]; i++)
@@ -59,10 +59,10 @@
 
 				if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])//0//likes
 				{
-						NSLog(@"displayMode is 0");		
+				//		NSLog(@"displayMode is 0");		
 					if (!_categoryValue)
 					{
-						_categoryValue = [NSString stringWithFormat:@"2"];
+						_categoryValue = [NSString stringWithFormat:@"0"];
 					}
 					else
 					{
@@ -73,10 +73,10 @@
 				}
 				else //displayMode is 1//comments 
 				{
-					NSLog(@"displayMode is 1");
+				//	NSLog(@"displayMode is 1");
 					if (!_categoryValue)
 					{
-						_categoryValue = [NSString stringWithFormat:@"2"];
+						_categoryValue = [NSString stringWithFormat:@"0"];
 					}
 					else
 					{
@@ -89,6 +89,36 @@
 				NSString *_from = [NSString stringWithFormat:@"%@",[[userArray objectAtIndex:j] objectForKey:@"name"]];
 				
 				
+				NSLog(@"attachment count is %i", [[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count]);
+				//if the count is more than 1, it means it's not status. 
+				
+				
+				if([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count] != 1 && [[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count] != 5)
+				
+				{
+					
+					if ([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] isKindOfClass:[NSArray class]])
+					{
+						//NSLog(@"attachment media is %@", [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"]);
+						NSLog(@"type is %@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]);
+						
+					}
+				
+				}
+				else if([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count] == 5)
+				{
+					NSLog(@"type is %@", [[streamArray objectAtIndex:i] objectForKey:@"attachment"]);
+
+					
+				}
+				else 
+				{
+					NSLog(@"type is status");
+					
+				}
+
+
+			
 				NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
 									  _actor_id, @"actor_id", 
 									  _categoryValue, @"categoryValue", 
