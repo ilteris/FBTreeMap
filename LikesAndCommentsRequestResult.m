@@ -121,8 +121,7 @@
 
 	// here  we are getting rid of the rest of the objects after numberOfObjects
 	//check if the array is larger than numberof Objects
-	
-	//get rid of the zeros. 
+
 	
 	if ([myArray count] >= numberOfObjects) 
 	{
@@ -191,16 +190,8 @@
 						  nil]]; 
 		[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%i.png",i]]];
 		[networkQueue addOperation:req];
-		
-		
-		
-	}
-	
-	
-	
-	
-    
-    
+
+	}    
 }
 
 
