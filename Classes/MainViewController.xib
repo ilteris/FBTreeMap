@@ -76,7 +76,7 @@
 								</object>
 							</object>
 						</object>
-						<string key="NSFrame">{{0, 28}, {768, 976}}</string>
+						<string key="NSFrame">{{0, 30}, {768, 976}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
@@ -396,7 +396,7 @@
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">P4AAAL+AAADDnwAAweAAAA</bytes>
 					</object>
-					<string>{{136, 92}, {768, 1024}}</string>
+					<string>{{259, 98}, {768, 1024}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>FBLoginButton</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -405,7 +405,7 @@
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAAAAAAAAw6UAAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAAAAAAAAxHrAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">

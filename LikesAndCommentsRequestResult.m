@@ -40,7 +40,7 @@
 	NSArray *streamArray = [NSArray  arrayWithArray:[[result objectAtIndex:0] objectForKey:@"fql_result_set"]];
 	
 	NSMutableArray *myArray = [[NSMutableArray alloc] initWithCapacity:1];
-	NSLog(@"streamArray %@", streamArray);
+	//NSLog(@"streamArray %@", streamArray);
 //	NSLog(@"userArray %@", userArray);
 	
 	
@@ -56,6 +56,7 @@
 			{
 				//NSLog(@"true it's number ");
 				NSString *_categoryValue;
+				
 
 				if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])//0//likes
 				{
@@ -87,34 +88,44 @@
 				NSString *_actor_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
 				NSString *_message = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
 				NSString *_from = [NSString stringWithFormat:@"%@",[[userArray objectAtIndex:j] objectForKey:@"name"]];
-				
+				NSString *_type;
 				
 				NSLog(@"attachment count is %i", [[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count]);
 				//if the count is more than 1, it means it's not status. 
 				
 				
-				if([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count] != 1 && [[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count] != 5)
+				if([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count] != 1) //meaning it's not status
 				
 				{
 					
+					//let's see how many of them have array.
 					if ([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] isKindOfClass:[NSArray class]])
 					{
 						//NSLog(@"attachment media is %@", [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"]);
 						NSLog(@"type is %@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]);
-						
+						_type = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
+						NSLog(@"array");
 					}
+					
+					else
+					{
+						NSLog(@"not an array");
+						NSLog(@"attachment media is %@", [[streamArray objectAtIndex:i] objectForKey:@"attachment"]);
+						//the rest we don't know what type they could be relying on facebook,
+						//we can however look at the source of the url and understand what type it's.
+						//so let's set it for nil right now.
+						_type = [NSString stringWithFormat:@"nil"];
+					}
+					
 				
 				} //weird stuff that could be images,tumblr links etc too.
-				else if([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count] == 5)
-				{
-					NSLog(@"type is %@", [[streamArray objectAtIndex:i] objectForKey:@"attachment"]);
-					NSLog(@"[[streamArray objectAtIndex:i] objectForKey:permalink )  %@",[[streamArray objectAtIndex:i] objectForKey:@"permalink"]);
-					
-					
-				}// it's equal to 1
+				
+					 
+			
 				else 
 				{
 					NSLog(@"type is status");
+					_type = [NSString stringWithFormat:@"status"];
 					
 				}
 
@@ -125,6 +136,7 @@
 									  _categoryValue, @"categoryValue", 
 									  _from, @"from",
 									  _message, @"message",
+									  _type, @"type",
 									  nil];
 
 				
@@ -165,7 +177,7 @@
 	}
 	 */
 	
-	//NSLog(@"tempArr: %@", tempArr);
+	NSLog(@"myArray: %@", myArray);
 	
 	[tempArr autorelease];
     
@@ -252,7 +264,7 @@
 		NSString *_categoryValue;
 		NSString *_message;
 		NSString *_from;
-		
+		NSString *_type;
 		
 		if(_plistArray == nil) //check if the plist is empty 
 		{ 
@@ -272,6 +284,9 @@
 		_from = [NSString stringWithFormat:@"%@", [[[[request userInfo] objectForKey:@"myArray"] objectAtIndex:imageNo] objectForKey:@"from"]];
 
 		_message = [NSString stringWithFormat:@"%@", [[[[request userInfo] objectForKey:@"myArray"] objectAtIndex:imageNo] objectForKey:@"message"]];
+		_type = [NSString stringWithFormat:@"%@", [[[[request userInfo] objectForKey:@"myArray"] objectAtIndex:imageNo] objectForKey:@"type"]];
+
+	
 		//NSLog(@" _message is %@", _message);
 		
 		//if the results are 0 then don't put those in the plist file.
@@ -283,11 +298,12 @@
 								  _categoryValue, @"categoryValue", 
 								  _from, @"from",
 								  _message, @"message",
+								  _type, @"type",
 								  nil];
 			
 			//adding to the plistArray here.
 			[_plistArray insertObject:dict atIndex:0];
-			//NSLog(@"dict %@", dict);	
+			NSLog(@"dict %@", dict);	
 		}
 	}
 	

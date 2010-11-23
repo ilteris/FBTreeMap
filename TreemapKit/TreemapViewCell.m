@@ -252,10 +252,10 @@
 - (void)dealloc {
 	[valueLabel release];
 	[countLabel release];
-	[nameLabel release];
+	[nameLabel	release];
 	[imageViewA release];
 	[imageViewB release];
-	[delegate release];
+	[delegate	release];
 
 	[super dealloc];
 }

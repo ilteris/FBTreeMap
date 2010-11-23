@@ -66,21 +66,5 @@
 		<key>comments</key>
 		<integer>1</integer>
 	</dict>
-	<dict>
-		<key>filename</key>
-		<string>8.png</string>
-		<key>likes</key>
-		<integer>4</integer>
-		<key>comments</key>
-		<integer>1</integer>
-	</dict>
-	<dict>
-		<key>filename</key>
-		<string>9.png</string>
-		<key>likes</key>
-		<integer>2</integer>
-		<key>comments</key>
-		<integer>1</integer>
-	</dict>
 </array>
 </plist>

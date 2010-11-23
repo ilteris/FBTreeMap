@@ -44,9 +44,9 @@
 	/*Facebook Application ID*/
 	//NSString *client_id = @"128496757192973";
 	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
-
-
+	[self setTheBackgroundArray];	
 	
+	NSLog(@"_background id %@", _backgrounds);
 	//alloc and initalize our FbGraph instance
 	//self.fbGraph = [[FbGraph alloc] initWithFbClientID:client_id];
 	
@@ -74,6 +74,25 @@
 	
 }
 
+
+- (void)setTheBackgroundArray
+{
+	_backgrounds = [[NSMutableArray alloc] initWithCapacity:1];
+	NSString *b0 = [NSString stringWithFormat:@"concrete"];
+	NSString *b1 = [NSString stringWithFormat:@"leather"];
+//	NSString *b2 = [NSString stringWithFormat:@"play"];
+	NSString *b3 = [NSString stringWithFormat:@"rust"];
+	//NSString *b4 = [NSString stringWithFormat:@"video"];
+	NSString *b5 = [NSString stringWithFormat:@"wood"];
+	
+	[_backgrounds addObject:b0];
+	[_backgrounds addObject:b1];
+//	[_backgrounds addObject:b2];
+	[_backgrounds addObject:b3];
+//	[_backgrounds addObject:b4];
+	[_backgrounds addObject:b5];
+	
+}
 
 
 #pragma mark -
@@ -286,53 +305,53 @@
 	//TODO: check if the fruits is null when it's coming here/
 	
 	//if (!fruits) //meaning I just launched the app. 
-//	{
-		//need to fill the fruits 
-		//get the plist
-
-		
-		NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
-		NSString *documentsDirectory = [paths objectAtIndex: 0];
-		NSString *plistFile = [documentsDirectory stringByAppendingPathComponent: @"data.plist"];
-		NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
-		
-
-		
-		//if the plist doesn't exist meaning we just launched the app FOR THE FIRST TIME.
-		if([array count] == 0) 
-			//in this case we are using our plist file that's  bundled with the app.
-		{
-			NSBundle *bundle = [NSBundle mainBundle];
-			NSString *plistPath = [bundle pathForResource:@"data" ofType:@"plist"];
-			array = [[NSMutableArray alloc] initWithContentsOfFile:plistPath];
-			NSLog(@"array count is zero");
-			
-		}
-		
-		//trying to get the paths of the filenames and like counts here.
-		
-		self.fruits = [[NSMutableArray alloc] initWithCapacity:1];
-		self.destinationPaths = [NSMutableArray arrayWithCapacity:1];
-		//NSLog(@"array %@", array);
-		//NSLog(@"fruits %@", fruits);
-		
+	//	{
+	//need to fill the fruits 
+	//get the plist
 	
-		//fruits is yet empty here.
-		for (NSDictionary *dic in array)  
-		{
-			NSMutableDictionary *mDic = [NSMutableDictionary dictionaryWithDictionary:dic];
-			[fruits addObject:mDic];
-		}
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex: 0];
+	NSString *plistFile = [documentsDirectory stringByAppendingPathComponent: @"data.plist"];
+	NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
+	
+	
+	
+	//if the plist doesn't exist meaning we just launched the app FOR THE FIRST TIME.
+	if([array count] == 0) 
+		//in this case we are using our plist file that's  bundled with the app.
+	{
+		NSBundle *bundle = [NSBundle mainBundle];
+		NSString *plistPath = [bundle pathForResource:@"data" ofType:@"plist"];
+		array = [[NSMutableArray alloc] initWithContentsOfFile:plistPath];
+		NSLog(@"array count is zero");
+		
+	}
+	
+	//trying to get the paths of the filenames and like counts here.
+	
+	self.fruits = [[NSMutableArray alloc] initWithCapacity:1];
+	self.destinationPaths = [NSMutableArray arrayWithCapacity:1];
+	//NSLog(@"array %@", array);
+	//NSLog(@"fruits %@", fruits);
+	
+	
+	//fruits is yet empty here.
+	for (NSDictionary *dic in array)  
+	{
+		NSMutableDictionary *mDic = [NSMutableDictionary dictionaryWithDictionary:dic];
+		[fruits addObject:mDic];
+	}
 	//} //endif
 	
-
+	
 	
 	//these values go to the treemapview in order to be used for calculating the sizes of the cells
 	NSMutableArray *values = [NSMutableArray arrayWithCapacity:1];
 	
 	NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
-
-
+	
+	
 	for (NSDictionary *dic in fruits) 
 	{
 		// NSLog(@"fruit: %@", [dic objectForKey:@"likes"]);
@@ -349,9 +368,9 @@
 		}
 		
 	}
-
+	
 	NSLog(@"values %@", values);
-
+	
 	
 	return values;
 }
@@ -369,23 +388,44 @@
 
 	//here give the document thingie so that we can load the images from the plist file.
 	
+	//[self setTheBackgroundArray];
+	
+	
 	NSString *tText = [[fruits objectAtIndex:index] objectForKey:@"categoryValue"];
 	
-	NSLog(@"[[fruits objectAtIndex:index] objectForKey:comments] %@", [[fruits objectAtIndex:index] objectForKey:@"comments"]);
+	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex: 0];
 	//match the indexes through the cellForIndex/fruits objectAtIndex.
 	NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"filename"]];
-	//NSLog(@"fruits is here %@", fn);
 	
-	//NSSearchPathForDirectoriesInDomains
+	NSLog(@"_backgrounds %@", _backgrounds);
 	
-	//get the image from the filename.
-	UIImage *img = [UIImage imageWithContentsOfFile:fn];
 	
+	if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"status"])
+	{
+		NSLog(@"this should be status");
+		NSInteger rand_ind = arc4random() % [_backgrounds count];
+		
+		UIImage *img = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[_backgrounds objectAtIndex:rand_ind]  ofType:@"png"]];
+		
+		[_backgrounds removeObjectAtIndex:rand_ind];
+		
+		if([_backgrounds count] < 1) [self setTheBackgroundArray];
+		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
+	}
+	else 
+	{
+		NSLog(@"this should NOT be status");
+		UIImage *img = [UIImage imageWithContentsOfFile:fn];
+		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
+	}
+
+	   
+	//check the type of the post and pass an image accordingly.
 	
 	//cell.downloadDestinationPath = fn;
-	cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
+	
 	
 	NSLog(@"tXtext %@", tText);
 	NSLog(@"[[fruits objectAtIndex:index] objectForKey:from %@", [[fruits objectAtIndex:index] objectForKey:@"from"]);

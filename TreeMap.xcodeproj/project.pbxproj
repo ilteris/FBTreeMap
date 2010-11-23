@@ -36,6 +36,12 @@
 		F01C168D128B0E7200CF1476 /* 1_like_red.png in Resources */ = {isa = PBXBuildFile; fileRef = F01C1689128B0E7200CF1476 /* 1_like_red.png */; };
 		F01C168E128B0E7200CF1476 /* 2_comment_white.png in Resources */ = {isa = PBXBuildFile; fileRef = F01C168A128B0E7200CF1476 /* 2_comment_white.png */; };
 		F01C168F128B0E7200CF1476 /* 2_like_white.png in Resources */ = {isa = PBXBuildFile; fileRef = F01C168B128B0E7200CF1476 /* 2_like_white.png */; };
+		F0200728129C2BA4004647DB /* concrete.png in Resources */ = {isa = PBXBuildFile; fileRef = F0200722129C2BA4004647DB /* concrete.png */; };
+		F0200729129C2BA4004647DB /* leather.png in Resources */ = {isa = PBXBuildFile; fileRef = F0200723129C2BA4004647DB /* leather.png */; };
+		F020072A129C2BA4004647DB /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = F0200724129C2BA4004647DB /* play.png */; };
+		F020072B129C2BA4004647DB /* rust.png in Resources */ = {isa = PBXBuildFile; fileRef = F0200725129C2BA4004647DB /* rust.png */; };
+		F020072C129C2BA4004647DB /* video.png in Resources */ = {isa = PBXBuildFile; fileRef = F0200726129C2BA4004647DB /* video.png */; };
+		F020072D129C2BA4004647DB /* wood.png in Resources */ = {isa = PBXBuildFile; fileRef = F0200727129C2BA4004647DB /* wood.png */; };
 		F033EA4E118A24C30020F23D /* TreeMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F033EA4C118A24C30020F23D /* TreeMapViewController.m */; };
 		F033EA4F118A24C30020F23D /* TreeMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F033EA4D118A24C30020F23D /* TreeMapViewController.xib */; };
 		F033EA5B118A25230020F23D /* data.plist in Resources */ = {isa = PBXBuildFile; fileRef = F033EA5A118A25230020F23D /* data.plist */; };
@@ -125,6 +131,12 @@
 		F01C1689128B0E7200CF1476 /* 1_like_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1_like_red.png; sourceTree = "<group>"; };
 		F01C168A128B0E7200CF1476 /* 2_comment_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2_comment_white.png; sourceTree = "<group>"; };
 		F01C168B128B0E7200CF1476 /* 2_like_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2_like_white.png; sourceTree = "<group>"; };
+		F0200722129C2BA4004647DB /* concrete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = concrete.png; sourceTree = "<group>"; };
+		F0200723129C2BA4004647DB /* leather.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leather.png; sourceTree = "<group>"; };
+		F0200724129C2BA4004647DB /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
+		F0200725129C2BA4004647DB /* rust.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rust.png; sourceTree = "<group>"; };
+		F0200726129C2BA4004647DB /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video.png; sourceTree = "<group>"; };
+		F0200727129C2BA4004647DB /* wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wood.png; sourceTree = "<group>"; };
 		F033EA4B118A24C30020F23D /* TreeMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TreeMapViewController.h; path = ../TreeMapViewController.h; sourceTree = "<group>"; };
 		F033EA4C118A24C30020F23D /* TreeMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TreeMapViewController.m; path = ../TreeMapViewController.m; sourceTree = "<group>"; };
 		F033EA4D118A24C30020F23D /* TreeMapViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TreeMapViewController.xib; path = ../TreeMapViewController.xib; sourceTree = "<group>"; };
@@ -277,6 +289,12 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F0200722129C2BA4004647DB /* concrete.png */,
+				F0200723129C2BA4004647DB /* leather.png */,
+				F0200724129C2BA4004647DB /* play.png */,
+				F0200725129C2BA4004647DB /* rust.png */,
+				F0200726129C2BA4004647DB /* video.png */,
+				F0200727129C2BA4004647DB /* wood.png */,
 				F01C1688128B0E7200CF1476 /* 1_comment_blue.png */,
 				F01C1689128B0E7200CF1476 /* 1_like_red.png */,
 				F01C168A128B0E7200CF1476 /* 2_comment_white.png */,
@@ -469,6 +487,12 @@
 				F01C168D128B0E7200CF1476 /* 1_like_red.png in Resources */,
 				F01C168E128B0E7200CF1476 /* 2_comment_white.png in Resources */,
 				F01C168F128B0E7200CF1476 /* 2_like_white.png in Resources */,
+				F0200728129C2BA4004647DB /* concrete.png in Resources */,
+				F0200729129C2BA4004647DB /* leather.png in Resources */,
+				F020072A129C2BA4004647DB /* play.png in Resources */,
+				F020072B129C2BA4004647DB /* rust.png in Resources */,
+				F020072C129C2BA4004647DB /* video.png in Resources */,
+				F020072D129C2BA4004647DB /* wood.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
