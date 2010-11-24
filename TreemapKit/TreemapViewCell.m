@@ -125,13 +125,6 @@
 		nameLabel.alpha = 1;
 		
 			
-		
-		
-		[self.aView addSubview:countLabel];
-		[self.aView addSubview:_like_btn];
-		[self.aView addSubview:nameLabel];
-
-		
 		self.valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 10)];
 		valueLabel.font = [UIFont boldSystemFontOfSize:10];
 		valueLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
@@ -139,12 +132,14 @@
 		valueLabel.textColor = [UIColor whiteColor];
 		//valueLabel.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.3];
 		valueLabel.lineBreakMode = UILineBreakModeCharacterWrap;
-		valueLabel.adjustsFontSizeToFitWidth = YES;
+		valueLabel.adjustsFontSizeToFitWidth = NO;
 		valueLabel.backgroundColor = [UIColor clearColor];
 
-		valueLabel.alpha = .8;
+		valueLabel.alpha = 1;
 				
-		
+		[self.aView addSubview:countLabel];
+		[self.aView addSubview:_like_btn];
+		[self.aView addSubview:nameLabel];
 		
 		[self.aView addSubview:valueLabel];
 		
@@ -235,9 +230,10 @@
 	CGRect newFrame = nameLabel.frame;
 	newFrame.size.height = expectedLabelSize.height;
 	nameLabel.frame = newFrame;
+
+	valueLabel.frame = CGRectMake(nameLabel.frame.origin.x, nameLabel.frame.origin.y + nameLabel.frame.size.height + 40, self.valueLabel.frame.size.width, self.valueLabel.frame.size.height);
 	
-	
-	valueLabel.frame = CGRectMake(0, 0, self.frame.size.width, self.valueLabel.frame.size.height);
+	//valueLabel.frame = CGRectMake(0, 0, self.frame.size.width, self.valueLabel.frame.size.height);
 	imageViewA.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
 	aView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
 	bView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
