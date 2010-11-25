@@ -3,9 +3,9 @@
 @protocol TreemapViewCellDelegate;
 
 @interface TreemapViewCell : UIControl {
-	UILabel *valueLabel;
+	UILabel *titleLabel;
 	UILabel *countLabel;
-	UILabel *nameLabel;
+	UILabel *contentLabel;
 	
 	UIImageView *imageViewA;
 	
@@ -29,9 +29,9 @@
 	id <TreemapViewCellDelegate> delegate;
 }
 
-@property (nonatomic, retain) UILabel *valueLabel;
+@property (nonatomic, retain) UILabel *titleLabel;
 @property (nonatomic, retain) UILabel *countLabel;
-@property (nonatomic, retain) UILabel *nameLabel;
+@property (nonatomic, retain) UILabel *contentLabel;
 
 @property (nonatomic, retain) UIImageView *imageViewA;
 @property (nonatomic, retain) UIImageView *imageViewB;

@@ -232,9 +232,9 @@
 	
 	//NSLog(@"cell bounds: %.0f, %.0f, %3.0f, %3.0f", cell.frame.origin.x, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
 	
-	cell.nameLabel.text = [NSString stringWithFormat:@"%@ has %@ likes %@ comments" ,[[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"], [[fruits objectAtIndex:index] objectForKey:@"likes"], [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]];
-	//cell.valueLabel.text = [NSString stringWithFormat:@"%@ comments", [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]];
-	//if([cell.valueLabel.text isEqual:@"(null) comments"]) cell.valueLabel.text = [NSString stringWithFormat:@"0 comments"];
+	cell.contentLabel.text = [NSString stringWithFormat:@"%@ has %@ likes %@ comments" ,[[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"], [[fruits objectAtIndex:index] objectForKey:@"likes"], [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]];
+	//cell.titleLabel.text = [NSString stringWithFormat:@"%@ comments", [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]];
+	//if([cell.titleLabel.text isEqual:@"(null) comments"]) cell.titleLabel.text = [NSString stringWithFormat:@"0 comments"];
 	//cell.backgroundColor = [UIColor colorWithHue:(float)index / (fruits.count + 3) saturation:1 brightness:0.75 alpha:.3];
 
 
@@ -429,9 +429,9 @@
 	
 	NSLog(@"tXtext %@", tText);
 	NSLog(@"[[fruits objectAtIndex:index] objectForKey:from %@", [[fruits objectAtIndex:index] objectForKey:@"from"]);
-	cell.nameLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
+	cell.contentLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
 	cell.countLabel.text = tText;
-	cell.valueLabel.text = [[fruits objectAtIndex:index] objectForKey:@"from"];
+	cell.titleLabel.text = [[[fruits objectAtIndex:index] objectForKey:@"from"] uppercaseString];
 	[self.cells addObject:cell];
 	[cell release];
 	
