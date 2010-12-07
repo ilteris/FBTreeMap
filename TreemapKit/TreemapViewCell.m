@@ -75,7 +75,7 @@
 		countLabel.backgroundColor = [UIColor clearColor];
 		countLabel.shadowColor  = [UIColor blackColor];
 		countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-		countLabel.adjustsFontSizeToFitWidth = NO;
+
 		
 
 					
@@ -114,13 +114,12 @@
 		contentLabel.backgroundColor = [UIColor clearColor];
 		contentLabel.shadowColor  = [UIColor blackColor];
 		contentLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-		contentLabel.lineBreakMode = UILineBreakModeWordWrap;
-		contentLabel.adjustsFontSizeToFitWidth = NO;
-		contentLabel.numberOfLines = 5;
+		contentLabel.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
+
+		contentLabel.numberOfLines = 0;
 		
 		contentLabel.alpha = 1;
-		
-			
+
 		self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 10)];
 		titleLabel.font = [UIFont boldSystemFontOfSize:11];
 		titleLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
@@ -129,7 +128,7 @@
 		titleLabel.shadowColor  = [UIColor blackColor];
 		titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
 		titleLabel.lineBreakMode = UILineBreakModeCharacterWrap;
-		titleLabel.adjustsFontSizeToFitWidth = NO;
+
 		titleLabel.backgroundColor = [UIColor clearColor];
 
 		titleLabel.alpha = 1;
@@ -207,6 +206,8 @@
 - (void)layoutSubviews {
 	[super layoutSubviews];
 
+	[contentLabel sizeToFit];
+	
 //	countLabel.text = @"1290";	
 	
 	// calculate the position of the icon according to the width of the countLabel.
@@ -223,18 +224,49 @@
 										  constrainedToSize:maximumLabelSize 
 											  lineBreakMode:contentLabel.lineBreakMode]; 
 	
-	//adjust the label the the new height.
+
+	//adjust the label to the new height.
 	CGRect newFrame = contentLabel.frame;
 	newFrame.size.height = expectedLabelSize.height;
 	contentLabel.frame = newFrame;
 
+	NSLog(@"@@@@@@@@@@@");
+
+	NSLog(@"titleLabel is %@", titleLabel.text);
+	
+	CGFloat possibleNoOfLines = floorf((self.frame.size.height-countLabel.frame.size.height-60.0f) /contentLabel.font.lineHeight);
+	CGFloat actualNoOfLines = (contentLabel.frame.size.height/contentLabel.font.lineHeight);
+	
+	////if the height of the text is long enough to touch the _like_btn then cut the text off and display the title so it fits. 
+	//so if text height + spacing > required area (total height of cell - (height of countLabel+bottom padding))
+	
+	
+	
+	//60 comes from top-bottom margins 11/11 and spacing between title and count and content 12/12/12
+	NSLog(@"possibleNoOfLines is %f", floorf((self.frame.size.height-countLabel.frame.size.height-60.0f) /contentLabel.font.lineHeight));
+	
+	NSLog(@"actualNoOfLines %f", (contentLabel.frame.size.height/contentLabel.font.lineHeight));
+	
+	if(actualNoOfLines >= possibleNoOfLines)
+	{
+		contentLabel.numberOfLines = (NSInteger)possibleNoOfLines;
+		NSLog(@"contentLabel is %@", contentLabel.text);
+		CGRect newFrame = CGRectMake(contentLabel.frame.origin.x, contentLabel.frame.origin.y, contentLabel.frame.size.width, contentLabel.font.lineHeight*contentLabel.numberOfLines);
+		contentLabel.frame = newFrame;
+		
+		//[contentLabel sizeToFit];
+	}
+	//(label height - padding) / (fontsize + couple pixels) = number of lines...
+	
+	//NSLog( contentLabel.frame.size.height / contentLabel.font.size.
+	
 	titleLabel.frame = CGRectMake(contentLabel.frame.origin.x, contentLabel.frame.origin.y + contentLabel.frame.size.height + 12, self.titleLabel.frame.size.width, self.titleLabel.frame.size.height);
 	
 	//titleLabel.frame = CGRectMake(0, 0, self.frame.size.width, self.titleLabel.frame.size.height);
 	imageViewA.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
 	aView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
 	bView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-	
+
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
