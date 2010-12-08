@@ -2,7 +2,8 @@
 
 @protocol TreemapViewCellDelegate;
 
-@interface TreemapViewCell : UIControl {
+@interface TreemapViewCell : UIControl 
+{
 	UILabel *titleLabel;
 	UILabel *countLabel;
 	UILabel *contentLabel;
@@ -24,10 +25,14 @@
 	
 	UIButton *_like_btn;
 	
+	NSString *_post_id;
+	
 	
 	
 	id <TreemapViewCellDelegate> delegate;
 }
+
+@property(nonatomic, retain) NSString* post_id;
 
 @property (nonatomic, retain) UILabel *titleLabel;
 @property (nonatomic, retain) UILabel *countLabel;

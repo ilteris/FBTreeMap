@@ -46,26 +46,6 @@
 	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
 	[self setTheBackgroundArray];	
 	
-	NSLog(@"_background id %@", _backgrounds);
-	//alloc and initalize our FbGraph instance
-	//self.fbGraph = [[FbGraph alloc] initWithFbClientID:client_id];
-	
-	
-	//begin the authentication process.....
-	//[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,read_stream,user_status, user_videos,publish_stream,offline_access"];
-	
-	/**
-	 * OR you may wish to 'anchor' the login UIWebView to a window not at the root of your application...
-	 * for example you may wish it to render/display inside a UITabBar view....
-	 *
-	 * Feel free to try both methods here, simply (un)comment out the appropriate one.....
-	 **/
-	
-	
-	//[self.view addSubview:self.myWebView];
-	//	[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,read_stream,user_status,user_videos,publish_stream, offline_access" andSuperView:self.view];
-	//[fbGraph authenticateUserWithCallbackObject:self andSelector:@selector(fbGraphCallback:) andExtendedPermissions:@"user_photos,user_videos,publish_stream,offline_access" andSuperView:self.view];
-	
 	
 }
 
@@ -101,165 +81,6 @@
 	
 	
 	
-	//maybe here do the all extravazanga<--------
-	
-	//check the type
-	//if type is link
-		//if type is extralink
-		//if type is internalink
-	
-	//if type is status
-	//if type is photo
-	//if type is video
-	//NSLog(@"---start here");
-	//NSLog(@"index %i", index);
-	//NSLog(@"type %@", [[fruits objectAtIndex:index] objectForKey:@"type"]);
-	
-	//NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
-	//if the type === status
-	if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"status"])
-	{
-	//	NSLog(@"STATUS");
-		//NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
-		
-		CGSize maximumLabelSize = CGSizeMake(cell.frame.size.width-(10*2),9999);
-		
-		CGSize expectedLabelSize = [[[fruits objectAtIndex:index] objectForKey:@"message"] sizeWithFont:[UIFont systemFontOfSize:14] 
-										  constrainedToSize:maximumLabelSize 
-											  lineBreakMode:UILineBreakModeWordWrap]; 
-		//adjust the label to the new height.
-		CGRect newFrame = cell.countLabel.frame;
-		newFrame.size.height = expectedLabelSize.height;
-		cell.countLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
-		//NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
-		cell.countLabel.frame = newFrame;
-		
-	//	NSLog(@"---end here.");
-	}//if the type === link
-	else if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"link"])
-	{
-	//	NSLog(@"LINK");
-		if([[[fruits objectAtIndex:index] objectForKey:@"link"] isEqual:@"http://www.facebook.com/"])
-		{//if the link is internal link
-		//	NSLog(@"INTERNAL_LINK");
-			cell.countLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
-		//	NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
-		//	NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
-			//if it's the internal link then it could still be internal but the link part is different?
-			//doublecheck
-			
-			
-		//	NSLog(@"---end here.");
-		}
-		else
-		{ //the link is external link.
-			//grab the second part of the link.
-		//	NSLog(@"EXTERNAL_LINK");
-			
-			
-			//NSLog(@"from is ----> %@", [[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"]);
-		//	NSLog(@"link is %@", [[fruits objectAtIndex:index] objectForKey:@"link"]);
-		//	NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
-			/*
-			 NSString *deviceToken = [[[[[fruits objectAtIndex:index] objectForKey:@"picture"] stringByReplacingOccurrencesOfString:@"%2F"withString:@"/"] 
-			 stringByReplacingOccurrencesOfString:@"%3A" withString:@":"] 
-			 stringByReplacingOccurrencesOfString: @" " withString: @""];
-			 */
-			
-			//done removing the percent escapes
-			NSString *filePath = [[[fruits objectAtIndex:index] objectForKey:@"picture"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-			//get the second url now:
-		//	NSLog(@"picture is ----> %@", filePath);
-			
-			NSString *regexString   = @"url=(.+)";
-			//also you can use look behind assertation.
-			//(?<=url=).+
-			NSString *matchedString   = [filePath stringByMatching:regexString capture:1L];
-	
-		//	NSLog(@"regexString is ----> %@", matchedString);
-		//	NSLog(@"---end here.");
-		}
-	}//if the type === video
-	else if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"video"])
-	{
-		
-		//TODO: the video could be external OR internal, check it here!
-	//	NSLog(@"VIDEO");
-	//	NSLog(@"link of video is %@", [[fruits objectAtIndex:index] objectForKey:@"link"]);
-	//	NSLog(@"picture is ----> %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
-		
-		/*
-		NSString *deviceToken = [[[[[fruits objectAtIndex:index] objectForKey:@"picture"] stringByReplacingOccurrencesOfString:@"%2F"withString:@"/"] 
-								  stringByReplacingOccurrencesOfString:@"%3A" withString:@":"] 
-								 stringByReplacingOccurrencesOfString: @" " withString: @""];
-		*/
-		
-		//done removing the percent escapes
-		NSString *filePath = [[[fruits objectAtIndex:index] objectForKey:@"picture"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		//get the second url now:
-	//	NSLog(@"picture is ----> %@", filePath);
-		
-		NSString *regexString   = @"url=(.+)";
-		//also you can use look behind assertation.
-		//(?<=url=).+
-		
-		NSString *matchedString   = [filePath stringByMatching:regexString capture:1L] ;
-		
-		
-		
-	//	NSLog(@"picture is ----> %@", matchedString);
-		
-		
-		
-	//	NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
-	//	NSLog(@"---end here.");
-		cell.countLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
-	}
-	 else if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"photo"])
-	 {
-	// NSLog(@"PHOTO");
-	// NSLog(@"link of photo is %@", [[fruits objectAtIndex:index] objectForKey:@"picture"]);
-	 //the photo ends with _s but need to replace that with _n and load it. 
-	//	 NSLog(@"---end here.");	 
-	// NSLog(@"message  %@", [[fruits objectAtIndex:index] objectForKey:@"message"]);
-	// cell.countLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
-	 }
-	 
-	
-
-		
-	//NSLog(@"cell %@", NSStringFromCGRect(cell.frame));
-	
-	//NSLog(@"cell bounds: %.0f, %.0f, %3.0f, %3.0f", cell.frame.origin.x, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
-	
-	cell.contentLabel.text = [NSString stringWithFormat:@"%@ has %@ likes %@ comments" ,[[[fruits objectAtIndex:index] objectForKey:@"from"] objectForKey:@"name"], [[fruits objectAtIndex:index] objectForKey:@"likes"], [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]];
-	//cell.titleLabel.text = [NSString stringWithFormat:@"%@ comments", [[[fruits objectAtIndex:index] objectForKey:@"comments"] objectForKey:@"count"]];
-	//if([cell.titleLabel.text isEqual:@"(null) comments"]) cell.titleLabel.text = [NSString stringWithFormat:@"0 comments"];
-	//cell.backgroundColor = [UIColor colorWithHue:(float)index / (fruits.count + 3) saturation:1 brightness:0.75 alpha:.3];
-
-
-
-
-
-		
-
-	//NSLog(@"cell.downloadDestinationPath %@", cell.downloadDestinationPath);
-	//if(cell.loaded)	cell.imageView.image = [self scaleAndCropFrame:cell.frame withUIImage:[UIImage imageWithContentsOfFile:cell.downloadDestinationPath]];
-
-	 
-	
-	/**
-	 * Rather than returing a url to the image, Facebook will stream an image file's bits back to us..
-	 **/
-	
-	/*
-	if (fb_graph_response.imageResponse != nil) 
-	{
-		cell.imageView.image = [self scaleAndCropFrame:cell.frame withUIImage:fb_graph_response.imageResponse];
-   	}
-	 */
-	
-	
 }
 
 
@@ -267,19 +88,15 @@
 #pragma mark -
 #pragma mark TreemapView delegate
 
-- (void)treemapView:(TreemapView *)treemapView tapped:(NSInteger)index {
-	
-
-	TreemapViewCell *cell = (TreemapViewCell *)[self.treeMapView.subviews objectAtIndex:index];
-	
+- (void)treemapView:(TreemapView *)treemapView tapped:(NSInteger)index 
+{
+	TreemapViewCell *cell = (TreemapViewCell *)[self.treeMapView.subviews objectAtIndex:index];	
 	[cell flipIt];
-
 }
 
+
+
 #pragma mark -
-
-
-
 - (void)resizeView
 {
 	NSLog(@"resizeView");
@@ -432,6 +249,9 @@
 	cell.contentLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
 	cell.countLabel.text = tText;
 	cell.titleLabel.text = [[[fruits objectAtIndex:index] objectForKey:@"from"] uppercaseString];
+	
+	//add the post_id
+	cell.post_id = [[fruits objectAtIndex:index] objectForKey:@"post_id"];
 	[self.cells addObject:cell];
 	[cell release];
 	

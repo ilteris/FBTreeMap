@@ -45,12 +45,6 @@
 	
 	NSMutableArray *_backgrounds;
 	
-	
-	
-	
-
-	
-	
 }
 
 @property (nonatomic, retain) NSMutableArray *fruits;

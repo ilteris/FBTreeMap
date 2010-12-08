@@ -19,6 +19,8 @@
 @synthesize downloadDestinationPath;
 @synthesize loaded;
 
+@synthesize post_id = _post_id;
+
 
 #pragma mark -
 
@@ -46,6 +48,7 @@
 		_like_btn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
 		_like_btn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
 		
+		[_like_btn addTarget:self action:@selector(onBtnPress:) forControlEvents:UIControlEventTouchUpInside];
 		
 		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 		{
@@ -148,6 +151,9 @@
 
 
 
+
+
+
 -(void) flipIt
 {
 
@@ -178,7 +184,7 @@
 	
 	
 	//self.imageView.alpha = 0.0;
-	CGRect boundRect2 = CGRectMake(0, 0, rect.size.width, rect.size.height);
+	//CGRect boundRect2 = CGRectMake(0, 0, rect.size.width, rect.size.height);
 
 	self.contentMode = UIViewContentModeCenter;
 	[UIView beginAnimations:@"UIBase Hide" context:nil];
@@ -269,10 +275,24 @@
 
 }
 
+
+#pragma mark -
+#pragma mark === Flip action ===
+#pragma mark -
+- (void)onBtnPress:(id)sender {
+	NSLog(@"flipAction");
+	NSLog(@"post_id is %@", _post_id);
+}
+
+
+
+
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	if ([delegate respondsToSelector:@selector(treemapViewCell:tapped:)])
 		[delegate treemapViewCell:self tapped:index];
 }
+
+
 
 - (void)dealloc {
 	[titleLabel release];
@@ -281,6 +301,8 @@
 	[imageViewA release];
 	[imageViewB release];
 	[delegate	release];
+	
+	[_post_id release];
 
 	[super dealloc];
 }

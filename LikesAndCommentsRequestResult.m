@@ -30,7 +30,7 @@
 - (void)request:(FBRequest*)request didLoad:(id)result{
 	
    // NSMutableArray *fruits = [[[NSMutableArray alloc] init] autorelease];
-	//NSLog(@"result %@", result);
+	NSLog(@"result %@", result);
 	NSMutableArray *tempArr = [result mutableCopy];
 //	NSMutableArray *myArray = [[NSArray alloc] initWithCapacity:1];
 	
@@ -42,6 +42,8 @@
 	NSMutableArray *myArray = [[NSMutableArray alloc] initWithCapacity:1];
 	//NSLog(@"streamArray %@", streamArray);
 //	NSLog(@"userArray %@", userArray);
+	
+	
 	
 	
 	for (NSInteger i=0; i < [streamArray count]; i++)
@@ -87,6 +89,7 @@
 				}
 				NSString *_actor_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
 				NSString *_message = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
+				NSString *_post_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"post_id"]];
 				NSString *_from = [NSString stringWithFormat:@"%@",[[userArray objectAtIndex:j] objectForKey:@"name"]];
 				NSString *_type;
 				
@@ -137,6 +140,7 @@
 									  _from, @"from",
 									  _message, @"message",
 									  _type, @"type",
+									  _post_id, @"post_id",
 									  nil];
 
 				
@@ -265,6 +269,7 @@
 		NSString *_message;
 		NSString *_from;
 		NSString *_type;
+		NSString *_post_id;
 		
 		if(_plistArray == nil) //check if the plist is empty 
 		{ 
@@ -285,6 +290,7 @@
 
 		_message = [NSString stringWithFormat:@"%@", [[[[request userInfo] objectForKey:@"myArray"] objectAtIndex:imageNo] objectForKey:@"message"]];
 		_type = [NSString stringWithFormat:@"%@", [[[[request userInfo] objectForKey:@"myArray"] objectAtIndex:imageNo] objectForKey:@"type"]];
+		_post_id = [NSString stringWithFormat:@"%@", [[[[request userInfo] objectForKey:@"myArray"] objectAtIndex:imageNo] objectForKey:@"post_id"]];
 
 	
 		//NSLog(@" _message is %@", _message);
@@ -299,6 +305,7 @@
 								  _from, @"from",
 								  _message, @"message",
 								  _type, @"type",
+								  _post_id, @"post_id",
 								  nil];
 			
 			//adding to the plistArray here.

@@ -40,7 +40,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _permissions =  [[NSArray arrayWithObjects: 
-						  @"publish_stream",@"read_stream", @"offline_access",nil] retain];
+						  @"publish_stream", @"read_stream", @"offline_access",nil] retain];
     }
     return self;
 }
@@ -270,10 +270,6 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 	 */
 }
 
-
-
-
-
 #pragma mark -
 #pragma mark UserInfoLoadDelegate
 
@@ -285,23 +281,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 - (void)likesAndCommentsDidLoad
 {
 	NSLog(@"likesAndCommentsDidLoad");
-	
-	
 	[(TreemapView*)self.treemapViewController.treeMapView reloadData];
-	/*
-	 [_session setSessionWithFacebook:_facebook andUid:_userInfo.uid];
-	 [_session save];
-	 
-	 _myRunController = [[MyRunViewController alloc] init];
-	 _myRunController.managedObjectContext = _managedObjectContext;
-	 _myRunController.userInfo = _userInfo;
-	 _myRunController.view.frame = CGRectMake(0, 0, 320, 460);
-	 [self.myRunController viewWillAppear:YES];
-	 [_loginView addSubview:self.myRunController.view];
-	 */
-
-	
-	
 }
 - (void)userInfoDidLoad 
 {
