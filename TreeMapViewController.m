@@ -30,10 +30,9 @@
 @synthesize fbGraph;
 @synthesize feedPostId;
 @synthesize myWebView;
-
-
-
 @synthesize jsonArray;
+@synthesize userInfo = _userInfo;
+
 
 #pragma mark -
 #pragma mark facebook delegate
@@ -45,12 +44,10 @@
 	//NSString *client_id = @"128496757192973";
 	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
 	[self setTheBackgroundArray];	
-	
-	
 }
 
-
-- (void)viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated 
+{
 	
 }
 
@@ -77,9 +74,8 @@
 
 #pragma mark -
 
-- (void)updateCell:(TreemapViewCell *)cell forIndex:(NSInteger)index {
-	
-	
+- (void)updateCell:(TreemapViewCell *)cell forIndex:(NSInteger)index 
+{
 	
 }
 

@@ -100,6 +100,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 	
 	
 	_treemapViewController = [[TreeMapViewController alloc] init];
+	_treemapViewController.userInfo = _userInfo;
 	[_treemapViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight];
 	
 	[self.treemapViewController viewWillAppear:YES];

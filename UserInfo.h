@@ -37,7 +37,6 @@
 	FBRequest *_reqUid;
 	FBRequest *_reqFriendList;
 	FBRequest *_reqFriendInfo;
-	
 }
 
 @property(nonatomic, retain) id<UserInfoLoadDelegate> userInfoDelegate;
@@ -51,7 +50,6 @@
 - (void) requestFriendsDetail;
 - (id) initializeWithFacebook:(Facebook *)facebook andDelegate:(id<UserInfoLoadDelegate>)delegate;
 - (void) requestAllInfo;
-
 - (void) requestCountOf;
 
 

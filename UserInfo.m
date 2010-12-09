@@ -97,8 +97,6 @@
                        andDelegate: friendsRequestResult]; 
 }
 
-
-
 /** 
  * Request Likes and Comments from stream
  *
@@ -106,17 +104,11 @@
  */
 
 - (void) requestCountOf
-{
-	
+{	
 	NSLog(@"requestCountOf");
 	LikesAndCommentsRequestResult *likesAndCommentsRequestResult = 
-	[[[[LikesAndCommentsRequestResult alloc] initializeWithDelegate:self] autorelease] retain];
-	
-		
-		
-	
-	//NSString *fql = [NSString stringWithFormat:@"{\"user_stream\":\"actor_id, post_id,likes, message, permalink FROM stream WHERE source_id IN(SELECT target_id FROM connection WHERE source_id=%@) AND is_hidden = 0 LIMIT 80\",\"actor_info\":\"SELECT uid, name, pic_square FROM user WHERE uid IN (SELECT actor_id FROM #user_stream)\"}",_uid];
-					
+	[[[[LikesAndCommentsRequestResult alloc] initializeWithDelegate:self] autorelease] retain];		
+				
 	// create the multiquery
 	NSLog(@"uid %@", _uid);
 	NSString* friendIDs = @"SELECT actor_id, post_id,likes, message, comments, permalink, type, attachment FROM stream WHERE source_id IN(";
@@ -128,17 +120,13 @@
 	 
 	 NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKeys:queries, @"queries", nil];
 	
-		
-	
 	// send it out
 	[_facebook requestWithMethodName:@"fql.multiquery" 
 						  andParams:params 
 					  andHttpMethod:@"GET" 
-						andDelegate:likesAndCommentsRequestResult];
-	
-		
-	
+						 andDelegate:likesAndCommentsRequestResult];
 }
+
 
 
 
@@ -153,7 +141,6 @@
 	{
 		[_userInfoDelegate likesAndCommentsDidLoad];
 	}
-	
 }
 
 

@@ -13,14 +13,18 @@
 #import "RegexKitLite.h"
 
 #import "FBConnect.h"
-
+#import "UserInfo.h"
 
 
 @class ASINetworkQueue;
 
 
 @interface TreeMapViewController : UIViewController   <TreemapViewDelegate, TreemapViewDataSource, UIWebViewDelegate> {
-    ASINetworkQueue *networkQueue;
+   
+	
+	UserInfo *_userInfo;
+	
+	ASINetworkQueue *networkQueue;
 
 	NSMutableArray *cells;
 	NSMutableArray *destinationPaths;
@@ -36,6 +40,7 @@
 	IBOutlet UIView *treeMapView;
 	IBOutlet UIWebView *myWebView;
 	
+	
 	BOOL failed;
 	BOOL imagesLoaded;
 	
@@ -44,8 +49,11 @@
 	NSMutableArray *jsonArray;
 	
 	NSMutableArray *_backgrounds;
-	
 }
+
+
+
+@property(nonatomic, retain) UserInfo *userInfo;
 
 @property (nonatomic, retain) NSMutableArray *fruits;
 @property (nonatomic, retain) NSMutableArray *cells;

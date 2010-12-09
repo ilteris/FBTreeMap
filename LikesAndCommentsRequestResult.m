@@ -11,6 +11,8 @@
 #import "ASIHTTPRequest.h"
 #import "ASINetworkQueue.h"
 #import "FbGraph.h"
+#import "RegexKitLite.h"
+
 
 #define numberOfObjects (8)
 
@@ -32,18 +34,17 @@
    // NSMutableArray *fruits = [[[NSMutableArray alloc] init] autorelease];
 	NSLog(@"result %@", result);
 	NSMutableArray *tempArr = [result mutableCopy];
-//	NSMutableArray *myArray = [[NSArray alloc] initWithCapacity:1];
 	
 	
+	NSArray *streamArray = [NSArray  arrayWithArray:[[result objectAtIndex:0] objectForKey:@"fql_result_set"]];//stream json object
+	NSArray *userArray = [NSArray	arrayWithArray:[[result objectAtIndex:1] objectForKey:@"fql_result_set"]];//name/uids json object
 	
-	NSArray *userArray = [NSArray	arrayWithArray:[[result objectAtIndex:1] objectForKey:@"fql_result_set"]];
-	NSArray *streamArray = [NSArray  arrayWithArray:[[result objectAtIndex:0] objectForKey:@"fql_result_set"]];
+	//unfortunately they do have different length since stupidfacebook don't return the same uids twice for the same items in the stream.
+	//so in order to fix that, for every stream item, run through the userArray and match the uid and when there's a match, replace the uid with name.
 	
 	NSMutableArray *myArray = [[NSMutableArray alloc] initWithCapacity:1];
 	//NSLog(@"streamArray %@", streamArray);
 //	NSLog(@"userArray %@", userArray);
-	
-	
 	
 	
 	for (NSInteger i=0; i < [streamArray count]; i++)
@@ -55,11 +56,12 @@
 			//NSLog(@"2ndarr uid number is %@", [[userArray objectAtIndex:j] objectForKey:@"uid"]);
 
 			if([[[streamArray objectAtIndex:i] objectForKey:@"actor_id"] isEqual:[[userArray objectAtIndex:j] objectForKey:@"uid"]])	
-			{
+			{ //this gets only called when the actor_id == uid
 				//NSLog(@"true it's number ");
 				NSString *_categoryValue;
 				
-
+				/*do the extravazanga for matching the uids with names, taking care of the missing uids */
+				
 				if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])//0//likes
 				{
 				//		NSLog(@"displayMode is 0");		
@@ -86,31 +88,56 @@
 						_categoryValue = [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"count"]];
 					}
 	
-				}
-				NSString *_actor_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
-				NSString *_message = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
-				NSString *_post_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"post_id"]];
-				NSString *_from = [NSString stringWithFormat:@"%@",[[userArray objectAtIndex:j] objectForKey:@"name"]];
-				NSString *_type;
+				}//endelse
 				
-				NSLog(@"attachment count is %i", [[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count]);
-				//if the count is more than 1, it means it's not status. 
+				/*end here*/
+				//NSString *_actor_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
+				//NSString *_message = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
+				//NSString *_post_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"post_id"]];
+				//NSString *_from = [NSString stringWithFormat:@"%@",[[userArray objectAtIndex:j] objectForKey:@"name"]];
+				//NSString *_type;
+				//NSString *_src;
+				//NSString *_img_url;
 				
 				
-				if([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count] != 1) //meaning it's not status
-				
+				if([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count] != 1) 
+					//meaning count is more than 1, it could be everything except twitter, friendfeed, facebook status
 				{
+					//now it could be internal (photos,videos,events or external  (videos, links) as far it goes. if fb_object_type gives us something it's internal for sure so let's check that first.
+					/*
+					if ([[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"]) 
+					{ //if the object is there
+						if ([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"] length] > 0) 
+						{ //if the value is more than 0 then;
+							NSLog(@"internal shit");
+							NSLog(@"fb_object_type is %@",[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"] );
+							NSLog(@"attachment media is %@", [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"]);
+						}
+					}
+					else
+					{
+						NSLog(@"external shit");
+						NSLog(@"attachment media is %@", [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"]);
+					}
 					
 					//let's see how many of them have array.
 					if ([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] isKindOfClass:[NSArray class]])
 					{
-						//NSLog(@"attachment media is %@", [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"]);
+						NSLog(@"array");
+						
 						NSLog(@"type is %@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]);
 						_type = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
-						NSLog(@"array");
+						NSString *_temp = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"src"]];
+						
+						NSString *filePath = [_temp stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+						//get the second url now:
+ 						NSString *regexString   = @"url=(.+)";
+						//also you can use look behind assertation.
+						//(?<=url=).+
+						_src   = [filePath stringByMatching:regexString capture:1L];
+						NSLog(@"regexString is ----> %@", _src);
 					}
-					
-					else
+					else 
 					{
 						NSLog(@"not an array");
 						NSLog(@"attachment media is %@", [[streamArray objectAtIndex:i] objectForKey:@"attachment"]);
@@ -120,15 +147,27 @@
 						_type = [NSString stringWithFormat:@"nil"];
 					}
 					
-				
-				} //weird stuff that could be images,tumblr links etc too.
-				
-					 
-			
-				else 
+				*/
+					
+					
+				} 
+				else //meaning this could be twitter, friendfeed or facebook status
 				{
 					NSLog(@"type is status");
+					
+					NSString *_actor_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
+					NSString *_message = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
+					NSString *_post_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"post_id"]];
+					NSString *_from = [NSString stringWithFormat:@"%@",[[userArray objectAtIndex:j] objectForKey:@"name"]];
+					NSString *_type;
+					NSString *_src;
+					NSString *_img_url;
+					
+					
+					
 					_type = [NSString stringWithFormat:@"status"];
+					_src = [NSString stringWithFormat:@""];
+					
 					
 				}
 
@@ -141,6 +180,7 @@
 									  _message, @"message",
 									  _type, @"type",
 									  _post_id, @"post_id",
+									  _src, @"src",
 									  nil];
 
 				
@@ -197,10 +237,6 @@
 		networkQueue = [[ASINetworkQueue alloc] init];	
 	}
 	
-	
-	
-	
-	
 	//failed = NO;
 	[networkQueue reset];
 	//[networkQueue setDownloadProgressDelegate:progressIndicator];
@@ -221,6 +257,8 @@
 		//TODO: need to convert this so, it brings back the urls for the larger images.
 		//might need to use the REST API for this!
 		
+		NSLog(@"type should be %@", [[myArray objectAtIndex:i] objectForKey:@"type"] );
+		NSLog(@"src should be %@", [[myArray objectAtIndex:i] objectForKey:@"src"] );
 		
 		NSString *url_string = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&", [[myArray objectAtIndex:i] objectForKey:@"actor_id"] ];
 
