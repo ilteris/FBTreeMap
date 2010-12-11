@@ -20,7 +20,7 @@
 @synthesize loaded;
 
 @synthesize post_id = _post_id;
-
+@synthesize playBtn = _playBtn;
 
 #pragma mark -
 
@@ -35,6 +35,11 @@
 		self.imageViewA = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width - 4, frame.size.height-4)];
 		self.imageViewB = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width - 4, frame.size.height-4)];
 
+		self.imageViewA.contentMode = UIViewContentModeTop; 
+		self.imageViewA.clipsToBounds = YES;
+		//self.imageViewA.autoresizingMask =  UIViewAutoresizingNone;
+		//self.aView.contentMode = UIViewContentModeCenter;
+		
 		[self.aView addSubview:imageViewA];
 		self.bView.backgroundColor = [UIColor whiteColor];
 		self.downloadDestinationPath = [NSString stringWithFormat:@""];
@@ -45,24 +50,29 @@
 
 			
 	
-		_like_btn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
-		_like_btn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
+		_countBtn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+		_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
 		
-		[_like_btn addTarget:self action:@selector(onBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+			
+		
+		
+		[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
 		
 		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 		{
 			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"1_like_red" ofType:@"png"]];
-			[_like_btn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+			[_countBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
 			[tImage release];
 		}
 		else 
 		{
 			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"1_comment_blue" ofType:@"png"]];
-			[_like_btn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+			[_countBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
 			[tImage release];
 		}
 
+		
+		
 		
 		
 		self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:1] CGColor];
@@ -82,7 +92,7 @@
 		
 
 					
-		_like_btn.alpha = 0.5;
+		_countBtn.alpha = 0.5;
 
 		NSLog(@"frame size: %@", NSStringFromCGSize(self.frame.size));
 		
@@ -111,6 +121,7 @@
 			//display only user profile.
 		}
 
+
 		//contentLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
 		contentLabel.textAlignment = UITextAlignmentLeft;
 		contentLabel.textColor = [UIColor whiteColor];
@@ -137,7 +148,7 @@
 		titleLabel.alpha = 1;
 				
 		[self.aView addSubview:countLabel];
-		[self.aView addSubview:_like_btn];
+		[self.aView addSubview:_countBtn];
 		[self.aView addSubview:contentLabel];
 		
 		[self.aView addSubview:titleLabel];
@@ -186,7 +197,7 @@
 	//self.imageView.alpha = 0.0;
 	//CGRect boundRect2 = CGRectMake(0, 0, rect.size.width, rect.size.height);
 
-	self.contentMode = UIViewContentModeCenter;
+	//self.contentMode = UIViewContentModeCenter;
 	[UIView beginAnimations:@"UIBase Hide" context:nil];
 	[UIView setAnimationDelegate:self];
 	[UIView setAnimationDuration:.5f]; 
@@ -219,9 +230,9 @@
 	// calculate the position of the icon according to the width of the countLabel.
 	// can you set the width of the countLabel ==>countLabelWidth  to countLabel's width?
 	CGSize countLabelWidth = [countLabel.text sizeWithFont:countLabel.font forWidth:countLabel.frame.size.width lineBreakMode:countLabel.lineBreakMode];
-	CGRect _like_btn_frame = _like_btn.frame;
-	_like_btn_frame.origin.x = countLabel.frame.origin.x + countLabelWidth.width + 4;
-	_like_btn.frame = _like_btn_frame;
+	CGRect _countBtn_frame = _countBtn.frame;
+	_countBtn_frame.origin.x = countLabel.frame.origin.x + countLabelWidth.width + 4;
+	_countBtn.frame = _countBtn_frame;
 	
 	
 	//set the height for the contentLabel.
@@ -243,7 +254,7 @@
 	CGFloat possibleNoOfLines = floorf((self.frame.size.height-countLabel.frame.size.height-60.0f) /contentLabel.font.lineHeight);
 	CGFloat actualNoOfLines = (contentLabel.frame.size.height/contentLabel.font.lineHeight);
 	
-	////if the height of the text is long enough to touch the _like_btn then cut the text off and display the title so it fits. 
+	////if the height of the text is long enough to touch the _countBtn then cut the text off and display the title so it fits. 
 	//so if text height + spacing > required area (total height of cell - (height of countLabel+bottom padding))
 	
 	
@@ -279,7 +290,7 @@
 #pragma mark -
 #pragma mark === Flip action ===
 #pragma mark -
-- (void)onBtnPress:(id)sender {
+- (void)onCountBtnPress:(id)sender {
 	NSLog(@"flipAction");
 	NSLog(@"post_id is %@", _post_id);
 }
@@ -301,6 +312,7 @@
 	[imageViewA release];
 	[imageViewB release];
 	[delegate	release];
+	[_playBtn release];
 	
 	[_post_id release];
 

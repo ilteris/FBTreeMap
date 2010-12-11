@@ -23,7 +23,9 @@
 	
 	BOOL loaded;
 	
-	UIButton *_like_btn;
+	UIButton *_countBtn;
+	UIButton *_playBtn;
+	
 	
 	NSString *_post_id;
 	
@@ -32,7 +34,8 @@
 	id <TreemapViewCellDelegate> delegate;
 }
 
-@property(nonatomic, retain) NSString* post_id;
+@property(nonatomic, retain) NSString *post_id;
+@property (nonatomic, retain) UIButton *playBtn;
 
 @property (nonatomic, retain) UILabel *titleLabel;
 @property (nonatomic, retain) UILabel *countLabel;
@@ -52,6 +55,8 @@
 @property (nonatomic, assign) NSInteger index;
 
 @property (nonatomic, retain) id <TreemapViewCellDelegate> delegate;
+
+
 
 - (id)initWithFrame:(CGRect)frame;
 - (void)flipIt;

@@ -48,7 +48,6 @@
 	NSMutableArray *fruits;
 	NSMutableArray *jsonArray;
 	
-	NSMutableArray *_backgrounds;
 }
 
 
@@ -72,7 +71,6 @@
 @property (nonatomic, retain) IBOutlet UIWebView *myWebView;
 
 
-- (void)setTheBackgroundArray;
 - (void)resizeView;
 
 

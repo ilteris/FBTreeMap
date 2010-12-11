@@ -43,7 +43,7 @@
 	/*Facebook Application ID*/
 	//NSString *client_id = @"128496757192973";
 	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
-	[self setTheBackgroundArray];	
+
 }
 
 - (void)viewDidAppear:(BOOL)animated 
@@ -52,24 +52,6 @@
 }
 
 
-- (void)setTheBackgroundArray
-{
-	_backgrounds = [[NSMutableArray alloc] initWithCapacity:1];
-	NSString *b0 = [NSString stringWithFormat:@"concrete"];
-	NSString *b1 = [NSString stringWithFormat:@"leather"];
-//	NSString *b2 = [NSString stringWithFormat:@"play"];
-	NSString *b3 = [NSString stringWithFormat:@"rust"];
-	//NSString *b4 = [NSString stringWithFormat:@"video"];
-	NSString *b5 = [NSString stringWithFormat:@"wood"];
-	
-	[_backgrounds addObject:b0];
-	[_backgrounds addObject:b1];
-//	[_backgrounds addObject:b2];
-	[_backgrounds addObject:b3];
-//	[_backgrounds addObject:b4];
-	[_backgrounds addObject:b5];
-	
-}
 
 
 #pragma mark -
@@ -212,27 +194,38 @@
 	//match the indexes through the cellForIndex/fruits objectAtIndex.
 	NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"filename"]];
 	
-	NSLog(@"_backgrounds %@", _backgrounds);
+
 	
 	
-	if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"status"])
+	UIImage *img = [UIImage imageWithContentsOfFile:fn];
+	
+	if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"video"])
 	{
-		NSLog(@"this should be status");
-		NSInteger rand_ind = arc4random() % [_backgrounds count];
 		
-		UIImage *img = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[_backgrounds objectAtIndex:rand_ind]  ofType:@"png"]];
+		cell.imageViewA.image = img;
+		cell.playBtn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+		cell.playBtn.frame = CGRectMake(0, 0, 56.0, 55.0);
+		NSLog(@"playbtn is %@", NSStringFromCGRect(cell.playBtn.bounds));
+		NSLog(@"imageViewA is %@", NSStringFromCGRect(cell.imageViewA.bounds));
+		cell.playBtn.frame = CGRectMake((cell.imageViewA.bounds.size.width-cell.playBtn.bounds.size.width)/2, (cell.imageViewA.bounds.size.height-cell.playBtn.bounds.size.height)/2, cell.playBtn.frame.size.width, cell.playBtn.frame.size.height);
+		NSLog(@"playbtn is %@", NSStringFromCGRect(cell.playBtn.bounds));
+
+		UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"play" ofType:@"png"]];
+		[cell.playBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+		[tImage release];
 		
-		[_backgrounds removeObjectAtIndex:rand_ind];
-		
-		if([_backgrounds count] < 1) [self setTheBackgroundArray];
-		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
+		[cell.aView addSubview:cell.playBtn];
+		cell.contentLabel.text = @"";//	[[fruits objectAtIndex:index] objectForKey:@"message"];
+
 	}
-	else 
+	else
 	{
-		NSLog(@"this should NOT be status");
-		UIImage *img = [UIImage imageWithContentsOfFile:fn];
 		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
+		cell.contentLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
+
 	}
+	   
+	
 
 	   
 	//check the type of the post and pass an image accordingly.
@@ -242,7 +235,6 @@
 	
 	NSLog(@"tXtext %@", tText);
 	NSLog(@"[[fruits objectAtIndex:index] objectForKey:from %@", [[fruits objectAtIndex:index] objectForKey:@"from"]);
-	cell.contentLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
 	cell.countLabel.text = tText;
 	cell.titleLabel.text = [[[fruits objectAtIndex:index] objectForKey:@"from"] uppercaseString];
 	

@@ -18,11 +18,14 @@
 {
 	NSInteger _categoryMode;
 	NSMutableArray *_plistArray;
+	NSMutableArray *_backgrounds;
+
 	ASINetworkQueue *networkQueue;
 	id<LikesAndCommentsRequestDelegate> _likesAndCommentsRequestDelegate;
 }
 
 - (id) initializeWithDelegate:(id <LikesAndCommentsRequestDelegate>)delegate;
+- (void)setTheBackgroundArray;
 							  
 
 @end

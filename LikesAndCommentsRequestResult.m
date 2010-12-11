@@ -23,6 +23,8 @@
 {
 	self = [super init];
 	_likesAndCommentsRequestDelegate = [delegate retain];
+	[self setTheBackgroundArray];	
+
 	return self;
 }
 
@@ -32,7 +34,7 @@
 - (void)request:(FBRequest*)request didLoad:(id)result{
 	
    // NSMutableArray *fruits = [[[NSMutableArray alloc] init] autorelease];
-	NSLog(@"result %@", result);
+//	NSLog(@"result %@", result);
 	NSMutableArray *tempArr = [result mutableCopy];
 	
 	
@@ -44,155 +46,185 @@
 	
 	NSMutableArray *myArray = [[NSMutableArray alloc] initWithCapacity:1];
 	//NSLog(@"streamArray %@", streamArray);
-//	NSLog(@"userArray %@", userArray);
+	//NSLog(@"userArray %@", userArray);
+	
 	
 	
 	for (NSInteger i=0; i < [streamArray count]; i++)
 	{
-		//NSLog(@"1starr uid number is %@", [[streamArray objectAtIndex:i] objectForKey:@"actor_id"]);
+		//these are the objects for each dictionary item which is going to be written to the plist file.
+		NSString *_from;
+		NSString *_categoryValue;
+		NSString *_actor_id;
+		NSString *_image_url;
+		NSString *_message;
+		NSString *_post_id;
+		NSString *_type;
+		
+		
+		//traverse the user array and match the actor_id ----> uid, then break the for loop;
 		for (NSInteger j=0; j < [userArray count]; j++)
 		{
-
-			//NSLog(@"2ndarr uid number is %@", [[userArray objectAtIndex:j] objectForKey:@"uid"]);
-
 			if([[[streamArray objectAtIndex:i] objectForKey:@"actor_id"] isEqual:[[userArray objectAtIndex:j] objectForKey:@"uid"]])	
 			{ //this gets only called when the actor_id == uid
-				//NSLog(@"true it's number ");
-				NSString *_categoryValue;
+				_from = [NSString stringWithFormat:@"%@",[[userArray objectAtIndex:j] objectForKey:@"name"]];
 				
-				/*do the extravazanga for matching the uids with names, taking care of the missing uids */
-				
-				if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])//0//likes
-				{
-				//		NSLog(@"displayMode is 0");		
-					if (!_categoryValue)
-					{
-						_categoryValue = [NSString stringWithFormat:@"0"];
-					}
-					else
-					{
-						_categoryValue = [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"likes"] objectForKey:@"count"]];
+				break;
+			}
+		}//endfor
+		
+		//you have figured out the name now. why don't you go ahead and fill other things too, so we have a proper dictionary/arrays.
+		
+		//first _categoryValue -->count of current displayMode(likes/comments)
+		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])//0//likes
+		{
+			_categoryValue = [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"likes"] objectForKey:@"count"]];
+		}
+		else //displayMode is 1//comments 
+		{
+			_categoryValue = [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"count"]];
+		}//endelse
+
+		
+
+
+		//NSString *_post_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"post_id"]];
+		//NSString *_from = [NSString stringWithFormat:@"%@",[[userArray objectAtIndex:j] objectForKey:@"name"]];
+		//NSString *_type;
+		//NSString *_src;
+		//NSString *_img_url;
+		
+		//NSLog(@"attachment count is %i", [[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count]);
+
+		_actor_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
+		_post_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"post_id"]];
+		
+		//attachment count is more than 1, it could be everything except facebook status according to facebook API
+		if([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count] > 1) 
+		{
+			//if the media array is empty, these are services which we still need to use the background image because item only have messages and zero media. 
+			if (![[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] isKindOfClass:[NSArray class]])
+			{
+				_image_url = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&", [[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
+				_message = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
+				_type = [NSString stringWithFormat:@"status"];
+			}
+			else
+			{ //this is all the objects including internal fb events,fb photos,fb videos,fb links, external; youtube, tumblr, facebook apps and external links.
+				//their common attribute they all have media.
+				//let's do the split here. first check the objects that only have fb_object_type even if they are empty.
+				if ([[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"]) 
+				{ 
+					//if the value of fb_object_type is more than 0 then this is internal facebook objects including fb videos, fb events, fb photos, fb albums.
+					if ([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"] length] > 0) 
+					{ 
+						//NSLog(@"fb object type is %@", [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"] );
+						//NSLog(@"count one %@", [streamArray objectAtIndex:i] );
 						
-					}
-				
-				}
-				else //displayMode is 1//comments 
-				{
-				//	NSLog(@"displayMode is 1");
-					if (!_categoryValue)
-					{
-						_categoryValue = [NSString stringWithFormat:@"0"];
-					}
-					else
-					{
-						_categoryValue = [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"count"]];
-					}
-	
-				}//endelse
-				
-				/*end here*/
-				//NSString *_actor_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
-				//NSString *_message = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
-				//NSString *_post_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"post_id"]];
-				//NSString *_from = [NSString stringWithFormat:@"%@",[[userArray objectAtIndex:j] objectForKey:@"name"]];
-				//NSString *_type;
-				//NSString *_src;
-				//NSString *_img_url;
-				
-				
-				if([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count] != 1) 
-					//meaning count is more than 1, it could be everything except twitter, friendfeed, facebook status
-				{
-					//now it could be internal (photos,videos,events or external  (videos, links) as far it goes. if fb_object_type gives us something it's internal for sure so let's check that first.
-					/*
-					if ([[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"]) 
-					{ //if the object is there
-						if ([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"] length] > 0) 
-						{ //if the value is more than 0 then;
-							NSLog(@"internal shit");
-							NSLog(@"fb_object_type is %@",[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"] );
-							NSLog(@"attachment media is %@", [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"]);
-						}
-					}
-					else
-					{
-						NSLog(@"external shit");
-						NSLog(@"attachment media is %@", [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"]);
-					}
-					
-					//let's see how many of them have array.
-					if ([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] isKindOfClass:[NSArray class]])
-					{
-						NSLog(@"array");
+						//NSLog(@"internal shit");
+						//NSLog(@"fb_object_type is %@",[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"] );
+						//NSLog(@"attachment media is %@", [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"]);
+						NSString *_temp = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"src"]];
+
 						
-						NSLog(@"type is %@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]);
-						_type = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
+						_image_url = [_temp stringByReplacingOccurrencesOfString:@"_s" withString:@"_n"];
+						_message =   [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
+						if([_message length] == 0) _message = [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"name"];
+						_type = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
+
+						
+					}//endif
+					else 	//here we know these could either be external links OR youtube videos as long as fb_object_type == @"" && media is an array.
+					{
+						//we can differentiate between those two by loooking at the attachment>media>type as youtube type == video and external links type == link.
+						//NSLog(@"type is %@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]);
+						
+						//NSLog(@"count one %@", [streamArray objectAtIndex:i] );
+						
+						
 						NSString *_temp = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"src"]];
 						
 						NSString *filePath = [_temp stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 						//get the second url now:
- 						NSString *regexString   = @"url=(.+)";
-						//also you can use look behind assertation.
-						//(?<=url=).+
-						_src   = [filePath stringByMatching:regexString capture:1L];
-						NSLog(@"regexString is ----> %@", _src);
-					}
-					else 
-					{
-						NSLog(@"not an array");
-						NSLog(@"attachment media is %@", [[streamArray objectAtIndex:i] objectForKey:@"attachment"]);
-						//the rest we don't know what type they could be relying on facebook,
-						//we can however look at the source of the url and understand what type it's.
-						//so let's set it for nil right now.
-						_type = [NSString stringWithFormat:@"nil"];
-					}
+						NSString *regexString   = @"url=(.+)";
+						//NSLog(@"count one %@", [streamArray objectAtIndex:i] );
+						//sometimes the urls are facebook links so, grab them instead.
+						if(![filePath stringByMatching:regexString capture:1L]) 
+						{
+							_image_url =  [NSString stringWithFormat:@"%@", _temp];
+						}
+						else 
+						{
+							_image_url = [NSString stringWithFormat:@"%@", [filePath stringByMatching:regexString capture:1L]];
+						}
+
+						
+						
+						_message =   [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
+						
+						///NSLog(@"_message is %@", _message);
+						//NSLog(@"_message count is %i", [_message length]);
+						if([_message length] == 0) _message = [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"name"];
+						//NSLog(@"_message is %@", _message);
+						
+						_type = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
+						
+												
+						
+					}//endelse
+
+				//	NSLog(@"count one %@", [streamArray objectAtIndex:i] );
 					
-				*/
-					
-					
-				} 
-				else //meaning this could be twitter, friendfeed or facebook status
+				}//endif
+				else //this is most probably an tumblr, instagram, foursquare or a facebook app so expect images as app icons map icons etc...
 				{
-					NSLog(@"type is status");
+					//TODO: right now if the message is empty, it's empty, but it could be improved try to get the name if msg is empty and if name empty, get caption etc. 
 					
-					NSString *_actor_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
-					NSString *_message = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
-					NSString *_post_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"post_id"]];
-					NSString *_from = [NSString stringWithFormat:@"%@",[[userArray objectAtIndex:j] objectForKey:@"name"]];
-					NSString *_type;
-					NSString *_src;
-					NSString *_img_url;
+					NSString *_temp = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"src"]];
+					
+					NSString *filePath = [_temp stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+					//get the second url now:
+					NSString *regexString   = @"src=(.+)";
+					//also you can use look behind assertation.
+					//(?<=url=).+
+					//NSString *_src   = [filePath stringByMatching:regexString capture:1L];
+					//NSLog(@"regexString is ----> %@", _src);
+					//NSLog(@"count one %@", [streamArray objectAtIndex:i] );
+					
+					_image_url = [NSString stringWithFormat:@"%@", [filePath stringByMatching:regexString capture:1L]];
+					_message =   [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
+					_type = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
 					
 					
-					
-					_type = [NSString stringWithFormat:@"status"];
-					_src = [NSString stringWithFormat:@""];
-					
-					
-				}
-
-
-			
-				NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-									  _actor_id, @"actor_id", 
-									  _categoryValue, @"categoryValue", 
-									  _from, @"from",
-									  _message, @"message",
-									  _type, @"type",
-									  _post_id, @"post_id",
-									  _src, @"src",
-									  nil];
-
+				}//endelse
 				
-				[myArray addObject:dict];
-				
-				break;
+	
 			}
-		}
+		
+		}//endif
+		else //attachment count == 1, this one could be facebook status, grab the profile images here but use the background images instead for displaying.
+		{
+			
+			_message = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
+			_image_url = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&", [[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
+			_type = [NSString stringWithFormat:@"status"];
+		}//endelse
 		
 		
+		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+							  _from, @"from",
+							  _categoryValue, @"categoryValue", 
+							  _actor_id, @"actor_id", 
+							  _image_url, @"image_url",
+							  _message, @"message",
+							  _post_id, @"post_id",
+							  _type, @"type",
+							  nil];
 		
-	}
+	//	NSLog(@"dictionary is %@", dict);
+		
+		[myArray addObject:dict];
+	}//endfor
 	
 	
 	
@@ -221,7 +253,7 @@
 	}
 	 */
 	
-	NSLog(@"myArray: %@", myArray);
+	//NSLog(@"myArray: %@", myArray);
 	
 	[tempArr autorelease];
     
@@ -249,6 +281,16 @@
 	ASIHTTPRequest *req;
 	[networkQueue go];
 	
+		
+	
+	
+	if(_plistArray == nil) //check if the plist is empty 
+	{ 
+		_plistArray = [[NSMutableArray alloc] initWithCapacity:1]; //if it's empty, alloc/init
+		
+	}
+	
+	
 	
 	
 	for (NSInteger i = 0; i < [myArray count]; i++)
@@ -257,27 +299,124 @@
 		//TODO: need to convert this so, it brings back the urls for the larger images.
 		//might need to use the REST API for this!
 		
-		NSLog(@"type should be %@", [[myArray objectAtIndex:i] objectForKey:@"type"] );
-		NSLog(@"src should be %@", [[myArray objectAtIndex:i] objectForKey:@"src"] );
+		//NSLog(@"type should be %@", [[myArray objectAtIndex:i] objectForKey:@"type"] );
+		//NSLog(@"src should be %@", [[myArray objectAtIndex:i] objectForKey:@"src"] );
 		
-		NSString *url_string = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&", [[myArray objectAtIndex:i] objectForKey:@"actor_id"] ];
+		
+		//NSString *url_string = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&", [[myArray objectAtIndex:i] objectForKey:@"actor_id"] ];
 
-
+		if([[[myArray objectAtIndex:i] objectForKey:@"type"] isEqual:@"status"])
+		{
+			//don't request to load any image here
+			
+			NSLog(@"this should be status");
+			NSInteger rand_ind = arc4random() % [_backgrounds count];
+			
 	
-		NSLog(@"url_string %@", url_string);
+			
+			NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[_backgrounds objectAtIndex:rand_ind]  ofType:@"png"]];
+			
+	
+			[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%i.png",i]] atomically:YES];
+			
+			NSString *tempFileName = [NSString stringWithFormat:@"%i.png",i];
+			
+			[_backgrounds removeObjectAtIndex:rand_ind];
+			
+			if([_backgrounds count] < 1) [self setTheBackgroundArray];
+			
+			
+			
+			if(![[[myArray objectAtIndex:i]  objectForKey:@"categoryValue"] isEqual:@"0"]) 
+			{
+				NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+									  [[myArray objectAtIndex:i]  objectForKey:@"from"], @"from",
+									  [[myArray objectAtIndex:i]  objectForKey:@"categoryValue"], @"categoryValue", 
+									  tempFileName, @"filename",
+									  //[[myArray objectAtIndex:i]  objectForKey:@"image_url"], @"image_url",
+									  [[myArray objectAtIndex:i]  objectForKey:@"message"], @"message",
+									  [[myArray objectAtIndex:i]  objectForKey:@"post_id"], @"post_id",
+									  [[myArray objectAtIndex:i]  objectForKey:@"type"], @"type",
+									  nil];
+				
+				//adding to the plistArray here.
+				[_plistArray insertObject:dict atIndex:0];
+				NSLog(@"dict %@", dict);	
+			}
+			
+			
+			
+			
+			
+		}
+		else if([[[myArray objectAtIndex:i] objectForKey:@"type"] isEqual:@"video"])	
+		{
+			//don't request to load any image here
+			NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"video"  ofType:@"png"]];
+			
+			
+			[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%i.png",i]] atomically:YES];
+			NSString *tempFileName = [NSString stringWithFormat:@"%i.png",i];
+
+			
+			if(![[[myArray objectAtIndex:i]  objectForKey:@"categoryValue"] isEqual:@"0"]) 
+			{
+				NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+										[[myArray objectAtIndex:i]  objectForKey:@"from"], @"from",
+										[[myArray objectAtIndex:i]  objectForKey:@"categoryValue"], @"categoryValue", 
+										tempFileName, @"filename", 
+										//[[myArray objectAtIndex:i]  objectForKey:@"image_url"], @"image_url",
+										[[myArray objectAtIndex:i]  objectForKey:@"message"], @"message",
+										[[myArray objectAtIndex:i]  objectForKey:@"post_id"], @"post_id",
+										[[myArray objectAtIndex:i]  objectForKey:@"type"], @"type",
+									   nil];
+				
+				//adding to the plistArray here.
+				[_plistArray insertObject:dict atIndex:0];
+				NSLog(@"dict %@", dict);	
+			}
 		
-		req = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:url_string]] autorelease];
-		[req setUserInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-						  [NSNumber numberWithInt:i], @"ImageNumber", 
-						 // [[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"], @"tempArr",
-						 // [[tempArr objectAtIndex:1] objectForKey:@"fql_result_set"], @"names",
-							myArray, @"myArray",
-						  nil]]; 
-		[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%i.png",i]]];
-		[networkQueue addOperation:req];
+		}
+		else 
+		{
+			//load the images.
+			req = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:[[myArray objectAtIndex:i] objectForKey:@"image_url"]]] autorelease];
+			[req setUserInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+							  [NSNumber numberWithInt:i], @"ImageNumber", 
+							  // [[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"], @"tempArr",
+							  // [[tempArr objectAtIndex:1] objectForKey:@"fql_result_set"], @"names",
+							  myArray, @"myArray",
+							  nil]]; 
+			[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%i.png",i]]];
+			[networkQueue addOperation:req];
+			
+		}
+	
+		
+		
 
 	}    
 }
+
+- (void)setTheBackgroundArray
+{
+	_backgrounds = [[NSMutableArray alloc] initWithCapacity:1];
+	NSString *b0 = [NSString stringWithFormat:@"concrete"];
+	NSString *b1 = [NSString stringWithFormat:@"leather"];
+	//	NSString *b2 = [NSString stringWithFormat:@"play"];
+	NSString *b3 = [NSString stringWithFormat:@"rust"];
+	//NSString *b4 = [NSString stringWithFormat:@"video"];
+	NSString *b5 = [NSString stringWithFormat:@"wood"];
+	
+	[_backgrounds addObject:b0];
+	[_backgrounds addObject:b1];
+	//	[_backgrounds addObject:b2];
+	[_backgrounds addObject:b3];
+	//	[_backgrounds addObject:b4];
+	[_backgrounds addObject:b5];
+	
+}
+
 
 
 - (void)request:(FBRequest*)request didFailWithError:(NSError*)error {
@@ -296,7 +435,6 @@
 	UIImage *img = [UIImage imageWithContentsOfFile:[request downloadDestinationPath]];
 	if (img) 
 	{
-		
 		int imageNo =  [[[request userInfo] objectForKey:@"ImageNumber"] intValue]; 
 		
 		//NSLog(@"request %@", [request userInfo] );
