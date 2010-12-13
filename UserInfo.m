@@ -115,6 +115,7 @@
 	friendIDs = [friendIDs stringByAppendingFormat:@"SELECT target_id FROM connection WHERE source_id=%@) AND is_hidden = 0 LIMIT 80", _uid];
 	
 	NSString* namesAndPics = [NSString stringWithFormat:@"SELECT name, uid FROM user WHERE uid IN (SELECT actor_id FROM #friendIDs) "];
+	
 	NSString* queries = [NSString stringWithFormat:@"{\"friendIDs\":\"%@\",\"namesAndPics\":\"%@\"}", friendIDs, namesAndPics];
 	
 	 

@@ -72,9 +72,6 @@
 		F0F00BE01215D57100DB0EF9 /* UIImage+Tint.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F00BDE1215D57100DB0EF9 /* UIImage+Tint.m */; };
 		F0F00C75121AE12900DB0EF9 /* original.png in Resources */ = {isa = PBXBuildFile; fileRef = F0F00C74121AE12900DB0EF9 /* original.png */; };
 		F0F00CC6121AEB9900DB0EF9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0F00CC5121AEB9900DB0EF9 /* QuartzCore.framework */; };
-		F0FAC3AD11FE1A7900073EE1 /* FbGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FAC39A11FE1A7900073EE1 /* FbGraph.m */; };
-		F0FAC3AE11FE1A7900073EE1 /* FbGraphFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FAC39C11FE1A7900073EE1 /* FbGraphFile.m */; };
-		F0FAC3AF11FE1A7900073EE1 /* FbGraphResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FAC39E11FE1A7900073EE1 /* FbGraphResponse.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -186,12 +183,6 @@
 		F0F00BDE1215D57100DB0EF9 /* UIImage+Tint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Tint.m"; sourceTree = "<group>"; };
 		F0F00C74121AE12900DB0EF9 /* original.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = original.png; sourceTree = "<group>"; };
 		F0F00CC5121AEB9900DB0EF9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		F0FAC39911FE1A7900073EE1 /* FbGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FbGraph.h; sourceTree = "<group>"; };
-		F0FAC39A11FE1A7900073EE1 /* FbGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FbGraph.m; sourceTree = "<group>"; };
-		F0FAC39B11FE1A7900073EE1 /* FbGraphFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FbGraphFile.h; sourceTree = "<group>"; };
-		F0FAC39C11FE1A7900073EE1 /* FbGraphFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FbGraphFile.m; sourceTree = "<group>"; };
-		F0FAC39D11FE1A7900073EE1 /* FbGraphResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FbGraphResponse.h; sourceTree = "<group>"; };
-		F0FAC39E11FE1A7900073EE1 /* FbGraphResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FbGraphResponse.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -279,7 +270,6 @@
 				F06114561251294C008C7D07 /* RegexKitLite.h */,
 				F06114571251294C008C7D07 /* RegexKitLite.m */,
 				F06A1CD21200AE3B001E46AE /* todo.txt */,
-				F0FAC39811FE1A7900073EE1 /* FbGraphAPI */,
 				32CA4F630368D1EE00C91783 /* TreeMap_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
@@ -409,19 +399,6 @@
 			name = Categories;
 			sourceTree = "<group>";
 		};
-		F0FAC39811FE1A7900073EE1 /* FbGraphAPI */ = {
-			isa = PBXGroup;
-			children = (
-				F0FAC39911FE1A7900073EE1 /* FbGraph.h */,
-				F0FAC39A11FE1A7900073EE1 /* FbGraph.m */,
-				F0FAC39B11FE1A7900073EE1 /* FbGraphFile.h */,
-				F0FAC39C11FE1A7900073EE1 /* FbGraphFile.m */,
-				F0FAC39D11FE1A7900073EE1 /* FbGraphResponse.h */,
-				F0FAC39E11FE1A7900073EE1 /* FbGraphResponse.m */,
-			);
-			path = FbGraphAPI;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -508,9 +485,6 @@
 				F033EA4E118A24C30020F23D /* TreeMapViewController.m in Sources */,
 				F033EA6C118A25DF0020F23D /* TreemapView.m in Sources */,
 				F033EA6D118A25DF0020F23D /* TreemapViewCell.m in Sources */,
-				F0FAC3AD11FE1A7900073EE1 /* FbGraph.m in Sources */,
-				F0FAC3AE11FE1A7900073EE1 /* FbGraphFile.m in Sources */,
-				F0FAC3AF11FE1A7900073EE1 /* FbGraphResponse.m in Sources */,
 				F0F00BDF1215D57100DB0EF9 /* UIImage+ProportionalFill.m in Sources */,
 				F0F00BE01215D57100DB0EF9 /* UIImage+Tint.m in Sources */,
 				F06114581251294C008C7D07 /* RegexKitLite.m in Sources */,

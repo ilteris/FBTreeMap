@@ -10,7 +10,7 @@
 #import "NSMutableArray_Shuffling.h"
 #import "ASIHTTPRequest.h"
 #import "ASINetworkQueue.h"
-#import "FbGraph.h"
+
 #import "RegexKitLite.h"
 
 
@@ -34,7 +34,7 @@
 - (void)request:(FBRequest*)request didLoad:(id)result{
 	
    // NSMutableArray *fruits = [[[NSMutableArray alloc] init] autorelease];
-//	NSLog(@"result %@", result);
+	NSLog(@"result %@", result);
 	NSMutableArray *tempArr = [result mutableCopy];
 	
 	
@@ -47,6 +47,9 @@
 	NSMutableArray *myArray = [[NSMutableArray alloc] initWithCapacity:1];
 	//NSLog(@"streamArray %@", streamArray);
 	//NSLog(@"userArray %@", userArray);
+	
+	NSLog(@"streamArray count is %i", [streamArray count]);
+	NSLog(@"userArray count is %i", [userArray count]);
 	
 	
 	
@@ -61,7 +64,7 @@
 		NSString *_post_id;
 		NSString *_type;
 		
-		
+				
 		//traverse the user array and match the actor_id ----> uid, then break the for loop;
 		for (NSInteger j=0; j < [userArray count]; j++)
 		{
@@ -295,19 +298,17 @@
 	
 	for (NSInteger i = 0; i < [myArray count]; i++)
 	{
-		//preparing images for ASIHTTPRequest
-		//TODO: need to convert this so, it brings back the urls for the larger images.
-		//might need to use the REST API for this!
-		
 		//NSLog(@"type should be %@", [[myArray objectAtIndex:i] objectForKey:@"type"] );
 		//NSLog(@"src should be %@", [[myArray objectAtIndex:i] objectForKey:@"src"] );
-		
+
+			
 		
 		//NSString *url_string = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&", [[myArray objectAtIndex:i] objectForKey:@"actor_id"] ];
 
+		//don't request to load any image here because we are using background images locally.
 		if([[[myArray objectAtIndex:i] objectForKey:@"type"] isEqual:@"status"])
 		{
-			//don't request to load any image here
+
 			
 			NSLog(@"this should be status");
 			NSInteger rand_ind = arc4random() % [_backgrounds count];
@@ -341,7 +342,7 @@
 				
 				//adding to the plistArray here.
 				[_plistArray insertObject:dict atIndex:0];
-				NSLog(@"dict %@", dict);	
+			//	NSLog(@"dict %@", dict);	
 			}
 			
 			
@@ -373,7 +374,7 @@
 				
 				//adding to the plistArray here.
 				[_plistArray insertObject:dict atIndex:0];
-				NSLog(@"dict %@", dict);	
+			//	NSLog(@"dict %@", dict);	
 			}
 		
 		}

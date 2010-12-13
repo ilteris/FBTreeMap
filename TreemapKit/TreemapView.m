@@ -136,6 +136,7 @@
 	NSMutableArray *nodes = [NSMutableArray arrayWithCapacity:values.count];
 	for (int i = 0; i < values.count; i++) {
 		NSNumber *value = [values objectAtIndex:i];
+		NSLog(@"nodes value is %@", value);
 		NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:2];
 		[dic setValue:[NSNumber numberWithInt:i] forKey:@"index"];
 		[dic setValue:value forKey:@"value"];

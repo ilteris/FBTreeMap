@@ -1,5 +1,5 @@
 #import "TreeMapViewController.h"
-#import "FbGraphFile.h"
+
 #import "SBJSON.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIImage+ProportionalFill.h"
@@ -22,12 +22,12 @@
    
 @synthesize fruits;
 @synthesize cells;
-@synthesize destinationPaths;
+
 @synthesize treeMapView;
 
 @synthesize plistArray;
 //fcebook
-@synthesize fbGraph;
+
 @synthesize feedPostId;
 @synthesize myWebView;
 @synthesize jsonArray;
@@ -126,7 +126,7 @@
 	//trying to get the paths of the filenames and like counts here.
 	
 	self.fruits = [[NSMutableArray alloc] initWithCapacity:1];
-	self.destinationPaths = [NSMutableArray arrayWithCapacity:1];
+
 	//NSLog(@"array %@", array);
 	//NSLog(@"fruits %@", fruits);
 	
@@ -142,34 +142,52 @@
 	
 	
 	//these values go to the treemapview in order to be used for calculating the sizes of the cells
-	NSMutableArray *values = [NSMutableArray arrayWithCapacity:1];
+	NSMutableArray *valuesArray = [NSMutableArray arrayWithCapacity:1];
 	
 	NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
 	
 	
 	for (NSDictionary *dic in fruits) 
 	{
-		// NSLog(@"fruit: %@", [dic objectForKey:@"likes"]);
-		//passing the file names from the plist here. hmmmm.
-		
-		//@"comments.count"
-		
-		
-		// [self.destinationPaths addObject:[dic objectForKey:@"destinationPath"]];
+
 		if(![[dic objectForKey:@"categoryValue"] isEqual:@"0"]) 
 		{
-			NSLog(@"dic is %@", dic);
-			[values addObject:[dic objectForKey:@"categoryValue"]];
+		//	NSLog(@"dic is %@", dic);
+			NSNumber *value = [dic objectForKey:@"categoryValue"];
+			[valuesArray addObject:value];
 		}
 		
+		
+		
+	}
+	NSLog(@"values %@", valuesArray);
+	
+	
+
+	//little hack to bump up the value of the largest item. this gives us a larger cell.
+	//this still needs to be improved. -what happens when there's two equal values? need to solve that.
+	//TODO: also need to check relative values betweeen the first value-second value (relative value)
+	int highestNumber	= 0;
+	int numberIndex		= 0;
+	for (NSNumber *theNumber in valuesArray)
+	{
+		if ([theNumber intValue] > highestNumber) {
+			highestNumber = [theNumber intValue];
+			
+			numberIndex = [valuesArray indexOfObject:theNumber];
+		}
 	}
 	
-	NSLog(@"values %@", values);
+	//NSLog(@"Highest number: %i at index: %i", highestNumber, numberIndex);
+	NSInteger tempValue = [[valuesArray objectAtIndex:numberIndex] intValue];
+	tempValue = round(tempValue*2);
+	NSNumber *_inStr = [NSNumber numberWithInt:tempValue];
 	
-	
-	return values;
+	[valuesArray replaceObjectAtIndex:numberIndex withObject:_inStr];
+	return valuesArray;
 }
-
+ 
+ 
 
 //this gets called @creation for each of the cell. 
 - (TreemapViewCell *)treemapView:(TreemapView *)treemapView cellForIndex:(NSInteger)index forRect:(CGRect)rect 
@@ -193,10 +211,6 @@
 	NSString *documentsDirectory = [paths objectAtIndex: 0];
 	//match the indexes through the cellForIndex/fruits objectAtIndex.
 	NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"filename"]];
-	
-
-	
-	
 	UIImage *img = [UIImage imageWithContentsOfFile:fn];
 	
 	if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"video"])
@@ -205,11 +219,7 @@
 		cell.imageViewA.image = img;
 		cell.playBtn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
 		cell.playBtn.frame = CGRectMake(0, 0, 56.0, 55.0);
-		NSLog(@"playbtn is %@", NSStringFromCGRect(cell.playBtn.bounds));
-		NSLog(@"imageViewA is %@", NSStringFromCGRect(cell.imageViewA.bounds));
 		cell.playBtn.frame = CGRectMake((cell.imageViewA.bounds.size.width-cell.playBtn.bounds.size.width)/2, (cell.imageViewA.bounds.size.height-cell.playBtn.bounds.size.height)/2, cell.playBtn.frame.size.width, cell.playBtn.frame.size.height);
-		NSLog(@"playbtn is %@", NSStringFromCGRect(cell.playBtn.bounds));
-
 		UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"play" ofType:@"png"]];
 		[cell.playBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
 		[tImage release];
@@ -225,16 +235,6 @@
 
 	}
 	   
-	
-
-	   
-	//check the type of the post and pass an image accordingly.
-	
-	//cell.downloadDestinationPath = fn;
-	
-	
-	NSLog(@"tXtext %@", tText);
-	NSLog(@"[[fruits objectAtIndex:index] objectForKey:from %@", [[fruits objectAtIndex:index] objectForKey:@"from"]);
 	cell.countLabel.text = tText;
 	cell.titleLabel.text = [[[fruits objectAtIndex:index] objectForKey:@"from"] uppercaseString];
 	
