@@ -39,7 +39,8 @@
 	
 	
 	NSArray *streamArray = [NSArray  arrayWithArray:[[result objectAtIndex:0] objectForKey:@"fql_result_set"]];//stream json object
-	NSArray *userArray = [NSArray	arrayWithArray:[[result objectAtIndex:1] objectForKey:@"fql_result_set"]];//name/uids json object
+	NSArray *userArray = [NSArray	arrayWithArray:[[result objectAtIndex:2] objectForKey:@"fql_result_set"]];//name/uids json object
+	NSArray *pageArray = [NSArray	arrayWithArray:[[result objectAtIndex:1] objectForKey:@"fql_result_set"]];//page/name/page_id
 	
 	//unfortunately they do have different length since stupidfacebook don't return the same uids twice for the same items in the stream.
 	//so in order to fix that, for every stream item, run through the userArray and match the uid and when there's a match, replace the uid with name.
@@ -50,8 +51,11 @@
 	
 	NSLog(@"streamArray count is %i", [streamArray count]);
 	NSLog(@"userArray count is %i", [userArray count]);
+	NSLog(@"pageArray count is %i", [pageArray count]);
 	
+	[userArray arrayByAddingObjectsFromArray:pageArray];
 	
+	NSLog(@"userArray count is %i", [userArray count]);
 	
 	for (NSInteger i=0; i < [streamArray count]; i++)
 	{
@@ -75,6 +79,11 @@
 				break;
 			}
 		}//endfor
+		
+	
+		
+		
+		
 		
 		//you have figured out the name now. why don't you go ahead and fill other things too, so we have a proper dictionary/arrays.
 		
