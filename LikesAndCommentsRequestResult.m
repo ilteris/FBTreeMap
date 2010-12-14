@@ -55,7 +55,29 @@
 	
 	[userArray arrayByAddingObjectsFromArray:pageArray];
 	
-	NSLog(@"userArray count is %i", [userArray count]);
+	NSLog(@"pageArray is %@", pageArray);
+	
+	NSMutableArray *userAndPageArray = [[NSMutableArray alloc] initWithCapacity:1];
+	for(NSInteger k=0; k < [userArray count]; k++)
+	{
+		[userAndPageArray addObject:[userArray objectAtIndex:k]];
+	}
+	
+	//NSLog(@"userAndPageArray is %@", userAndPageArray);
+	NSLog(@"userAndPageArray count is %i", [userAndPageArray count]);
+
+	
+	for(NSInteger k=0; k < [pageArray count]; k++)
+	{	
+		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+							  [[pageArray objectAtIndex:k] objectForKey:@"page_id"], @"uid",
+							  [[pageArray objectAtIndex:k] objectForKey:@"name"], @"name",
+							  nil];
+		[userAndPageArray addObject:dict];
+	}
+	
+	//NSLog(@"userAndPageArray is %@", userAndPageArray);
+	NSLog(@"userAndPageArray count is %i", [userAndPageArray count]);
 	
 	for (NSInteger i=0; i < [streamArray count]; i++)
 	{
@@ -68,23 +90,18 @@
 		NSString *_post_id;
 		NSString *_type;
 		
-				
+		
 		//traverse the user array and match the actor_id ----> uid, then break the for loop;
-		for (NSInteger j=0; j < [userArray count]; j++)
+		for (NSInteger j=0; j < [userAndPageArray count]; j++)
 		{
-			if([[[streamArray objectAtIndex:i] objectForKey:@"actor_id"] isEqual:[[userArray objectAtIndex:j] objectForKey:@"uid"]])	
+			if([[[streamArray objectAtIndex:i] objectForKey:@"actor_id"] isEqual:[[userAndPageArray objectAtIndex:j] objectForKey:@"uid"]])	
 			{ //this gets only called when the actor_id == uid
-				_from = [NSString stringWithFormat:@"%@",[[userArray objectAtIndex:j] objectForKey:@"name"]];
+				_from = [NSString stringWithFormat:@"%@",[[userAndPageArray objectAtIndex:j] objectForKey:@"name"]];
 				
 				break;
 			}
 		}//endfor
-		
-	
-		
-		
-		
-		
+				
 		//you have figured out the name now. why don't you go ahead and fill other things too, so we have a proper dictionary/arrays.
 		
 		//first _categoryValue -->count of current displayMode(likes/comments)
@@ -96,9 +113,6 @@
 		{
 			_categoryValue = [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"count"]];
 		}//endelse
-
-		
-
 
 		//NSString *_post_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"post_id"]];
 		//NSString *_from = [NSString stringWithFormat:@"%@",[[userArray objectAtIndex:j] objectForKey:@"name"]];
