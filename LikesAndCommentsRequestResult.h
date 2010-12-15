@@ -20,7 +20,7 @@
 	NSMutableArray *_plistArray;
 	NSMutableArray *_backgrounds;
 
-	ASINetworkQueue *networkQueue;
+	ASINetworkQueue *_networkQueue;
 	id<LikesAndCommentsRequestDelegate> _likesAndCommentsRequestDelegate;
 }
 

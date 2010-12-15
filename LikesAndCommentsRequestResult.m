@@ -295,21 +295,21 @@
 	//@@@@@@@ 2- setup the queue.
 
 	
-	if (!networkQueue) {
-		networkQueue = [[ASINetworkQueue alloc] init];	
+	if (!_networkQueue) {
+		_networkQueue = [[ASINetworkQueue alloc] init];	
 	}
 	
 	//failed = NO;
-	[networkQueue reset];
+	[_networkQueue reset];
 	//[networkQueue setDownloadProgressDelegate:progressIndicator];
-	[networkQueue setRequestDidFinishSelector:@selector(imageFetchComplete:)];
-	[networkQueue setRequestDidFailSelector:@selector(imageFetchFailed:)];
-	[networkQueue setQueueDidFinishSelector:@selector(queueComplete:)]; 
+	[_networkQueue setRequestDidFinishSelector:@selector(imageFetchComplete:)];
+	[_networkQueue setRequestDidFailSelector:@selector(imageFetchFailed:)];
+	[_networkQueue setQueueDidFinishSelector:@selector(queueComplete:)]; 
 	//[networkQueue setShowAccurateProgress:[accurateProgress isOn]];
-	[networkQueue setDelegate:self];
+	[_networkQueue setDelegate:self];
 	
 	
-	[networkQueue go];
+	[_networkQueue go];
 	
 	
 	
@@ -429,7 +429,7 @@
 							  [myArray objectAtIndex:i], @"item",
 							  nil]]; 
 			[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%i.png",i]]];
-			[networkQueue addOperation:req];
+			[_networkQueue addOperation:req];
 		}//endelse
 	}//endfor
 	
