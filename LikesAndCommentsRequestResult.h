@@ -26,7 +26,8 @@
 
 - (id) initializeWithDelegate:(id <LikesAndCommentsRequestDelegate>)delegate;
 - (void)setTheBackgroundArray;
-							  
+- (NSMutableArray*) spliceArray:(NSMutableArray*)myArray;
+- (void) downloadImagesForItems:(NSMutableArray*)myArray;
 
 @end
 

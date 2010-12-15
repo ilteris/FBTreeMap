@@ -172,27 +172,27 @@
 	int highestSecondNumber				= 0;
 	int highestNumberIndex				= 0;
 	int highestSecondNumberIndex		= 0;
-	BOOL duplicateWinner = NO;
 	for (NSNumber *theNumber in valuesArray)
 	{
-		if ([theNumber intValue] > highestNumber) {
+		if ([theNumber intValue] >= highestNumber) {
 			highestSecondNumberIndex = highestNumberIndex;
 			highestSecondNumber = highestNumber;
 			highestNumber = [theNumber intValue];
 			highestNumberIndex = [valuesArray indexOfObject:theNumber];
 		}
+		else if([theNumber intValue] > highestSecondNumber)
+		{
+			highestSecondNumber = [theNumber intValue];
+			highestSecondNumberIndex = [valuesArray indexOfObject:theNumber];
+		}
 	}
 	
-	for (NSNumber *theNumber in valuesArray)
-	{
-		if ( highestNumber == [theNumber intValue]) duplicateWinner = YES;
-			
-	}
+		
 	
 	
 	NSLog(@"Highest number: %i at index: %i", highestNumber, highestNumberIndex);
 	NSLog(@"Highest number: %i at index: %i", highestSecondNumber, highestSecondNumberIndex);
-	if(!duplicateWinner) //if there's no duplicate winners then leave as it is. 
+	if((highestNumber/highestSecondNumber) < 2 || highestNumber==highestSecondNumber) //if there's no duplicate winners AND difference between first two highest number is 1/2 then multiply.
 	{
 		
 		NSInteger tempValue = [[valuesArray objectAtIndex:highestNumberIndex] intValue];
@@ -203,8 +203,7 @@
 		
 		NSLog(@"tempValue is %i", tempValue);
 	}
-		
-	
+
 	return valuesArray;
 
 }

@@ -34,8 +34,8 @@
 - (void)request:(FBRequest*)request didLoad:(id)result{
 	
    // NSMutableArray *fruits = [[[NSMutableArray alloc] init] autorelease];
-	NSLog(@"result %@", result);
-	NSMutableArray *tempArr = [result mutableCopy];
+//	NSLog(@"result %@", result);
+
 	
 	
 	NSArray *streamArray = [NSArray  arrayWithArray:[[result objectAtIndex:0] objectForKey:@"fql_result_set"]];//stream json object
@@ -45,39 +45,45 @@
 	//unfortunately they do have different length since stupidfacebook don't return the same uids twice for the same items in the stream.
 	//so in order to fix that, for every stream item, run through the userArray and match the uid and when there's a match, replace the uid with name.
 	
-	NSMutableArray *myArray = [[NSMutableArray alloc] initWithCapacity:1];
-	//NSLog(@"streamArray %@", streamArray);
-	//NSLog(@"userArray %@", userArray);
-	
-	NSLog(@"streamArray count is %i", [streamArray count]);
-	NSLog(@"userArray count is %i", [userArray count]);
-	NSLog(@"pageArray count is %i", [pageArray count]);
-	
 	[userArray arrayByAddingObjectsFromArray:pageArray];
 	
-	NSLog(@"pageArray is %@", pageArray);
+
 	
 	NSMutableArray *userAndPageArray = [[NSMutableArray alloc] initWithCapacity:1];
+
 	for(NSInteger k=0; k < [userArray count]; k++)
-	{
-		[userAndPageArray addObject:[userArray objectAtIndex:k]];
+	{	
+		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+							  [[userArray objectAtIndex:k] objectForKey:@"uid"], @"uid",
+							  [[userArray objectAtIndex:k] objectForKey:@"name"], @"name",
+							  @"user", @"fromType",
+							  nil];
+		[userAndPageArray addObject:dict];
 	}
 	
-	//NSLog(@"userAndPageArray is %@", userAndPageArray);
-	NSLog(@"userAndPageArray count is %i", [userAndPageArray count]);
-
 	
 	for(NSInteger k=0; k < [pageArray count]; k++)
 	{	
 		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
 							  [[pageArray objectAtIndex:k] objectForKey:@"page_id"], @"uid",
 							  [[pageArray objectAtIndex:k] objectForKey:@"name"], @"name",
+							  @"page", @"fromType",
 							  nil];
 		[userAndPageArray addObject:dict];
 	}
 	
 	//NSLog(@"userAndPageArray is %@", userAndPageArray);
-	NSLog(@"userAndPageArray count is %i", [userAndPageArray count]);
+
+	
+	
+	//let's init the arrays to be used for temporary plist holders
+	NSMutableArray *userPlistArray = [[NSMutableArray alloc] initWithCapacity:1];
+	NSMutableArray *pagePlistArray = [[NSMutableArray alloc] initWithCapacity:1];
+	
+	
+	
+
+	
 	
 	for (NSInteger i=0; i < [streamArray count]; i++)
 	{
@@ -89,18 +95,25 @@
 		NSString *_message;
 		NSString *_post_id;
 		NSString *_type;
+		NSString *_fromType;
+
+		
 		
 		
 		//traverse the user array and match the actor_id ----> uid, then break the for loop;
 		for (NSInteger j=0; j < [userAndPageArray count]; j++)
 		{
+
 			if([[[streamArray objectAtIndex:i] objectForKey:@"actor_id"] isEqual:[[userAndPageArray objectAtIndex:j] objectForKey:@"uid"]])	
 			{ //this gets only called when the actor_id == uid
 				_from = [NSString stringWithFormat:@"%@",[[userAndPageArray objectAtIndex:j] objectForKey:@"name"]];
-				
+				_fromType = [NSString stringWithFormat:@"%@", [[userAndPageArray objectAtIndex:j] objectForKey:@"fromType"]];
+
 				break;
 			}
 		}//endfor
+		
+		
 				
 		//you have figured out the name now. why don't you go ahead and fill other things too, so we have a proper dictionary/arrays.
 		
@@ -245,51 +258,42 @@
 							  _message, @"message",
 							  _post_id, @"post_id",
 							  _type, @"type",
+							  _fromType, @"fromType",
 							  nil];
 		
 	//	NSLog(@"dictionary is %@", dict);
 		
-		[myArray addObject:dict];
+		
+		//@@@@@@@ 0- split them pages and users separately, why? because we are going to be writing them separately to the filesystem.
+		if([_fromType isEqual:@"user"])
+		{
+			[userPlistArray addObject:dict];
+		}
+		else 
+		{
+			[pagePlistArray addObject:dict];
+		}
+   
+		
+
 	}//endfor
 	
 	
+	NSLog(@"pagePlistArray is %@", pagePlistArray);
+	NSLog(@"userPlistArray is %@", userPlistArray);
 	
-	//NSLog(@"result %@", result);
-	//@@@@@@@ 1- filter and splice!
+	
+	//@@@@@@@ 1- filter and splice;	
+	NSMutableArray* newUserPlistArray = [[self spliceArray:userPlistArray] retain];
+	NSMutableArray* newPagePlistArray = [[self spliceArray:pagePlistArray] retain];
+	[userPlistArray release];
+	[pagePlistArray release];
+	
+	
+	NSLog(@"newUserPlistArray is %@", newUserPlistArray);
+	NSLog(@"newPagePlistArray is %@", newPagePlistArray);
+	//@@@@@@@ 2- setup the queue.
 
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"categoryValue" ascending: NO];
-	//NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"comments.count" ascending: NO];
-	[myArray sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
-	[sortDescriptor release];
-	
-	//NSLog(@"names %@", [[tempArr objectAtIndex:1] objectForKey:@"fql_result_set"]);
-
-	// here  we are getting rid of the rest of the objects after numberOfObjects
-	//check if the array is larger than numberof Objects
-
-	
-	if ([myArray count] >= numberOfObjects) 
-	{
-		[myArray removeObjectsInRange: NSMakeRange(numberOfObjects,[myArray count]-numberOfObjects)];
-	}
-	/*
-	if ([[[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"] count] >= numberOfObjects) 
-	{
-		[[[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"] removeObjectsInRange: NSMakeRange(numberOfObjects,[[[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"] count]-numberOfObjects)];
-	}
-	 */
-	
-	//NSLog(@"myArray: %@", myArray);
-	
-	[tempArr autorelease];
-    
-	//@@@@@@@ 2- shuffle!
-	//[tempArr shuffle];
-	
-	//@@@@@@@ 3- download the images.
-	//imagesLoaded = NO;
-	
-	//NSLog(@"tempArr %@", tempArr);
 	
 	if (!networkQueue) {
 		networkQueue = [[ASINetworkQueue alloc] init];	
@@ -304,52 +308,69 @@
 	//[networkQueue setShowAccurateProgress:[accurateProgress isOn]];
 	[networkQueue setDelegate:self];
 	
-	ASIHTTPRequest *req;
+	
 	[networkQueue go];
 	
-		
 	
 	
+	//@@@@@@@ 3- setup the arrays that will be written.
+
 	if(_plistArray == nil) //check if the plist is empty 
 	{ 
 		_plistArray = [[NSMutableArray alloc] initWithCapacity:1]; //if it's empty, alloc/init
 		
 	}
 	
+	//@@@@@@@ 3- download the images.
+
+	//[self downloadImagesForItems:newUserPlistArray];
+	//[self downloadImagesForItems:newPagePlistArray];
 	
 	
+	    
+}//endfunction
+
+
+- (NSMutableArray*) spliceArray:(NSMutableArray*)myArray
+{
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"categoryValue" ascending: NO];
+	//NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"comments.count" ascending: NO];
+	[myArray sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
+	[sortDescriptor release];
+	
+	
+	
+	
+	// here  we are getting rid of the rest of the objects after numberOfObjects
+	//check if the array is larger than numberof Objects
+	
+	
+	if ([myArray count] >= numberOfObjects) 
+	{
+		[myArray removeObjectsInRange: NSMakeRange(numberOfObjects,[myArray count]-numberOfObjects)];
+	}
+
+	return myArray;
+}//endfunction
+
+
+
+- (void) downloadImagesForItems:(NSMutableArray*)myArray
+{
+	ASIHTTPRequest *req;
 	
 	for (NSInteger i = 0; i < [myArray count]; i++)
 	{
-		//NSLog(@"type should be %@", [[myArray objectAtIndex:i] objectForKey:@"type"] );
-		//NSLog(@"src should be %@", [[myArray objectAtIndex:i] objectForKey:@"src"] );
-
-			
-		
-		//NSString *url_string = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&", [[myArray objectAtIndex:i] objectForKey:@"actor_id"] ];
-
-		//don't request to load any image here because we are using background images locally.
+		//don't request to download any image because we are using background images locally with STATUS.
 		if([[[myArray objectAtIndex:i] objectForKey:@"type"] isEqual:@"status"])
 		{
-
-			
 			NSLog(@"this should be status");
 			NSInteger rand_ind = arc4random() % [_backgrounds count];
-			
-	
-			
 			NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[_backgrounds objectAtIndex:rand_ind]  ofType:@"png"]];
-			
-	
 			[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%i.png",i]] atomically:YES];
-			
 			NSString *tempFileName = [NSString stringWithFormat:@"%i.png",i];
-			
 			[_backgrounds removeObjectAtIndex:rand_ind];
-			
-			if([_backgrounds count] < 1) [self setTheBackgroundArray];
-			
-			
+			if([_backgrounds count] < 1) [self setTheBackgroundArray]; //if the backgroundarray gets empty, refill it.
 			
 			if(![[[myArray objectAtIndex:i]  objectForKey:@"categoryValue"] isEqual:@"0"]) 
 			{
@@ -361,66 +382,59 @@
 									  [[myArray objectAtIndex:i]  objectForKey:@"message"], @"message",
 									  [[myArray objectAtIndex:i]  objectForKey:@"post_id"], @"post_id",
 									  [[myArray objectAtIndex:i]  objectForKey:@"type"], @"type",
+									  [[myArray objectAtIndex:i]  objectForKey:@"fromType"], @"fromType",
 									  nil];
 				
 				//adding to the plistArray here.
 				[_plistArray insertObject:dict atIndex:0];
-			//	NSLog(@"dict %@", dict);	
+				//	NSLog(@"dict %@", dict);	
 			}
-			
-			
-			
-			
 			
 		}
 		else if([[[myArray objectAtIndex:i] objectForKey:@"type"] isEqual:@"video"])	
 		{
-			//don't request to load any image here
+			//don't request to load any image here, only load VIDEO Background since they are videos.
 			NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"video"  ofType:@"png"]];
-			
-			
 			[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%i.png",i]] atomically:YES];
 			NSString *tempFileName = [NSString stringWithFormat:@"%i.png",i];
-
+			
 			
 			if(![[[myArray objectAtIndex:i]  objectForKey:@"categoryValue"] isEqual:@"0"]) 
 			{
 				NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-										[[myArray objectAtIndex:i]  objectForKey:@"from"], @"from",
-										[[myArray objectAtIndex:i]  objectForKey:@"categoryValue"], @"categoryValue", 
-										tempFileName, @"filename", 
-										//[[myArray objectAtIndex:i]  objectForKey:@"image_url"], @"image_url",
-										[[myArray objectAtIndex:i]  objectForKey:@"message"], @"message",
-										[[myArray objectAtIndex:i]  objectForKey:@"post_id"], @"post_id",
-										[[myArray objectAtIndex:i]  objectForKey:@"type"], @"type",
-									   nil];
+									  [[myArray objectAtIndex:i]  objectForKey:@"from"], @"from",
+									  [[myArray objectAtIndex:i]  objectForKey:@"categoryValue"], @"categoryValue", 
+									  tempFileName, @"filename", 
+									  //[[myArray objectAtIndex:i]  objectForKey:@"image_url"], @"image_url",
+									  [[myArray objectAtIndex:i]  objectForKey:@"message"], @"message",
+									  [[myArray objectAtIndex:i]  objectForKey:@"post_id"], @"post_id",
+									  [[myArray objectAtIndex:i]  objectForKey:@"type"], @"type",
+									  [[myArray objectAtIndex:i]  objectForKey:@"fromType"], @"fromType",
+									  nil];
 				
 				//adding to the plistArray here.
 				[_plistArray insertObject:dict atIndex:0];
-			//	NSLog(@"dict %@", dict);	
+				//	NSLog(@"dict %@", dict);	
 			}
-		
+			
 		}
 		else 
 		{
-			//load the images.
+			//load the images for everything except status and video.
 			req = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:[[myArray objectAtIndex:i] objectForKey:@"image_url"]]] autorelease];
 			[req setUserInfo:[NSDictionary dictionaryWithObjectsAndKeys:
 							  [NSNumber numberWithInt:i], @"ImageNumber", 
 							  // [[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"], @"tempArr",
 							  // [[tempArr objectAtIndex:1] objectForKey:@"fql_result_set"], @"names",
-							  myArray, @"myArray",
+							  [myArray objectAtIndex:i], @"item",
 							  nil]]; 
 			[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%i.png",i]]];
 			[networkQueue addOperation:req];
-			
-		}
+		}//endelse
+	}//endfor
 	
-		
-		
-
-	}    
 }
+
 
 - (void)setTheBackgroundArray
 {
@@ -460,41 +474,27 @@
 	if (img) 
 	{
 		int imageNo =  [[[request userInfo] objectForKey:@"ImageNumber"] intValue]; 
-		
-		//NSLog(@"request %@", [request userInfo] );
-	
-		
+			
 		NSString *tempFileName = [NSString stringWithFormat:@"%i.png",imageNo];
 		NSString *_categoryValue;
 		NSString *_message;
 		NSString *_from;
 		NSString *_type;
 		NSString *_post_id;
+		NSString *_fromType;
 		
 		if(_plistArray == nil) //check if the plist is empty 
 		{ 
 			_plistArray = [[NSMutableArray alloc] initWithCapacity:1]; //if it's empty, alloc/init
 			
 		}
-		
-		
-		//below we should get the type of the posts and then push background or something as the image.
-		
-		
-		
-		_categoryValue = [NSString stringWithFormat:@"%@",[[[[request userInfo] objectForKey:@"myArray"] objectAtIndex:imageNo] objectForKey:@"categoryValue"]];
-		//likeKey = [NSString stringWithFormat:@"likes"];
-		
-		//NSLog(@" _message is %@", [[[[request userInfo] objectForKey:@"myArray"] objectAtIndex:imageNo] objectForKey:@"message"] );			
-		_from = [NSString stringWithFormat:@"%@", [[[[request userInfo] objectForKey:@"myArray"] objectAtIndex:imageNo] objectForKey:@"from"]];
+		_categoryValue =	[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"] objectForKey:@"categoryValue"]];
+		_from =				[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"]  objectForKey:@"from"]];
+		_message =			[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"]  objectForKey:@"message"]];
+		_type =				[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"]  objectForKey:@"type"]];
+		_post_id =			[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"]  objectForKey:@"post_id"]];
+		_fromType =			[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"] objectForKey:@"fromType"]];
 
-		_message = [NSString stringWithFormat:@"%@", [[[[request userInfo] objectForKey:@"myArray"] objectAtIndex:imageNo] objectForKey:@"message"]];
-		_type = [NSString stringWithFormat:@"%@", [[[[request userInfo] objectForKey:@"myArray"] objectAtIndex:imageNo] objectForKey:@"type"]];
-		_post_id = [NSString stringWithFormat:@"%@", [[[[request userInfo] objectForKey:@"myArray"] objectAtIndex:imageNo] objectForKey:@"post_id"]];
-
-	
-		//NSLog(@" _message is %@", _message);
-		
 		//if the results are 0 then don't put those in the plist file.
 		//NSLog(@"names is %@", [[request userInfo] objectForKey:@"names"]);
 		if(![_categoryValue isEqual:@"0"]) 
@@ -506,15 +506,15 @@
 								  _message, @"message",
 								  _type, @"type",
 								  _post_id, @"post_id",
+								  _fromType, @"fromType",
 								  nil];
 			
 			//adding to the plistArray here.
 			[_plistArray insertObject:dict atIndex:0];
 			NSLog(@"dict %@", dict);	
-		}
-	}
-	
-}
+		}//endif
+	}//endif
+}//endfunction
 
 
 
