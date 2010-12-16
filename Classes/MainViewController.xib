@@ -175,6 +175,17 @@
 							<string key="NSResourceName">1_heart_btn.png</string>
 						</object>
 					</object>
+					<object class="IBUISwitch" id="940386297">
+						<reference key="NSNextResponder" ref="766721923"/>
+						<int key="NSvFlags">289</int>
+						<string key="NSFrame">{{600, 1}, {94, 27}}</string>
+						<reference key="NSSuperview" ref="766721923"/>
+						<bool key="IBUIOpaque">NO</bool>
+						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+						<int key="IBUIContentHorizontalAlignment">0</int>
+						<int key="IBUIContentVerticalAlignment">0</int>
+						<bool key="IBUIOn">YES</bool>
+					</object>
 				</object>
 				<string key="NSFrameSize">{768, 1004}</string>
 				<reference key="NSSuperview"/>
@@ -285,6 +296,23 @@
 					</object>
 					<int key="connectionID">20</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">mySwitch</string>
+						<reference key="source" ref="841351856"/>
+						<reference key="destination" ref="940386297"/>
+					</object>
+					<int key="connectionID">22</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">toggleEnabledForSwitch:</string>
+						<reference key="source" ref="940386297"/>
+						<reference key="destination" ref="606714003"/>
+						<int key="IBEventType">13</int>
+					</object>
+					<int key="connectionID">23</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -316,6 +344,7 @@
 							<reference ref="71870162"/>
 							<reference ref="274481496"/>
 							<reference ref="513208907"/>
+							<reference ref="940386297"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -356,6 +385,12 @@
 						<reference key="parent" ref="766721923"/>
 						<string key="objectName">like_btn</string>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">21</int>
+						<reference key="object" ref="940386297"/>
+						<reference key="parent" ref="766721923"/>
+						<string key="objectName">mySwitch</string>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -372,6 +407,8 @@
 					<string>12.IBViewBoundsToFrameTransform</string>
 					<string>2.IBEditorWindowLastContentRect</string>
 					<string>2.IBPluginDependency</string>
+					<string>21.IBPluginDependency</string>
+					<string>21.IBViewBoundsToFrameTransform</string>
 					<string>4.CustomClassName</string>
 					<string>4.IBPluginDependency</string>
 					<string>4.IBViewBoundsToFrameTransform</string>
@@ -396,8 +433,12 @@
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">P4AAAL+AAADDnwAAweAAAA</bytes>
 					</object>
-					<string>{{259, 98}, {768, 1024}}</string>
+					<string>{{378, 37}, {768, 1024}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<object class="NSAffineTransform">
+						<bytes key="NSTransformStruct">P4AAAL+AAABECwAAwdAAAA</bytes>
+					</object>
 					<string>FBLoginButton</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
@@ -429,7 +470,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">20</int>
+			<int key="maxID">23</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -453,9 +494,11 @@
 							<string>displayLikes:</string>
 							<string>fbButtonClick:</string>
 							<string>refreshDisplay:</string>
+							<string>toggleEnabledForSwitch:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -470,6 +513,7 @@
 							<string>displayLikes:</string>
 							<string>fbButtonClick:</string>
 							<string>refreshDisplay:</string>
+							<string>toggleEnabledForSwitch:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -489,6 +533,10 @@
 								<string key="name">refreshDisplay:</string>
 								<string key="candidateClassName">id</string>
 							</object>
+							<object class="IBActionInfo">
+								<string key="name">toggleEnabledForSwitch:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
@@ -500,6 +548,7 @@
 							<string>containerView</string>
 							<string>like_btn</string>
 							<string>menu</string>
+							<string>mySwitch</string>
 							<string>refresh_btn</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -509,6 +558,7 @@
 							<string>UIView</string>
 							<string>UIButton</string>
 							<string>UIImageView</string>
+							<string>UISwitch</string>
 							<string>UIButton</string>
 						</object>
 					</object>
@@ -521,6 +571,7 @@
 							<string>containerView</string>
 							<string>like_btn</string>
 							<string>menu</string>
+							<string>mySwitch</string>
 							<string>refresh_btn</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -544,6 +595,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">menu</string>
 								<string key="candidateClassName">UIImageView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">mySwitch</string>
+								<string key="candidateClassName">UISwitch</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">refresh_btn</string>
@@ -721,6 +776,14 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">UIKit.framework/Headers/UISearchDisplayController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">UISwitch</string>
+					<string key="superclassName">UIControl</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">UIKit.framework/Headers/UISwitch.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

@@ -98,7 +98,7 @@
 	NSLog(@"valuesForTreemapView");
 	
 	//TODO: check if the fruits is null when it's coming here/
-	
+		
 	//if (!fruits) //meaning I just launched the app. 
 	//	{
 	//need to fill the fruits 
@@ -107,10 +107,22 @@
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex: 0];
-	NSString *plistFile = [documentsDirectory stringByAppendingPathComponent: @"data.plist"];
+	NSString *plistFile;
+	
+	NSLog(@"view mode is %i",[[NSUserDefaults standardUserDefaults] integerForKey:@"viewMode"] );
+	if([[NSUserDefaults standardUserDefaults] integerForKey:@"viewMode"])
+	{
+		plistFile = [documentsDirectory stringByAppendingPathComponent: @"userData.plist"];
+	}
+	else 
+	{
+		plistFile = [documentsDirectory stringByAppendingPathComponent: @"pageData.plist"];
+	}
+
+	
 	NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
 	
-	
+	NSLog(@"array is %@", array);
 	
 	//if the plist doesn't exist meaning we just launched the app FOR THE FIRST TIME.
 	if([array count] == 0) 
@@ -120,7 +132,6 @@
 		NSString *plistPath = [bundle pathForResource:@"data" ofType:@"plist"];
 		array = [[NSMutableArray alloc] initWithContentsOfFile:plistPath];
 		NSLog(@"array count is zero");
-		
 	}
 	
 	//trying to get the paths of the filenames and like counts here.
@@ -163,47 +174,57 @@
 	NSLog(@"values %@", valuesArray);
 	
 	
-
-
-	//little hack to bump up the value of the largest item. this gives us a larger cell.
-	//this still needs to be improved. -what happens when there's two equal values? need to solve that.
-	//TODO: also need to check relative values betweeen the first value-second value (relative value)
-	int highestNumber					= 0;
-	int highestSecondNumber				= 0;
-	int highestNumberIndex				= 0;
-	int highestSecondNumberIndex		= 0;
-	for (NSNumber *theNumber in valuesArray)
+	if([[NSUserDefaults standardUserDefaults] integerForKey:@"viewMode"])
 	{
-		if ([theNumber intValue] >= highestNumber) {
-			highestSecondNumberIndex = highestNumberIndex;
-			highestSecondNumber = highestNumber;
-			highestNumber = [theNumber intValue];
-			highestNumberIndex = [valuesArray indexOfObject:theNumber];
-		}
-		else if([theNumber intValue] > highestSecondNumber)
+		//little hack to bump up the value of the largest item. this gives us a larger cell.
+		//this still needs to be improved. -what happens when there's two equal values? need to solve that.
+		//TODO: also need to check relative values betweeen the first value-second value (relative value)
+		int highestNumber					= 0;
+		int highestSecondNumber				= 0;
+		int highestNumberIndex				= 0;
+		int highestSecondNumberIndex		= 0;
+		for (NSNumber *theNumber in valuesArray)
 		{
-			highestSecondNumber = [theNumber intValue];
-			highestSecondNumberIndex = [valuesArray indexOfObject:theNumber];
-		}
-	}
-	
+			if ([theNumber intValue] >= highestNumber) {
+				highestSecondNumberIndex = highestNumberIndex;
+				highestSecondNumber = highestNumber;
+				highestNumber = [theNumber intValue];
+				highestNumberIndex = [valuesArray indexOfObject:theNumber];
+			}
+			else if([theNumber intValue] > highestSecondNumber)
+			{
+				highestSecondNumber = [theNumber intValue];
+				highestSecondNumberIndex = [valuesArray indexOfObject:theNumber];
+			}
+		}//endfor
 		
-	
-	
-	NSLog(@"Highest number: %i at index: %i", highestNumber, highestNumberIndex);
-	NSLog(@"Highest number: %i at index: %i", highestSecondNumber, highestSecondNumberIndex);
-	if((highestNumber/highestSecondNumber) < 2 || highestNumber==highestSecondNumber) //if there's no duplicate winners AND difference between first two highest number is 1/2 then multiply.
+		if((highestNumber/highestSecondNumber) < 2 || highestNumber==highestSecondNumber) //if there's no duplicate winners AND difference between first two highest number is 1/2 then multiply.
+		{
+			
+			NSInteger tempValue = [[valuesArray objectAtIndex:highestNumberIndex] intValue];
+			
+			tempValue = round(tempValue*1.5);
+			NSNumber *_inStr = [NSNumber numberWithInt:tempValue];
+			[valuesArray replaceObjectAtIndex:highestNumberIndex withObject:_inStr];
+			
+			NSLog(@"tempValue is %i", tempValue);
+			
+			
+		}//endif
+		
+		NSLog(@"Highest number: %i at index: %i", highestNumber, highestNumberIndex);
+		NSLog(@"Highest number: %i at index: %i", highestSecondNumber, highestSecondNumberIndex);
+		
+
+	}
+	else 
 	{
 		
-		NSInteger tempValue = [[valuesArray objectAtIndex:highestNumberIndex] intValue];
-		
-		tempValue = round(tempValue*1.5);
-		NSNumber *_inStr = [NSNumber numberWithInt:tempValue];
-		[valuesArray replaceObjectAtIndex:highestNumberIndex withObject:_inStr];
-		
-		NSLog(@"tempValue is %i", tempValue);
-	}
+	}//endelse
 
+		
+		
+	
 	return valuesArray;
 
 }
@@ -276,11 +297,6 @@
 {
 	[self updateCell:cell forIndex:index];
 }
-
-
-
-
-
 
 
 

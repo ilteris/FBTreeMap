@@ -34,6 +34,11 @@
 	IBOutlet UIButton *comment_btn;
 	IBOutlet UIButton *refresh_btn;
 	
+	
+	IBOutlet UISwitch *mySwitch;  
+
+	
+	
 	BOOL displayMode; //either comment mode or like mode. 1 is comment mode 0 is like mode
 
 	
@@ -50,10 +55,14 @@
 @property (nonatomic, retain) IBOutlet UIButton *comment_btn;
 @property (nonatomic, retain) IBOutlet UIButton *refresh_btn;
 
+@property (nonatomic, retain) IBOutlet UISwitch *mySwitch; 
+
 
 - (IBAction) fbButtonClick: (id)sender;
 - (IBAction)refreshDisplay: (id)sender;
 - (IBAction)displayLikes: (id)sender;
 - (IBAction)displayComments: (id)sender;
+- (IBAction) toggleEnabledForSwitch: (id) sender;  
+
 
 @end

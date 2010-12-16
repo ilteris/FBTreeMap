@@ -34,7 +34,7 @@
 - (void)request:(FBRequest*)request didLoad:(id)result{
 	
    // NSMutableArray *fruits = [[[NSMutableArray alloc] init] autorelease];
-//	NSLog(@"result %@", result);
+	//NSLog(@"result %@", result);
 
 	
 	
@@ -181,6 +181,7 @@
 						//NSLog(@"count one %@", [streamArray objectAtIndex:i] );
 						
 						
+
 						NSString *_temp = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"src"]];
 						
 						NSString *filePath = [_temp stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -191,6 +192,10 @@
 						if(![filePath stringByMatching:regexString capture:1L]) 
 						{
 							_image_url =  [NSString stringWithFormat:@"%@", _temp];
+						//	NSLog(@"_image_url is %@", _image_url);
+							_image_url = [_temp stringByReplacingOccurrencesOfString:@"_s" withString:@"_n"];
+						//	NSLog(@"_image_url is %@", _image_url);
+							//_image_url =  [NSString stringWithFormat:@"%@", _temp];
 						}
 						else 
 						{
@@ -215,9 +220,12 @@
 				//	NSLog(@"count one %@", [streamArray objectAtIndex:i] );
 					
 				}//endif
-				else //this is most probably an tumblr, instagram, foursquare or a facebook app so expect images as app icons map icons etc...
+				else //this is most probably an tumblr, instagram, foursquare or a facebook app so expect images as app icons map icons etc... sometimes page is too!
 				{
-					//TODO: right now if the message is empty, it's empty, but it could be improved try to get the name if msg is empty and if name empty, get caption etc. 
+					//still getting only up to name ---> if that's empty maybe even go further up to description?
+					
+				//	NSLog(@"attachment media is %@", [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"]);
+					
 					
 					NSString *_temp = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"src"]];
 					
@@ -230,8 +238,22 @@
 					//NSLog(@"regexString is ----> %@", _src);
 					//NSLog(@"count one %@", [streamArray objectAtIndex:i] );
 					
-					_image_url = [NSString stringWithFormat:@"%@", [filePath stringByMatching:regexString capture:1L]];
+					if(![filePath stringByMatching:regexString capture:1L]) 
+					{
+						_image_url =  [NSString stringWithFormat:@"%@", _temp];
+						//	NSLog(@"_image_url is %@", _image_url);
+						_image_url = [_temp stringByReplacingOccurrencesOfString:@"_s" withString:@"_n"];
+						//	NSLog(@"_image_url is %@", _image_url);
+						//_image_url =  [NSString stringWithFormat:@"%@", _temp];
+					}
+					else 
+					{
+						_image_url = [NSString stringWithFormat:@"%@", [filePath stringByMatching:regexString capture:1L]];
+					}
+					
 					_message =   [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
+					
+					if([_message length] == 0) _message = [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"name"];
 					_type = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
 					
 					
@@ -279,9 +301,9 @@
 	}//endfor
 	
 	
-	NSLog(@"pagePlistArray is %@", pagePlistArray);
-	NSLog(@"userPlistArray is %@", userPlistArray);
-	
+	//NSLog(@"pagePlistArray is %@", pagePlistArray);
+	//NSLog(@"userPlistArray is %@", userPlistArray);
+	//
 	
 	//@@@@@@@ 1- filter and splice;	
 	NSMutableArray* newUserPlistArray = [[self spliceArray:userPlistArray] retain];
@@ -290,8 +312,8 @@
 	[pagePlistArray release];
 	
 	
-	NSLog(@"newUserPlistArray is %@", newUserPlistArray);
-	NSLog(@"newPagePlistArray is %@", newPagePlistArray);
+//	NSLog(@"newUserPlistArray is %@", newUserPlistArray);
+//	NSLog(@"newPagePlistArray is %@", newPagePlistArray);
 	//@@@@@@@ 2- setup the queue.
 
 	
@@ -315,15 +337,25 @@
 	
 	//@@@@@@@ 3- setup the arrays that will be written.
 
-	if(_plistArray == nil) //check if the plist is empty 
-	{ 
-		_plistArray = [[NSMutableArray alloc] initWithCapacity:1]; //if it's empty, alloc/init
-		
-	}
+	
 	
 	//@@@@@@@ 3- download the images.
-
-	//[self downloadImagesForItems:newUserPlistArray];
+	
+	if(_plistUserArray == nil) //check if the plist is empty 
+	{ 
+		_plistUserArray = [[NSMutableArray alloc] initWithCapacity:1]; //if it's empty, alloc/init	
+	}
+	
+	
+	if(_plistPageArray == nil) //check if the plist is empty 
+	{ 
+		_plistPageArray = [[NSMutableArray alloc] initWithCapacity:1]; //if it's empty, alloc/init	
+	}
+	
+	
+	
+	[self downloadImagesOf:newUserPlistArray forPlistArray:_plistUserArray writeWithPrefix:@"u"];
+	[self downloadImagesOf:newPagePlistArray forPlistArray:_plistPageArray writeWithPrefix:@"p"];
 	//[self downloadImagesForItems:newPagePlistArray];
 	
 	
@@ -355,9 +387,11 @@
 
 
 
-- (void) downloadImagesForItems:(NSMutableArray*)myArray
+- (void) downloadImagesOf:(NSMutableArray*)myArray forPlistArray:(NSMutableArray*)_plistArray writeWithPrefix:(NSString*)pfx
 {
 	ASIHTTPRequest *req;
+	
+	
 	
 	for (NSInteger i = 0; i < [myArray count]; i++)
 	{
@@ -367,8 +401,8 @@
 			NSLog(@"this should be status");
 			NSInteger rand_ind = arc4random() % [_backgrounds count];
 			NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[_backgrounds objectAtIndex:rand_ind]  ofType:@"png"]];
-			[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%i.png",i]] atomically:YES];
-			NSString *tempFileName = [NSString stringWithFormat:@"%i.png",i];
+			[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_%i.png",pfx,i]] atomically:YES];
+			NSString *tempFileName = [NSString stringWithFormat:@"%@_%i.png",pfx,i];
 			[_backgrounds removeObjectAtIndex:rand_ind];
 			if([_backgrounds count] < 1) [self setTheBackgroundArray]; //if the backgroundarray gets empty, refill it.
 			
@@ -395,8 +429,8 @@
 		{
 			//don't request to load any image here, only load VIDEO Background since they are videos.
 			NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"video"  ofType:@"png"]];
-			[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%i.png",i]] atomically:YES];
-			NSString *tempFileName = [NSString stringWithFormat:@"%i.png",i];
+			[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_%i.png",pfx,i]] atomically:YES];
+			NSString *tempFileName = [NSString stringWithFormat:@"%@_%i.png",pfx,i];
 			
 			
 			if(![[[myArray objectAtIndex:i]  objectForKey:@"categoryValue"] isEqual:@"0"]) 
@@ -420,15 +454,18 @@
 		}
 		else 
 		{
+			
 			//load the images for everything except status and video.
 			req = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:[[myArray objectAtIndex:i] objectForKey:@"image_url"]]] autorelease];
 			[req setUserInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-							  [NSNumber numberWithInt:i], @"ImageNumber", 
+							  [NSNumber numberWithInt:i], @"ImageNumber", //send the index number to use in the imageFetch delegate method.
 							  // [[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"], @"tempArr",
 							  // [[tempArr objectAtIndex:1] objectForKey:@"fql_result_set"], @"names",
-							  [myArray objectAtIndex:i], @"item",
+							  pfx, @"pfx",
+							  [myArray objectAtIndex:i], @"item", //send the item itself.
+							  _plistArray, @"array",
 							  nil]]; 
-			[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%i.png",i]]];
+			[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_%i.png",pfx,i]]];
 			[_networkQueue addOperation:req];
 		}//endelse
 	}//endfor
@@ -474,8 +511,10 @@
 	if (img) 
 	{
 		int imageNo =  [[[request userInfo] objectForKey:@"ImageNumber"] intValue]; 
-			
-		NSString *tempFileName = [NSString stringWithFormat:@"%i.png",imageNo];
+		
+		NSMutableArray* _plistArray = [[request userInfo] objectForKey:@"array"];
+		
+		NSString *tempFileName = [NSString stringWithFormat:@"%@_%i.png",[[request userInfo] objectForKey:@"pfx"],imageNo];
 		NSString *_categoryValue;
 		NSString *_message;
 		NSString *_from;
@@ -483,18 +522,17 @@
 		NSString *_post_id;
 		NSString *_fromType;
 		
-		if(_plistArray == nil) //check if the plist is empty 
-		{ 
-			_plistArray = [[NSMutableArray alloc] initWithCapacity:1]; //if it's empty, alloc/init
-			
-		}
+	//	NSLog(@"_plistArray is %@", _plistArray);
+		
+		
 		_categoryValue =	[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"] objectForKey:@"categoryValue"]];
-		_from =				[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"]  objectForKey:@"from"]];
-		_message =			[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"]  objectForKey:@"message"]];
-		_type =				[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"]  objectForKey:@"type"]];
-		_post_id =			[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"]  objectForKey:@"post_id"]];
+		_from =				[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"] objectForKey:@"from"]];
+		_message =			[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"] objectForKey:@"message"]];
+		_type =				[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"] objectForKey:@"type"]];
+		_post_id =			[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"] objectForKey:@"post_id"]];
 		_fromType =			[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"] objectForKey:@"fromType"]];
 
+		
 		//if the results are 0 then don't put those in the plist file.
 		//NSLog(@"names is %@", [[request userInfo] objectForKey:@"names"]);
 		if(![_categoryValue isEqual:@"0"]) 
@@ -511,7 +549,7 @@
 			
 			//adding to the plistArray here.
 			[_plistArray insertObject:dict atIndex:0];
-			NSLog(@"dict %@", dict);	
+		//	NSLog(@"dict %@", dict);	
 		}//endif
 	}//endif
 }//endfunction
@@ -539,14 +577,20 @@
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex: 0];
-	NSString *plistFile = [documentsDirectory stringByAppendingPathComponent: @"data.plist"];
+	NSString *plistFileForUsers = [documentsDirectory stringByAppendingPathComponent: @"userData.plist"];
+	NSString *plistFileForPages = [documentsDirectory stringByAppendingPathComponent: @"pageData.plist"];
 	//NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
 	//plist file consists of objects of dictionaries wrapped in an array
 	
-	//NSLog(@"self.plistArray %@", _plistArray);
-	[_plistArray writeToFile:plistFile atomically:NO];
+	//NSLog(@"self._plistUserArray %@", _plistUserArray);
+	//NSLog(@"self._plistPageArray %@", _plistPageArray);
+	[_plistUserArray writeToFile:plistFileForUsers atomically:NO];
+	[_plistPageArray writeToFile:plistFileForPages atomically:NO];
+	
 	//[(TreemapView *)self.treeMapView reloadData];
-	[_likesAndCommentsRequestDelegate likesAndCommentsRequestCompleteWithInfo:_plistArray];
+	
+	//before I was passing the plist array back to the userInfo from here using the delegate, but what's the necessaty of this, plus I do have a few plist file now, so I am not sending it anymore.
+	[_likesAndCommentsRequestDelegate likesAndCommentsRequestComplete];
 	
 }
 

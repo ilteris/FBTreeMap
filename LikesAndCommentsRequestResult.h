@@ -17,7 +17,8 @@
 @interface LikesAndCommentsRequestResult : NSObject<FBRequestDelegate>
 {
 	NSInteger _categoryMode;
-	NSMutableArray *_plistArray;
+	NSMutableArray *_plistUserArray;
+	NSMutableArray *_plistPageArray;
 	NSMutableArray *_backgrounds;
 
 	ASINetworkQueue *_networkQueue;
@@ -27,12 +28,12 @@
 - (id) initializeWithDelegate:(id <LikesAndCommentsRequestDelegate>)delegate;
 - (void)setTheBackgroundArray;
 - (NSMutableArray*) spliceArray:(NSMutableArray*)myArray;
-- (void) downloadImagesForItems:(NSMutableArray*)myArray;
+- (void) downloadImagesOf:(NSMutableArray*)myArray forPlistArray:(NSMutableArray*)_plistArray writeWithPrefix:(NSString*)pfx;
 
 @end
 
 @protocol LikesAndCommentsRequestDelegate<NSObject>
-- (void)likesAndCommentsRequestCompleteWithInfo:(NSMutableArray*)info;
+- (void)likesAndCommentsRequestComplete;
 - (void)userRequestFailed;
 @end
 						  

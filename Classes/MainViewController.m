@@ -17,7 +17,7 @@ static NSString* kAppId =  @"128496757192973";
 
 
 @synthesize  treemapViewController = _treemapViewController,
-menu,like_btn,comment_btn,refresh_btn, containerView;
+menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 
 	
 	
@@ -98,6 +98,8 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 	
 	menu.image = menuBgImage;
 	
+	if([[NSUserDefaults standardUserDefaults] integerForKey:@"viewMode"]) [mySwitch setOn:YES animated:NO];  
+	
 	
 	_treemapViewController = [[TreeMapViewController alloc] init];
 	_treemapViewController.userInfo = _userInfo;
@@ -105,8 +107,6 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 	
 	[self.treemapViewController viewWillAppear:YES];
 	[self.containerView addSubview:self.treemapViewController.view];
-	
-	
 
 }
 
@@ -116,6 +116,14 @@ menu,like_btn,comment_btn,refresh_btn, containerView;
 #pragma mark -
 #pragma mark IBActions
 
+
+- (IBAction) toggleEnabledForSwitch: (id) sender
+{
+	//NSLog(@"self.mySwitch state is %i", self.mySwitch.on);
+	
+	[[NSUserDefaults standardUserDefaults] setInteger:self.mySwitch.on forKey:@"viewMode"];
+	[(TreemapView*)self.treemapViewController.treeMapView reloadData];
+}
 
 - (IBAction)refreshDisplay: (id) sender
 {

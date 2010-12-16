@@ -135,10 +135,11 @@
 /**
  * LikesAndCommentsRequestDelegate
  */
-- (void)likesAndCommentsRequestCompleteWithInfo:(NSMutableArray*)info
+- (void)likesAndCommentsRequestComplete
 {
-	_likesAndCommentsInfo = [info retain];
-	NSLog(@"likesAndCommentsRequestCompleteWithInfo %@", info);
+	NSLog(@"likesAndCommentsRequestComplete inside");
+	//_likesAndCommentsInfo = [info retain];
+//	NSLog(@"likesAndCommentsRequestCompleteWithInfo %@", info);
 	if ([self.userInfoDelegate respondsToSelector:@selector(likesAndCommentsDidLoad)]) 
 	{
 		[_userInfoDelegate likesAndCommentsDidLoad];
