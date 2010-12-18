@@ -31,7 +31,7 @@
 @synthesize feedPostId;
 @synthesize myWebView;
 @synthesize jsonArray;
-@synthesize userInfo = _userInfo;
+
 
 
 #pragma mark -
@@ -134,6 +134,7 @@
 		NSLog(@"array count is zero");
 	}
 	
+	NSLog(@"array is %@", array);
 	//trying to get the paths of the filenames and like counts here.
 	
 	self.fruits = [[NSMutableArray alloc] initWithCapacity:1];
@@ -150,7 +151,7 @@
 	}
 	//} //endif
 	
-	
+	[array release];
 	
 	//these values go to the treemapview in order to be used for calculating the sizes of the cells
 	NSMutableArray *valuesArray = [NSMutableArray arrayWithCapacity:1];
@@ -171,6 +172,8 @@
 		
 		
 	}
+	
+	
 	NSLog(@"values %@", valuesArray);
 	
 	
@@ -178,7 +181,7 @@
 	{
 		//little hack to bump up the value of the largest item. this gives us a larger cell.
 		//this still needs to be improved. -what happens when there's two equal values? need to solve that.
-		//TODO: also need to check relative values betweeen the first value-second value (relative value)
+		
 		int highestNumber					= 0;
 		int highestSecondNumber				= 0;
 		int highestNumberIndex				= 0;
@@ -197,7 +200,7 @@
 				highestSecondNumberIndex = [valuesArray indexOfObject:theNumber];
 			}
 		}//endfor
-		
+		//TODO: if there's two 1 and 1 item, then this gets called. need to fix it. 
 		if((highestNumber/highestSecondNumber) < 2 || highestNumber==highestSecondNumber) //if there's no duplicate winners AND difference between first two highest number is 1/2 then multiply.
 		{
 			

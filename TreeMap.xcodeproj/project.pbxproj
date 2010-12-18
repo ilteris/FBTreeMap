@@ -522,6 +522,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: stephan valter (283872D3RC)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -529,6 +530,7 @@
 				GCC_PREFIX_HEADER = TreeMap_Prefix.pch;
 				INFOPLIST_FILE = "TreeMap-Info.plist";
 				PRODUCT_NAME = TreeMap;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "BF809993-E03D-470B-8F49-E43F6C208635";
 			};
 			name = Debug;
 		};
@@ -550,12 +552,13 @@
 			buildSettings = {
 				"ARCHS[sdk=iphoneos*]" = armv7;
 				"ARCHS[sdk=iphonesimulator*]" = i386;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: stephan valter (283872D3RC)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_LDFLAGS = "-licucore";
 				PREBINDING = NO;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "BF809993-E03D-470B-8F49-E43F6C208635";
 				SDKROOT = iphoneos4.2;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
@@ -566,13 +569,14 @@
 			buildSettings = {
 				"ARCHS[sdk=iphoneos*]" = armv7;
 				"ARCHS[sdk=iphonesimulator*]" = i386;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: MASS Produkt LLC,C/=US";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "-licucore";
 				PREBINDING = NO;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "488A8087-40DE-42B0-9FB5-28A2D8869620";
 				SDKROOT = iphoneos4.2;
 				TARGETED_DEVICE_FAMILY = 2;
 			};

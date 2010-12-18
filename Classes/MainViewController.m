@@ -24,6 +24,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 #pragma mark -
 #pragma mark Private helper function for login/logout	
 - (void) login {
+	NSLog(@"hereee");
 	[_facebook authorize:kAppId permissions:_permissions delegate:self];
 }
 
@@ -53,7 +54,6 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
     [super viewDidLoad];
 	
 //[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"displayMode"];
-	
 	
 	 _session = [[Session alloc] init];
 	_facebook = [[_session restore] retain];
@@ -90,24 +90,14 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 		comment_btn.enabled =  NO;
 	}
 	
-	UIImage *menuBgImage=[[UIImage imageNamed:@"pm_menu_bg.png"] stretchableImageWithLeftCapWidth:10 topCapHeight:5];
-	
-	
-	
+	UIImage *menuBgImage=[[UIImage imageNamed:@"pm_menu_bg.png"] stretchableImageWithLeftCapWidth:10 topCapHeight:5];	
 	[menu setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-	
 	menu.image = menuBgImage;
 	
 	if([[NSUserDefaults standardUserDefaults] integerForKey:@"viewMode"]) [mySwitch setOn:YES animated:NO];  
 	
 	
-	_treemapViewController = [[TreeMapViewController alloc] init];
-	_treemapViewController.userInfo = _userInfo;
-	[_treemapViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight];
-	
-	[self.treemapViewController viewWillAppear:YES];
-	[self.containerView addSubview:self.treemapViewController.view];
-
+		
 }
 
 
@@ -191,7 +181,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 
 
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration	
 {
 	
 	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
@@ -290,6 +280,15 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 
 - (void)likesAndCommentsDidLoad
 {
+	
+	_treemapViewController = [[TreeMapViewController alloc] init];
+
+	[_treemapViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight];
+	
+	[self.treemapViewController viewWillAppear:YES];
+	[self.containerView addSubview:self.treemapViewController.view];
+
+	
 	NSLog(@"likesAndCommentsDidLoad");
 	[(TreemapView*)self.treemapViewController.treeMapView reloadData];
 }

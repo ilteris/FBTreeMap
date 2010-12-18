@@ -22,7 +22,7 @@
 @interface TreeMapViewController : UIViewController   <TreemapViewDelegate, TreemapViewDataSource, UIWebViewDelegate> {
    
 	
-	UserInfo *_userInfo;
+
 	
 	ASINetworkQueue *networkQueue;
 
@@ -52,7 +52,7 @@
 
 
 
-@property(nonatomic, retain) UserInfo *userInfo;
+
 
 @property (nonatomic, retain) NSMutableArray *fruits;
 @property (nonatomic, retain) NSMutableArray *cells;
