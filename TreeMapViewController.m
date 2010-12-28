@@ -186,6 +186,7 @@
 		int highestSecondNumber				= 0;
 		int highestNumberIndex				= 0;
 		int highestSecondNumberIndex		= 0;
+		
 		for (NSNumber *theNumber in valuesArray)
 		{
 			if ([theNumber intValue] >= highestNumber) {
@@ -314,7 +315,7 @@
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
 {
 	
-	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
+	NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
 
 	//if([(TreemapView*)self.treeMapView initialized]) [self resizeView];
 }

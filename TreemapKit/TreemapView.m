@@ -149,8 +149,9 @@
 	NSArray *nodes = [self getData];
 	NSLog(@"creating nodes");
 	
-//	NSLog(@"nodes inside create Nodes %@", nodes);
+	NSLog(@"nodes inside create Nodes %@", nodes);
 
+	NSLog(@"view is %@", NSStringFromCGRect(self.frame));
 	
 	if (nodes && nodes.count > 0) 
 	{
