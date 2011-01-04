@@ -106,8 +106,7 @@
 - (void) requestCountOf
 {	
 	NSLog(@"requestCountOf");
-	LikesAndCommentsRequestResult *likesAndCommentsRequestResult = 
-	[[[[LikesAndCommentsRequestResult alloc] initializeWithDelegate:self] autorelease] retain];		
+	LikesAndCommentsRequestResult *likesAndCommentsRequestResult = [[[[LikesAndCommentsRequestResult alloc] initializeWithDelegate:self] autorelease] retain];		
 				
 	// create the multiquery
 	NSLog(@"uid %@", _uid);
@@ -121,7 +120,8 @@
 	
 	 
 	 NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKeys:queries, @"queries", nil];
-	
+	NSLog(@"facebook accessToken %@", _facebook.accessToken);
+
 	// send it out
 	[_facebook requestWithMethodName:@"fql.multiquery" 
 						  andParams:params 
@@ -162,8 +162,6 @@
 	{
 		[_userInfoDelegate userInfoDidLoad];
 	}
-	
-	
 }
 
 

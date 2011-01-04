@@ -48,20 +48,8 @@
 		
 		self.layer.borderWidth = .5;
 
-			
-	
-	
-
-			
 		self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:1] CGColor];
-		
-		
-
 		NSLog(@"frame : %@", NSStringFromCGRect(self.frame));
-		
-		
-		
-		
 		
 		//big sized cells
 		if(self.frame.size.width > 400 && self.frame.size.height > 200)
@@ -206,10 +194,11 @@
 			contentLabel.alpha = 1;
 			
 		}
+
 		//very small sized cells
-		else if(self.frame.size.width < 113 || self.frame.size.height < 130)
+		else if(self.frame.size.width < 113)
 		{
-			NSLog(@"status none");
+			NSLog(@"frame width is smaller than 113");
 			
 			self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 10)];
 			titleLabel.font = [UIFont boldSystemFontOfSize:0];
@@ -254,6 +243,67 @@
 			//don't display anything
 			//display only user profile.
 		}
+		else if(self.frame.size.height < 130)
+		{
+			NSLog(@"frame height is smaller than 130");
+			self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 10)];
+			titleLabel.font = [UIFont boldSystemFontOfSize:11];
+			titleLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
+			titleLabel.textAlignment = UITextAlignmentLeft;
+			titleLabel.textColor = [UIColor whiteColor];
+			titleLabel.shadowColor  = [UIColor blackColor];
+			titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+			titleLabel.lineBreakMode = UILineBreakModeCharacterWrap;
+			
+			titleLabel.backgroundColor = [UIColor clearColor];
+			
+			titleLabel.alpha = 1;
+			
+			self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(11, self.frame.size.height - 61, 200, 48)];
+			
+			countLabel.numberOfLines = 0;
+			countLabel.font = [UIFont boldSystemFontOfSize:62];
+			
+			
+			countLabel.textColor = [UIColor whiteColor];
+			countLabel.backgroundColor = [UIColor clearColor];
+			countLabel.shadowColor  = [UIColor blackColor];
+			countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+			
+			
+			_countBtn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+			_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
+			
+			
+			
+			
+			[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+			
+			if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
+			{
+				UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"1_like_red" ofType:@"png"]];
+				[_countBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+				[tImage release];
+			}
+			else 
+			{
+				UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"1_comment_blue" ofType:@"png"]];
+				[_countBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+				[tImage release];
+			}
+			
+			
+			_countBtn.alpha = 0.5;
+
+			
+			
+		}
+		else 
+		{
+			NSLog(@"god knows where");
+		}
+
+		
 
 
 		//contentLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
@@ -335,7 +385,7 @@
 - (void)layoutSubviews {
 	[super layoutSubviews];
 
-	[contentLabel sizeToFit];
+	//[contentLabel sizeToFit];
 	
 //	countLabel.text = @"1290";	
 	
@@ -372,10 +422,12 @@
 	
 	
 	//60 comes from top-bottom margins 11/11 and spacing between title and count and content 12/12/12
-	NSLog(@"possibleNoOfLines is %f", floorf((self.frame.size.height-countLabel.frame.size.height-60.0f) /contentLabel.font.lineHeight));
+//	NSLog(@"possibleNoOfLines is %f", floorf((self.frame.size.height-countLabel.frame.size.height-60.0f) /contentLabel.font.lineHeight));
 	
-	NSLog(@"actualNoOfLines %f", (contentLabel.frame.size.height/contentLabel.font.lineHeight));
+//	NSLog(@"actualNoOfLines %f", (contentLabel.frame.size.height/contentLabel.font.lineHeight));
 	
+	NSLog(@"frame : %@", NSStringFromCGRect(self.frame));
+
 	if(actualNoOfLines >= possibleNoOfLines)
 	{
 		contentLabel.numberOfLines = (NSInteger)possibleNoOfLines;
@@ -385,11 +437,12 @@
 		
 		//[contentLabel sizeToFit];
 	}
+	 
 	//(label height - padding) / (fontsize + couple pixels) = number of lines...
 	
 	//NSLog( contentLabel.frame.size.height / contentLabel.font.size.
 	
-	titleLabel.frame = CGRectMake(contentLabel.frame.origin.x, contentLabel.frame.origin.y + contentLabel.frame.size.height + 12, self.titleLabel.frame.size.width, self.titleLabel.frame.size.height);
+	titleLabel.frame = CGRectMake(11, contentLabel.frame.origin.y + contentLabel.frame.size.height + 12, self.titleLabel.frame.size.width, self.titleLabel.frame.size.height);
 	
 	//titleLabel.frame = CGRectMake(0, 0, self.frame.size.width, self.titleLabel.frame.size.height);
 	imageViewA.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);

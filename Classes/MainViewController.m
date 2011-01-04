@@ -56,7 +56,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 //[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"displayMode"];
 	
 	 _session = [[Session alloc] init];
-	_facebook = [[_session restore] retain];
+	_facebook = [[_session restore] retain];	
 	
 	if (_facebook == nil) {
 		_facebook = [[Facebook alloc] init];

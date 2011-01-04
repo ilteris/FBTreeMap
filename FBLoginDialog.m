@@ -50,6 +50,8 @@
   NSString *expTime = [self getStringFromUrl:q needle:@"expires_in="];
   NSDate *expirationDate =nil;
   
+	
+
   if (expTime != nil) {
     int expVal = [expTime intValue];
     if (expVal == 0) {

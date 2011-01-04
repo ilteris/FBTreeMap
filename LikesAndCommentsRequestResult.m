@@ -34,7 +34,7 @@
 - (void)request:(FBRequest*)request didLoad:(id)result{
 	
    // NSMutableArray *fruits = [[[NSMutableArray alloc] init] autorelease];
-	//NSLog(@"result %@", result);
+//	NSLog(@"result %@", result);
 
 	
 	
@@ -112,7 +112,6 @@
 				break;
 			}
 		}//endfor
-		
 		
 				
 		//you have figured out the name now. why don't you go ahead and fill other things too, so we have a proper dictionary/arrays.
@@ -259,14 +258,29 @@
 					
 				}//endelse
 				
-	
 			}
-		
-		}//endif
-		else //attachment count == 1, this one could be facebook status, grab the profile images here but use the background images instead for displaying.
-		{
 			
+		//	NSLog(@"from is %@", _from);
+		//	NSLog(@"categoryValue is %@", _categoryValue);
+			
+			//_message = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
+		//	NSLog(@"message is 2 %@", _message);
+			if([_message length] == 0) _message = [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"name"];
+			
+		//	NSLog(@"message is 3 %@", _message);
+			
+			
+		}//endif
+		else //attachment count == 1, this one could be facebook status, so need to separate between those: grab the profile images here but use the background images instead for displaying.
+		{
+		//	NSLog(@"from is %@", _from);
+		//	NSLog(@"categoryValue is %@", _categoryValue);
+
 			_message = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
+		//	NSLog(@"message is 2 %@", _message);
+			if([_message length] == 0) _message = [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"name"];
+
+		//	NSLog(@"message is 3 %@", _message);
 			_image_url = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&", [[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
 			_type = [NSString stringWithFormat:@"status"];
 		}//endelse
@@ -283,7 +297,7 @@
 							  _fromType, @"fromType",
 							  nil];
 		
-	//	NSLog(@"dictionary is %@", dict);
+		NSLog(@"dictionary is %@", dict);
 		
 		
 		//@@@@@@@ 0- split them pages and users separately, why? because we are going to be writing them separately to the filesystem.
@@ -390,8 +404,6 @@
 - (void) downloadImagesOf:(NSMutableArray*)myArray forPlistArray:(NSMutableArray*)_plistArray writeWithPrefix:(NSString*)pfx
 {
 	ASIHTTPRequest *req;
-	
-	
 	
 	for (NSInteger i = 0; i < [myArray count]; i++)
 	{

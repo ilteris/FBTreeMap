@@ -122,7 +122,7 @@
 	
 	NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
 	
-	NSLog(@"array is %@", array);
+	//NSLog(@"array is %@", array);
 	
 	//if the plist doesn't exist meaning we just launched the app FOR THE FIRST TIME.
 	if([array count] == 0) 
@@ -174,7 +174,7 @@
 	}
 	
 	
-	NSLog(@"values %@", valuesArray);
+	//NSLog(@"values %@", valuesArray);
 	
 	
 	if([[NSUserDefaults standardUserDefaults] integerForKey:@"viewMode"])
@@ -202,19 +202,29 @@
 			}
 		}//endfor
 		//TODO: if there's two 1 and 1 item, then this gets called. need to fix it. 
-		if((highestNumber/highestSecondNumber) < 2 || highestNumber==highestSecondNumber) //if there's no duplicate winners AND difference between first two highest number is 1/2 then multiply.
+		if(highestNumber==highestSecondNumber)
 		{
 			
-			NSInteger tempValue = [[valuesArray objectAtIndex:highestNumberIndex] intValue];
+		}
+		else 
+		{
 			
-			tempValue = round(tempValue*1.5);
-			NSNumber *_inStr = [NSNumber numberWithInt:tempValue];
-			[valuesArray replaceObjectAtIndex:highestNumberIndex withObject:_inStr];
-			
-			NSLog(@"tempValue is %i", tempValue);
-			
-			
-		}//endif
+			if((highestNumber/highestSecondNumber) < 2) //if there's no duplicate winners AND difference between first two highest number is 1/2 then multiply.
+			{
+				
+				NSInteger tempValue = [[valuesArray objectAtIndex:highestNumberIndex] intValue];
+				
+				tempValue = round(tempValue*1.5);
+				NSNumber *_inStr = [NSNumber numberWithInt:tempValue];
+				[valuesArray replaceObjectAtIndex:highestNumberIndex withObject:_inStr];
+				
+				NSLog(@"tempValue is %i", tempValue);
+				
+				
+			}//endif
+		}
+
+		
 		
 		NSLog(@"Highest number: %i at index: %i", highestNumber, highestNumberIndex);
 		NSLog(@"Highest number: %i at index: %i", highestSecondNumber, highestSecondNumberIndex);
@@ -278,7 +288,6 @@
 	{
 		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 		cell.contentLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
-
 	}
 	   
 	cell.countLabel.text = tText;
