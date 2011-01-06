@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FBConnect.h"
+#import "PeopleMapDB.h"
 
 
 @protocol LikesAndCommentsRequestDelegate;
@@ -16,19 +17,28 @@
 
 @interface LikesAndCommentsRequestResult : NSObject<FBRequestDelegate>
 {
+	PeopleMapDB *_peopleMapDB;
+	
 	NSInteger _categoryMode;
 	NSMutableArray *_plistUserArray;
 	NSMutableArray *_plistPageArray;
 	NSMutableArray *_backgrounds;
-
 	ASINetworkQueue *_networkQueue;
+
 	id<LikesAndCommentsRequestDelegate> _likesAndCommentsRequestDelegate;
 }
+
+@property (nonatomic, retain) PeopleMapDB *peopleMapDB;
+
 
 - (id) initializeWithDelegate:(id <LikesAndCommentsRequestDelegate>)delegate;
 - (void)setTheBackgroundArray;
 - (NSMutableArray*) spliceArray:(NSMutableArray*)myArray;
 - (void) downloadImagesOf:(NSMutableArray*)myArray forPlistArray:(NSMutableArray*)_plistArray writeWithPrefix:(NSString*)pfx;
+
+
+
+
 
 @end
 

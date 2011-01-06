@@ -18,15 +18,20 @@
 
 
 @implementation LikesAndCommentsRequestResult
+@synthesize peopleMapDB = _peopleMapDB;
+
 
 - (id) initializeWithDelegate:(id <LikesAndCommentsRequestDelegate>)delegate
 {
 	self = [super init];
 	_likesAndCommentsRequestDelegate = [delegate retain];
-	[self setTheBackgroundArray];	
+	[self setTheBackgroundArray];
+	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local.db"];
+	
 
 	return self;
 }
+
 
 /**
  * FBRequestDelegate
@@ -34,7 +39,7 @@
 - (void)request:(FBRequest*)request didLoad:(id)result{
 	
    // NSMutableArray *fruits = [[[NSMutableArray alloc] init] autorelease];
-//	NSLog(@"result %@", result);
+	NSLog(@"result %@", result);
 
 	
 	
@@ -88,17 +93,31 @@
 	for (NSInteger i=0; i < [streamArray count]; i++)
 	{
 		//these are the objects for each dictionary item which is going to be written to the plist file.
-		NSString *_from;
-		NSString *_categoryValue;
-		NSString *_actor_id;
-		NSString *_image_url;
-		NSString *_message;
 		NSString *_post_id;
-		NSString *_type;
-		NSString *_fromType;
-
+		NSString *_objectType;
+		NSNumber *_likeCount;
+		NSNumber *_commentCount;
+		NSNumber *_poster_id;
+		NSString *_poster_name;
+		NSString *_poster_type;
+		NSString *_message;
+		NSString *_image_url;
+		NSString *_permalink;
+		NSNumber *_posted_time;
+		NSNumber *_updated_time;
 		
 		
+		
+		/*
+		 NSString *_from;
+		 NSString *_categoryValue;
+		 NSString *_actor_id;
+		 NSString *_image_url;
+		 NSString *_message;
+		 NSString *_post_id;
+		 NSString *_type;
+		 NSString *_fromType;
+		 */
 		
 		//traverse the user array and match the actor_id ----> uid, then break the for loop;
 		for (NSInteger j=0; j < [userAndPageArray count]; j++)
@@ -106,8 +125,8 @@
 
 			if([[[streamArray objectAtIndex:i] objectForKey:@"actor_id"] isEqual:[[userAndPageArray objectAtIndex:j] objectForKey:@"uid"]])	
 			{ //this gets only called when the actor_id == uid
-				_from = [NSString stringWithFormat:@"%@",[[userAndPageArray objectAtIndex:j] objectForKey:@"name"]];
-				_fromType = [NSString stringWithFormat:@"%@", [[userAndPageArray objectAtIndex:j] objectForKey:@"fromType"]];
+				_poster_name = [NSString stringWithFormat:@"%@",[[userAndPageArray objectAtIndex:j] objectForKey:@"name"]];
+				_poster_type = [NSString stringWithFormat:@"%@", [[userAndPageArray objectAtIndex:j] objectForKey:@"fromType"]];
 
 				break;
 			}
@@ -117,14 +136,10 @@
 		//you have figured out the name now. why don't you go ahead and fill other things too, so we have a proper dictionary/arrays.
 		
 		//first _categoryValue -->count of current displayMode(likes/comments)
-		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])//0//likes
-		{
-			_categoryValue = [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"likes"] objectForKey:@"count"]];
-		}
-		else //displayMode is 1//comments 
-		{
-			_categoryValue = [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"count"]];
-		}//endelse
+		
+		_likeCount = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"likes"] objectForKey:@"count"] integerValue]];
+		_commentCount = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"count"] integerValue]];
+		_permalink = [NSString stringWithFormat:@"%@", [[streamArray objectAtIndex:i] objectForKey:@"permalink"]];
 
 		//NSString *_post_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"post_id"]];
 		//NSString *_from = [NSString stringWithFormat:@"%@",[[userArray objectAtIndex:j] objectForKey:@"name"]];
@@ -134,8 +149,12 @@
 		
 		//NSLog(@"attachment count is %i", [[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count]);
 
-		_actor_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
-		_post_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"post_id"]];
+		_poster_id =		[NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
+		_posted_time =		[NSNumber numberWithInt:[[[streamArray objectAtIndex:i] objectForKey:@"created_time"] integerValue]];
+		_updated_time =		[NSNumber numberWithInt:[[[streamArray objectAtIndex:i] objectForKey:@"updated_time"] integerValue]];
+		_post_id =			[NSString stringWithFormat:@"%@", [[streamArray objectAtIndex:i] objectForKey:@"post_id"]];
+		
+		//NSLog(@"post_id is %@", [NSString stringWithFormat:@"%@", [[streamArray objectAtIndex:i] objectForKey:@"post_id"]]);
 		
 		//attachment count is more than 1, it could be everything except facebook status according to facebook API
 		if([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] allKeys] count] > 1) 
@@ -145,7 +164,7 @@
 			{
 				_image_url = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&", [[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
 				_message = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
-				_type = [NSString stringWithFormat:@"status"];
+				_objectType = [NSString stringWithFormat:@"status"];
 			}
 			else
 			{ //this is all the objects including internal fb events,fb photos,fb videos,fb links, external; youtube, tumblr, facebook apps and external links.
@@ -163,14 +182,10 @@
 						//NSLog(@"fb_object_type is %@",[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"] );
 						//NSLog(@"attachment media is %@", [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"]);
 						NSString *_temp = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"src"]];
-
-						
 						_image_url = [_temp stringByReplacingOccurrencesOfString:@"_s" withString:@"_n"];
 						_message =   [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
 						if([_message length] == 0) _message = [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"name"];
-						_type = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
-
-						
+						_objectType = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
 					}//endif
 					else 	//here we know these could either be external links OR youtube videos as long as fb_object_type == @"" && media is an array.
 					{
@@ -210,7 +225,7 @@
 						if([_message length] == 0) _message = [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"name"];
 						//NSLog(@"_message is %@", _message);
 						
-						_type = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
+						_objectType = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
 						
 												
 						
@@ -253,7 +268,7 @@
 					_message =   [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
 					
 					if([_message length] == 0) _message = [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"name"];
-					_type = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
+					_objectType = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
 					
 					
 				}//endelse
@@ -282,25 +297,39 @@
 
 		//	NSLog(@"message is 3 %@", _message);
 			_image_url = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&", [[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
-			_type = [NSString stringWithFormat:@"status"];
+			_objectType = [NSString stringWithFormat:@"status"];
 		}//endelse
 		
 		
-		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-							  _from, @"from",
-							  _categoryValue, @"categoryValue", 
-							  _actor_id, @"actor_id", 
-							  _image_url, @"image_url",
-							  _message, @"message",
-							  _post_id, @"post_id",
-							  _type, @"type",
-							  _fromType, @"fromType",
-							  nil];
 		
-		NSLog(@"dictionary is %@", dict);
+		/*
+			
+		 // Dictionary keys
+
+
+		 
+		*/
+			
+		[_peopleMapDB addItemRow:[NSDictionary dictionaryWithObjectsAndKeys:
+								_post_id, @"post_id",
+								_objectType, @"objectType", 
+								_likeCount, @"likeCount", 
+								_commentCount, @"commentCount",
+								_poster_id, @"poster_id",
+								_poster_name, @"poster_name",
+								_poster_type, @"poster_type",
+								_message, @"message",
+								_permalink, @"permalink",
+								_image_url, @"image_url",
+								_posted_time, @"posted_time",
+								_updated_time, @"updated_time",
+							  nil]];
+		
+		
 		
 		
 		//@@@@@@@ 0- split them pages and users separately, why? because we are going to be writing them separately to the filesystem.
+		/*
 		if([_fromType isEqual:@"user"])
 		{
 			[userPlistArray addObject:dict];
@@ -310,7 +339,7 @@
 			[pagePlistArray addObject:dict];
 		}
    
-		
+		*/
 
 	}//endfor
 	
@@ -368,8 +397,8 @@
 	
 	
 	
-	[self downloadImagesOf:newUserPlistArray forPlistArray:_plistUserArray writeWithPrefix:@"u"];
-	[self downloadImagesOf:newPagePlistArray forPlistArray:_plistPageArray writeWithPrefix:@"p"];
+	//[self downloadImagesOf:newUserPlistArray forPlistArray:_plistUserArray writeWithPrefix:@"u"];
+	//[self downloadImagesOf:newPagePlistArray forPlistArray:_plistPageArray writeWithPrefix:@"p"];
 	//[self downloadImagesForItems:newPagePlistArray];
 	
 	
@@ -605,8 +634,6 @@
 	[_likesAndCommentsRequestDelegate likesAndCommentsRequestComplete];
 	
 }
-
-
 
 
 
