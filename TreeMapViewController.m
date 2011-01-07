@@ -48,7 +48,7 @@
 	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
 	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local.db"];
 
-	[self getLikes];
+	[self getItemsBasedOn:@"likeCount" andPosterType:@"user"];
 
 }
 
@@ -98,10 +98,13 @@
 
 
 
-- (void) getLikes
+- (void) getItemsBasedOn:(NSString*)count andPosterType:(NSString*)poster_type
 { //SELECT rowid, poster_name, commentCount FROM "object" WHERE poster_type = "page" ORDER BY "commentCount" DESC LIMIT 8;
 	NSDictionary * row = nil;
-	for (row in [_peopleMapDB getQuery:@"SELECT rowid, poster_name, commentCount FROM \"object\" WHERE poster_type = \"page\" ORDER BY \"commentCount\" DESC LIMIT 8"]) 
+	NSString* s = [NSString stringWithFormat:@"SELECT rowid, poster_name, %@ FROM \"object\" WHERE poster_type = \"%@\" ORDER BY \"%@\" DESC LIMIT 8", count, poster_type, count];
+	
+	NSLog(@"%@",s);
+	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT rowid, poster_name, %@ FROM \"object\" WHERE poster_type = \"%@\" ORDER BY \"%@\" DESC LIMIT 8", count, poster_type, count]]) 
 	{
 		//[self dispRow:row];
 		NSLog(@"row is %@", row);

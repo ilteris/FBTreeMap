@@ -75,9 +75,7 @@
 
 
 - (void)resizeView;
-- (void) getLikes;
-
-
+- (void) getItemsBasedOn:(NSString*)count andPosterType:(NSString*)poster_type;
 
 
 
