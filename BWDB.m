@@ -257,7 +257,7 @@
     [record getObjects:values andKeys:keys];    // convenient for the C array
     values[dictSize] = rowID;
     
-    NSString * query = [NSString stringWithFormat:@"update %@ set %@ = ? where id = ?",
+    NSString * query = [NSString stringWithFormat:@"update %@ set updated = datetime('now'), %@ = ? where id = ?",
                         tableName,
                         [[record allKeys] componentsJoinedByString:@" = ?, "]];
     NSLog(@"query is %@", query);

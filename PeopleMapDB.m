@@ -82,7 +82,12 @@ static NSString * const kDBItemFeedIDKey = @"feed_id";
     // NSLog(@"%s", __FUNCTION__);
     [self doQuery:@"DELETE FROM item WHERE feed_id = ?", rowid];
     [self doQuery:@"DELETE FROM feed WHERE id = ?", rowid];
+	
 }
+
+
+
+
 
 - (NSNumber *) addFeedRow: (NSDictionary *) feed { 
     // NSLog(@"%s", __FUNCTION__);
@@ -105,6 +110,7 @@ static NSString * const kDBItemFeedIDKey = @"feed_id";
                         [feed objectForKey:@"desc"], @"desc", nil];
     [self updateRow:rec :rowid];
 }
+
 
 #pragma mark -
 #pragma mark Item methods
@@ -145,21 +151,11 @@ static NSString * const kDBItemFeedIDKey = @"feed_id";
                         [item objectForKey:@"post_id"]];
 	
     if (rowid) {
-		NSLog(@"something is wrong...");
+		NSLog(@"updating row...");
         [self updateRow:item :rowid];
 		//TODO: right now, we are updating the whole things,
-		// we should just update the counts and updated time in a custom queery maybe here?
-		/*
-		[db updateRow:[NSDictionary dictionaryWithObjectsAndKeys:
-		@"cuatro", @"a",
-		@"cinco", @"b",
-		@"seis", @"c",
-		nil]
-		:[NSNumber numberWithInt:4]];
-		*/
-		// [db doQuery:@"drop table if exists bwtable"];
-		
-        return rowid;
+		// we should just update the counts and updated time;
+		return rowid;
     } else {
 		NSLog(@"inserting...");
         [self insertRow:item];
