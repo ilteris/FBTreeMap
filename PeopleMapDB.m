@@ -88,7 +88,6 @@ static NSString * const kDBItemFeedIDKey = @"feed_id";
 
 
 
-
 - (NSNumber *) addFeedRow: (NSDictionary *) feed { 
     // NSLog(@"%s", __FUNCTION__);
     self.tableName = kFeedTableName;

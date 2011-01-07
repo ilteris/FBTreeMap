@@ -98,12 +98,12 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	
 	if([[NSUserDefaults standardUserDefaults] integerForKey:@"viewMode"]) [mySwitch setOn:YES animated:NO];  
 	
-//	_treemapViewController = [[TreeMapViewController alloc] init];
+	_treemapViewController = [[TreeMapViewController alloc] init];
 	
-//	[_treemapViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight];
+	[_treemapViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight];
 	
 	//[self.treemapViewController viewWillAppear:YES];
-//	[self.containerView addSubview:self.treemapViewController.view];
+	[self.containerView addSubview:self.treemapViewController.view];
 		
 }
 

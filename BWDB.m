@@ -183,7 +183,7 @@
         for (int i = 0; i < param_count; i++) 
 		{
             id o = va_arg(args, id);
-			NSLog(@"o is %@", o);
+			//NSLog(@"o is %@", o);
             // determine the type of the argument
             if (o == nil) {
                 sqlite3_bind_null(statement, i + 1);

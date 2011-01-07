@@ -14,7 +14,7 @@
 
 #import "FBConnect.h"
 #import "UserInfo.h"
-
+#import "PeopleMapDB.h"
 
 @class ASINetworkQueue;
 
@@ -36,6 +36,8 @@
 	//when you press delete me/feed this is the post that's deleted
 	NSString *feedPostId;
 	
+	PeopleMapDB *_peopleMapDB;
+	
 
 	IBOutlet UIView *treeMapView;
 	IBOutlet UIWebView *myWebView;
@@ -52,6 +54,7 @@
 
 
 
+@property (nonatomic, retain) PeopleMapDB *peopleMapDB;
 
 
 @property (nonatomic, retain) NSMutableArray *fruits;
@@ -72,7 +75,7 @@
 
 
 - (void)resizeView;
-
+- (void) getLikes;
 
 
 

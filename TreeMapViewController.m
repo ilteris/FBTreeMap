@@ -10,6 +10,8 @@
 #import "NSMutableArray_Shuffling.h"
 
 
+
+
 #define numberOfObjects (8)
 
 
@@ -32,6 +34,7 @@
 @synthesize myWebView;
 @synthesize jsonArray;
 
+@synthesize peopleMapDB = _peopleMapDB;
 
 
 #pragma mark -
@@ -43,6 +46,9 @@
 	/*Facebook Application ID*/
 	//NSString *client_id = @"128496757192973";
 	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
+	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local.db"];
+
+	[self getLikes];
 
 }
 
@@ -90,6 +96,20 @@
 	
 }
 
+
+
+- (void) getLikes
+{ //SELECT rowid, poster_name, commentCount FROM "object" WHERE poster_type = "page" ORDER BY "commentCount" DESC LIMIT 8;
+	NSDictionary * row = nil;
+	for (row in [_peopleMapDB getQuery:@"SELECT rowid, poster_name, commentCount FROM \"object\" WHERE poster_type = \"page\" ORDER BY \"commentCount\" DESC LIMIT 8"]) 
+	{
+		//[self dispRow:row];
+		NSLog(@"row is %@", row);
+	}
+}
+
+
+
 #pragma mark TreemapView data source
 //values that are passed to treemapview --> anytime there's an action with the tableview, source gets called first.
 
@@ -133,6 +153,7 @@
 		array = [[NSMutableArray alloc] initWithContentsOfFile:plistPath];
 		NSLog(@"array count is zero");
 	}
+	
 	
 	NSLog(@"array is %@", array);
 	//trying to get the paths of the filenames and like counts here.
