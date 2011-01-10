@@ -101,13 +101,13 @@
 - (void) getItemsBasedOn:(NSString*)count andPosterType:(NSString*)poster_type
 { //SELECT rowid, poster_name, commentCount FROM "object" WHERE poster_type = "page" ORDER BY "commentCount" DESC LIMIT 8;
 	NSDictionary * row = nil;
-	NSString* s = [NSString stringWithFormat:@"SELECT rowid, poster_name, %@ FROM \"object\" WHERE poster_type = \"%@\" ORDER BY \"%@\" DESC LIMIT 8", count, poster_type, count];
+	//NSString* s = [NSString stringWithFormat:@"SELECT rowid, poster_name, %@ FROM \"object\" WHERE poster_type = \"%@\" ORDER BY \"%@\" DESC LIMIT 8", count, poster_type, count];
 	
-	NSLog(@"%@",s);
+	//NSLog(@"%@",s);
 	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT rowid, poster_name, %@ FROM \"object\" WHERE poster_type = \"%@\" ORDER BY \"%@\" DESC LIMIT 8", count, poster_type, count]]) 
 	{
 		//[self dispRow:row];
-		NSLog(@"row is %@", row);
+	//	NSLog(@"row is %@", row);
 	}
 }
 
@@ -192,9 +192,7 @@
 			NSNumber *value = [dic objectForKey:@"categoryValue"];
 			[valuesArray addObject:value];
 		}
-		
-		
-		
+
 	}
 	
 	
@@ -334,7 +332,6 @@
 {
 	[self updateCell:cell forIndex:index];
 }
-
 
 
 #pragma mark -

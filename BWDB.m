@@ -236,7 +236,7 @@
                         [[record allKeys] componentsJoinedByString:@","],
                         [placeHoldersArray componentsJoinedByString:@","]];
     
-	NSLog(@"query is %@", query);
+	//NSLog(@"query is %@", query);
     [self bindSQL:[query UTF8String] arguments:(va_list)values];
     sqlite3_step(statement);
     if(sqlite3_finalize(statement) == SQLITE_OK) {
@@ -260,7 +260,7 @@
     NSString * query = [NSString stringWithFormat:@"update %@ set updated = datetime('now'), %@ = ? where id = ?",
                         tableName,
                         [[record allKeys] componentsJoinedByString:@" = ?, "]];
-    NSLog(@"query is %@", query);
+  //  NSLog(@"query is %@", query);
     [self bindSQL:[query UTF8String] arguments:(va_list)values];
 	
     sqlite3_step(statement);

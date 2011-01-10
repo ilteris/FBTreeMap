@@ -39,7 +39,7 @@
 - (void)request:(FBRequest*)request didLoad:(id)result{
 	
    // NSMutableArray *fruits = [[[NSMutableArray alloc] init] autorelease];
-//	NSLog(@"result %@", result);
+	NSLog(@"result %@", result);
 
 	
 	
@@ -186,6 +186,15 @@
 						_message =   [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
 						if([_message length] == 0) _message = [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"name"];
 						_objectType = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
+						NSLog(@"objectType is %@", _objectType);
+						if([_objectType isEqual:@"video"])
+						   {
+							 //  NSString *video_source = [NSString stringWithFormat:@"%@",[[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"video"] objectForKey:@"source_url"]];
+								_image_url = [NSString stringWithFormat:@"%@",[[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"video"] objectForKey:@"source_url"]];
+							   
+							 //  NSLog(@"video_source is %@", video_source);
+							   
+						   }
 					}//endif
 					else 	//here we know these could either be external links OR youtube videos as long as fb_object_type == @"" && media is an array.
 					{
@@ -227,6 +236,14 @@
 						
 						_objectType = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
 						
+						NSLog(@"objectType is %@", _objectType);
+						if([_objectType isEqual:@"video"])
+						{
+							_image_url = [NSString stringWithFormat:@"%@",[[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"video"] objectForKey:@"source_url"]];
+							
+						//	NSLog(@"video_source is %@", video_source);
+							
+						}
 												
 						
 					}//endelse
@@ -234,7 +251,7 @@
 				//	NSLog(@"count one %@", [streamArray objectAtIndex:i] );
 					
 				}//endif
-				else //this is most probably an tumblr, instagram, foursquare or a facebook app so expect images as app icons map icons etc... sometimes page is too!
+				else //this is most probably an tumblr, instagram, foursquare or a facebook app so expect images as app icons map icons etc... sometimes fb page is too!
 				{
 					//still getting only up to name ---> if that's empty maybe even go further up to description?
 					
@@ -303,67 +320,44 @@
 		
 		
 		/*
-			
 		 // Dictionary keys
-
-
-		 
 		*/
 			
-		[_peopleMapDB addItemRow:[NSDictionary dictionaryWithObjectsAndKeys:
-								_post_id, @"post_id",
-								_objectType, @"objectType", 
-								_likeCount, @"likeCount", 
-								_commentCount, @"commentCount",
-								_poster_id, @"poster_id",
-								_poster_name, @"poster_name",
-								_poster_type, @"poster_type",
-								_message, @"message",
-								_permalink, @"permalink",
-								_image_url, @"image_url",
-								_posted_time, @"posted_time",
-								_updated_time, @"updated_time",
-							  nil]];
+		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+							  _post_id, @"post_id",
+							  _objectType, @"objectType", 
+							  _likeCount, @"likeCount", 
+							  _commentCount, @"commentCount",
+							  _poster_id, @"poster_id",
+							  _poster_name, @"poster_name",
+							  _poster_type, @"poster_type",
+							  _message, @"message",
+							  _permalink, @"permalink",
+							  _image_url, @"image_url",
+							  _posted_time, @"posted_time",
+							  _updated_time, @"updated_time",
+							  nil];
 		
-		
-		
-		
-		//@@@@@@@ 0- split them pages and users separately, why? because we are going to be writing them separately to the filesystem.
-		/*
-		if([_fromType isEqual:@"user"])
-		{
-			[userPlistArray addObject:dict];
-		}
-		else 
-		{
-			[pagePlistArray addObject:dict];
-		}
-   
-		*/
-
+		[_peopleMapDB addItemRow:dict];
 	}//endfor
 	
-	
-	//NSLog(@"pagePlistArray is %@", pagePlistArray);
-	//NSLog(@"userPlistArray is %@", userPlistArray);
-	//
-	
-	//@@@@@@@ 1- filter and splice;	
-	NSMutableArray* newUserPlistArray = [[self spliceArray:userPlistArray] retain];
-	NSMutableArray* newPagePlistArray = [[self spliceArray:pagePlistArray] retain];
-	[userPlistArray release];
-	[pagePlistArray release];
+	[self callTheDB];
 	
 	
-//	NSLog(@"newUserPlistArray is %@", newUserPlistArray);
-//	NSLog(@"newPagePlistArray is %@", newPagePlistArray);
-	//@@@@@@@ 2- setup the queue.
+		    
+}//endfunction
 
+- (void) callTheDB
+{
+	
+	
+
+	
+	
 	
 	if (!_networkQueue) {
 		_networkQueue = [[ASINetworkQueue alloc] init];	
 	}
-	
 	//failed = NO;
 	[_networkQueue reset];
 	//[networkQueue setDownloadProgressDelegate:progressIndicator];
@@ -372,146 +366,150 @@
 	[_networkQueue setQueueDidFinishSelector:@selector(queueComplete:)]; 
 	//[networkQueue setShowAccurateProgress:[accurateProgress isOn]];
 	[_networkQueue setDelegate:self];
-	
-	
 	[_networkQueue go];
 	
 	
+	//get the most liked 24 elements for any section and views 8x4(user,page for comment and likes) download the images. well actually, you need to download all the 8x4 images. 
 	
-	//@@@@@@@ 3- setup the arrays that will be written.
-
+	//start with current section/ current view.
+	NSDictionary *row = nil;
 	
-	
-	//@@@@@@@ 3- download the images.
-	
-	if(_plistUserArray == nil) //check if the plist is empty 
-	{ 
-		_plistUserArray = [[NSMutableArray alloc] initWithCapacity:1]; //if it's empty, alloc/init	
-	}
-	
-	
-	if(_plistPageArray == nil) //check if the plist is empty 
-	{ 
-		_plistPageArray = [[NSMutableArray alloc] initWithCapacity:1]; //if it's empty, alloc/init	
-	}
-	
-	
-	
-	//[self downloadImagesOf:newUserPlistArray forPlistArray:_plistUserArray writeWithPrefix:@"u"];
-	//[self downloadImagesOf:newPagePlistArray forPlistArray:_plistPageArray writeWithPrefix:@"p"];
-	//[self downloadImagesForItems:newPagePlistArray];
-	
-	
-	    
-}//endfunction
-
-
-- (NSMutableArray*) spliceArray:(NSMutableArray*)myArray
-{
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"categoryValue" ascending: NO];
-	//NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"comments.count" ascending: NO];
-	[myArray sortUsingDescriptors: [NSArray arrayWithObject: sortDescriptor]];
-	[sortDescriptor release];
-	
-	
-	
-	
-	// here  we are getting rid of the rest of the objects after numberOfObjects
-	//check if the array is larger than numberof Objects
-	
-	
-	if ([myArray count] >= numberOfObjects) 
-	{
-		[myArray removeObjectsInRange: NSMakeRange(numberOfObjects,[myArray count]-numberOfObjects)];
-	}
-
-	return myArray;
-}//endfunction
-
-
-
-- (void) downloadImagesOf:(NSMutableArray*)myArray forPlistArray:(NSMutableArray*)_plistArray writeWithPrefix:(NSString*)pfx
-{
 	ASIHTTPRequest *req;
 	
-	for (NSInteger i = 0; i < [myArray count]; i++)
+	
+	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT post_id,  image_url, likeCount, objectType FROM \"object\" WHERE poster_type = \"user\" ORDER BY \"likeCount\" DESC LIMIT 8"]]) 
 	{
-		//don't request to download any image because we are using background images locally with STATUS.
-		if([[[myArray objectAtIndex:i] objectForKey:@"type"] isEqual:@"status"])
+		//[self dispRow:row];
+		NSLog(@"row is %@", row);
+		if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]])
 		{
-			NSLog(@"this should be status");
-			NSInteger rand_ind = arc4random() % [_backgrounds count];
-			NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[_backgrounds objectAtIndex:rand_ind]  ofType:@"png"]];
-			[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_%i.png",pfx,i]] atomically:YES];
-			NSString *tempFileName = [NSString stringWithFormat:@"%@_%i.png",pfx,i];
-			[_backgrounds removeObjectAtIndex:rand_ind];
-			if([_backgrounds count] < 1) [self setTheBackgroundArray]; //if the backgroundarray gets empty, refill it.
-			
-			if(![[[myArray objectAtIndex:i]  objectForKey:@"categoryValue"] isEqual:@"0"]) 
-			{
-				NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [[myArray objectAtIndex:i]  objectForKey:@"from"], @"from",
-									  [[myArray objectAtIndex:i]  objectForKey:@"categoryValue"], @"categoryValue", 
-									  tempFileName, @"filename",
-									  //[[myArray objectAtIndex:i]  objectForKey:@"image_url"], @"image_url",
-									  [[myArray objectAtIndex:i]  objectForKey:@"message"], @"message",
-									  [[myArray objectAtIndex:i]  objectForKey:@"post_id"], @"post_id",
-									  [[myArray objectAtIndex:i]  objectForKey:@"type"], @"type",
-									  [[myArray objectAtIndex:i]  objectForKey:@"fromType"], @"fromType",
-									  nil];
-				
-				//adding to the plistArray here.
-				[_plistArray insertObject:dict atIndex:0];
-				//	NSLog(@"dict %@", dict);	
-			}
-			
-		}
-		else if([[[myArray objectAtIndex:i] objectForKey:@"type"] isEqual:@"video"])	
-		{
-			//don't request to load any image here, only load VIDEO Background since they are videos.
-			NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"video"  ofType:@"png"]];
-			[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_%i.png",pfx,i]] atomically:YES];
-			NSString *tempFileName = [NSString stringWithFormat:@"%@_%i.png",pfx,i];
-			
-			
-			if(![[[myArray objectAtIndex:i]  objectForKey:@"categoryValue"] isEqual:@"0"]) 
-			{
-				NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [[myArray objectAtIndex:i]  objectForKey:@"from"], @"from",
-									  [[myArray objectAtIndex:i]  objectForKey:@"categoryValue"], @"categoryValue", 
-									  tempFileName, @"filename", 
-									  //[[myArray objectAtIndex:i]  objectForKey:@"image_url"], @"image_url",
-									  [[myArray objectAtIndex:i]  objectForKey:@"message"], @"message",
-									  [[myArray objectAtIndex:i]  objectForKey:@"post_id"], @"post_id",
-									  [[myArray objectAtIndex:i]  objectForKey:@"type"], @"type",
-									  [[myArray objectAtIndex:i]  objectForKey:@"fromType"], @"fromType",
-									  nil];
-				
-				//adding to the plistArray here.
-				[_plistArray insertObject:dict atIndex:0];
-				//	NSLog(@"dict %@", dict);	
-			}
-			
-		}
-		else 
-		{
-			
-			//load the images for everything except status and video.
-			req = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:[[myArray objectAtIndex:i] objectForKey:@"image_url"]]] autorelease];
-			[req setUserInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-							  [NSNumber numberWithInt:i], @"ImageNumber", //send the index number to use in the imageFetch delegate method.
-							  // [[tempArr objectAtIndex:0] objectForKey:@"fql_result_set"], @"tempArr",
-							  // [[tempArr objectAtIndex:1] objectForKey:@"fql_result_set"], @"names",
-							  pfx, @"pfx",
-							  [myArray objectAtIndex:i], @"item", //send the item itself.
-							  _plistArray, @"array",
-							  nil]]; 
-			[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_%i.png",pfx,i]]];
-			[_networkQueue addOperation:req];
-		}//endelse
+			NSLog(@"file is %@", [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]);
+	
+			if([[row objectForKey:@"objectType" ] isEqual:@"video"]) 
+			{//then put the video background there.
+				NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"video"  ofType:@"png"]];
+				[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]] atomically:YES];
+			}//endif
+			else if([[row objectForKey:@"objectType" ] isEqual:@"status"]) 
+			{//then put the custom background there.
+				NSInteger rand_ind = arc4random() % [_backgrounds count];
+				NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[_backgrounds objectAtIndex:rand_ind]  ofType:@"png"]];
+				[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]] atomically:YES];
+				[_backgrounds removeObjectAtIndex:rand_ind];
+				if([_backgrounds count] < 1) [self setTheBackgroundArray]; //if the backgroundarray gets empty, refill it.
+			}//endelseif
+			else 
+			{//then download the image
+				req = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:[row objectForKey:@"image_url"]]] autorelease];
+				[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]];
+				[_networkQueue addOperation:req];
+			}//endelse
+		}//endif
 	}//endfor
 	
+	
+	//start with current section/ other view.
+	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT post_id, image_url, commentCount, objectType FROM \"object\" WHERE poster_type = \"page\" ORDER BY \"commentCount\" DESC LIMIT 8"]]) 
+	{
+		//[self dispRow:row];
+		NSLog(@"row is %@", row);
+		if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]])
+		{
+			NSLog(@"file is %@", [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]);
+			
+			if([[row objectForKey:@"objectType" ] isEqual:@"video"]) 
+			{//then put the video background there.
+				NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"video"  ofType:@"png"]];
+				[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]] atomically:YES];
+			}//endif
+			else if([[row objectForKey:@"objectType" ] isEqual:@"status"]) 
+			{//then put the custom background there.
+				NSInteger rand_ind = arc4random() % [_backgrounds count];
+				NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[_backgrounds objectAtIndex:rand_ind]  ofType:@"png"]];
+				[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]] atomically:YES];
+				[_backgrounds removeObjectAtIndex:rand_ind];
+				if([_backgrounds count] < 1) [self setTheBackgroundArray]; //if the backgroundarray gets empty, refill it.
+			}//endelseif
+			else 
+			{//then download the image
+				req = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:[row objectForKey:@"image_url"]]] autorelease];
+				[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]];
+				[_networkQueue addOperation:req];
+			}//endelse
+		}//endif
+		
+		
+	}//endfor
+	
+	//start with other section/ current view.
+	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT post_id, image_url, image_url, likeCount, objectType FROM \"object\" WHERE poster_type = \"user\" ORDER BY \"likeComment\" DESC LIMIT 8"]]) 
+	{
+		//[self dispRow:row];
+		NSLog(@"row is %@", row);
+		if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]])
+		{
+			NSLog(@"file is %@", [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]);
+			
+			if([[row objectForKey:@"objectType" ] isEqual:@"video"]) 
+			{//then put the video background there.
+				NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"video"  ofType:@"png"]];
+				[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]] atomically:YES];
+			}//endif
+			else if([[row objectForKey:@"objectType" ] isEqual:@"status"]) 
+			{//then put the custom background there.
+				NSInteger rand_ind = arc4random() % [_backgrounds count];
+				NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[_backgrounds objectAtIndex:rand_ind]  ofType:@"png"]];
+				[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]] atomically:YES];
+				[_backgrounds removeObjectAtIndex:rand_ind];
+				if([_backgrounds count] < 1) [self setTheBackgroundArray]; //if the backgroundarray gets empty, refill it.
+			}//endelseif
+			else 
+			{//then download the image
+				req = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:[row objectForKey:@"image_url"]]] autorelease];
+				[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]];
+				[_networkQueue addOperation:req];
+			}//endelse
+		}//endif
+		
+	}//endfor
+	
+	//start with other section/ other view.
+	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT post_id, image_url, image_url, commentCount, objectType FROM \"object\" WHERE poster_type = \"page\" ORDER BY \"commentCount\" DESC LIMIT 8"]]) 
+	{
+		//[self dispRow:row];
+		NSLog(@"row is %@", row);
+		if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]])
+		{
+			NSLog(@"file is %@", [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]);
+			
+			if([[row objectForKey:@"objectType" ] isEqual:@"video"]) 
+			{//then put the video background there.
+				NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"video"  ofType:@"png"]];
+				[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]] atomically:YES];
+			}//endif
+			else if([[row objectForKey:@"objectType" ] isEqual:@"status"]) 
+			{//then put the custom background there.
+				NSInteger rand_ind = arc4random() % [_backgrounds count];
+				NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[_backgrounds objectAtIndex:rand_ind]  ofType:@"png"]];
+				[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]] atomically:YES];
+				[_backgrounds removeObjectAtIndex:rand_ind];
+				if([_backgrounds count] < 1) [self setTheBackgroundArray]; //if the backgroundarray gets empty, refill it.
+			}//endelseif
+			else 
+			{//then download the image
+				req = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:[row objectForKey:@"image_url"]]] autorelease];
+				[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]];
+				[_networkQueue addOperation:req];
+			}//endelse
+		}//endif
+		
+	}//endfor
+
+
 }
+
+
+
 
 
 - (void)setTheBackgroundArray
@@ -548,51 +546,7 @@
 - (void)imageFetchComplete:(ASIHTTPRequest *)request
 {
 	
-	UIImage *img = [UIImage imageWithContentsOfFile:[request downloadDestinationPath]];
-	if (img) 
-	{
-		int imageNo =  [[[request userInfo] objectForKey:@"ImageNumber"] intValue]; 
-		
-		NSMutableArray* _plistArray = [[request userInfo] objectForKey:@"array"];
-		
-		NSString *tempFileName = [NSString stringWithFormat:@"%@_%i.png",[[request userInfo] objectForKey:@"pfx"],imageNo];
-		NSString *_categoryValue;
-		NSString *_message;
-		NSString *_from;
-		NSString *_type;
-		NSString *_post_id;
-		NSString *_fromType;
-		
-	//	NSLog(@"_plistArray is %@", _plistArray);
-		
-		
-		_categoryValue =	[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"] objectForKey:@"categoryValue"]];
-		_from =				[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"] objectForKey:@"from"]];
-		_message =			[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"] objectForKey:@"message"]];
-		_type =				[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"] objectForKey:@"type"]];
-		_post_id =			[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"] objectForKey:@"post_id"]];
-		_fromType =			[NSString stringWithFormat:@"%@",[[[request userInfo] objectForKey:@"item"] objectForKey:@"fromType"]];
-
-		
-		//if the results are 0 then don't put those in the plist file.
-		//NSLog(@"names is %@", [[request userInfo] objectForKey:@"names"]);
-		if(![_categoryValue isEqual:@"0"]) 
-		{
-			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-								  tempFileName, @"filename", 
-								  _categoryValue, @"categoryValue", 
-								  _from, @"from",
-								  _message, @"message",
-								  _type, @"type",
-								  _post_id, @"post_id",
-								  _fromType, @"fromType",
-								  nil];
-			
-			//adding to the plistArray here.
-			[_plistArray insertObject:dict atIndex:0];
-		//	NSLog(@"dict %@", dict);	
-		}//endif
-	}//endif
+	
 }//endfunction
 
 
@@ -616,17 +570,14 @@
 	
 	//imagesLoaded = YES;
 	
-	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths objectAtIndex: 0];
-	NSString *plistFileForUsers = [documentsDirectory stringByAppendingPathComponent: @"userData.plist"];
-	NSString *plistFileForPages = [documentsDirectory stringByAppendingPathComponent: @"pageData.plist"];
+	
 	//NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
 	//plist file consists of objects of dictionaries wrapped in an array
 	
 	//NSLog(@"self._plistUserArray %@", _plistUserArray);
 	//NSLog(@"self._plistPageArray %@", _plistPageArray);
-	[_plistUserArray writeToFile:plistFileForUsers atomically:NO];
-	[_plistPageArray writeToFile:plistFileForPages atomically:NO];
+	//[_plistUserArray writeToFile:plistFileForUsers atomically:NO];
+	//[_plistPageArray writeToFile:plistFileForPages atomically:NO];
 	
 	//[(TreemapView *)self.treeMapView reloadData];
 	

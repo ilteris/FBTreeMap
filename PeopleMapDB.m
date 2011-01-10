@@ -150,13 +150,13 @@ static NSString * const kDBItemFeedIDKey = @"feed_id";
                         [item objectForKey:@"post_id"]];
 	
     if (rowid) {
-		NSLog(@"updating row...");
+	//	NSLog(@"updating row...");
         [self updateRow:item :rowid];
 		//TODO: right now, we are updating the whole things,
 		// we should just update the counts and updated time;
 		return rowid;
     } else {
-		NSLog(@"inserting...");
+	//	NSLog(@"inserting...");
         [self insertRow:item];
         return nil;     // indicate that it's a new row
     }
