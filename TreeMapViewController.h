@@ -75,7 +75,7 @@
 
 
 - (void)resizeView;
-- (void) getItemsBasedOn:(NSString*)count andPosterType:(NSString*)poster_type;
+
 
 
 

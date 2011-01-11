@@ -48,7 +48,7 @@
 	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
 	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local.db"];
 
-	[self getItemsBasedOn:@"likeCount" andPosterType:@"user"];
+	//[self getItemsBasedOn:@"likeCount" andPosterType:@"user"];
 
 }
 
@@ -97,22 +97,6 @@
 }
 
 
-
-- (void) getItemsBasedOn:(NSString*)count andPosterType:(NSString*)poster_type
-{ //SELECT rowid, poster_name, commentCount FROM "object" WHERE poster_type = "page" ORDER BY "commentCount" DESC LIMIT 8;
-	NSDictionary * row = nil;
-	//NSString* s = [NSString stringWithFormat:@"SELECT rowid, poster_name, %@ FROM \"object\" WHERE poster_type = \"%@\" ORDER BY \"%@\" DESC LIMIT 8", count, poster_type, count];
-	
-	//NSLog(@"%@",s);
-	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT rowid, poster_name, %@ FROM \"object\" WHERE poster_type = \"%@\" ORDER BY \"%@\" DESC LIMIT 8", count, poster_type, count]]) 
-	{
-		//[self dispRow:row];
-	//	NSLog(@"row is %@", row);
-	}
-}
-
-
-
 #pragma mark TreemapView data source
 //values that are passed to treemapview --> anytime there's an action with the tableview, source gets called first.
 
@@ -120,85 +104,41 @@
 {
 	NSLog(@"valuesForTreemapView");
 	
-	//TODO: check if the fruits is null when it's coming here/
-		
-	//if (!fruits) //meaning I just launched the app. 
-	//	{
-	//need to fill the fruits 
-	//get the plist
+	NSDictionary * row = nil;
+	//NSString* s = [NSString stringWithFormat:@"SELECT rowid, poster_name, %@ FROM \"object\" WHERE poster_type = \"%@\" ORDER BY \"%@\" DESC LIMIT 8", count, poster_type, count];
 	
-	
-	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths objectAtIndex: 0];
-	NSString *plistFile;
-	
-	NSLog(@"view mode is %i",[[NSUserDefaults standardUserDefaults] integerForKey:@"viewMode"] );
-	if([[NSUserDefaults standardUserDefaults] integerForKey:@"viewMode"])
-	{
-		plistFile = [documentsDirectory stringByAppendingPathComponent: @"userData.plist"];
-	}
-	else 
-	{
-		plistFile = [documentsDirectory stringByAppendingPathComponent: @"pageData.plist"];
-	}
-
-	
-	NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
-	
-	//NSLog(@"array is %@", array);
-	
-	//if the plist doesn't exist meaning we just launched the app FOR THE FIRST TIME.
-	if([array count] == 0) 
-		//in this case we are using our plist file that's  bundled with the app.
-	{
-		NSBundle *bundle = [NSBundle mainBundle];
-		NSString *plistPath = [bundle pathForResource:@"data" ofType:@"plist"];
-		array = [[NSMutableArray alloc] initWithContentsOfFile:plistPath];
-		NSLog(@"array count is zero");
-	}
-	
-	
-	NSLog(@"array is %@", array);
-	//trying to get the paths of the filenames and like counts here.
-	
-	self.fruits = [[NSMutableArray alloc] initWithCapacity:1];
-
-	//NSLog(@"array %@", array);
-	//NSLog(@"fruits %@", fruits);
-	
-	
-	//fruits is yet empty here.
-	for (NSDictionary *dic in array)  
-	{
-		NSMutableDictionary *mDic = [NSMutableDictionary dictionaryWithDictionary:dic];
-		[fruits addObject:mDic];
-	}
-	//} //endif
-	
-	[array release];
-	
-	//these values go to the treemapview in order to be used for calculating the sizes of the cells
 	NSMutableArray *valuesArray = [NSMutableArray arrayWithCapacity:1];
 	
-	NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
+	self.fruits = [[NSMutableArray alloc] initWithCapacity:1];
 	
-	
-	for (NSDictionary *dic in fruits) 
+	//NSLog(@"%@",s);
+	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT post_id, poster_name, commentCount, objectType, message FROM \"object\" WHERE poster_type = \"user\" ORDER BY \"commentCount\" DESC LIMIT 8"]]) 
 	{
+		//[self dispRow:row];
+		//	NSLog(@"row is %@", row);
 
-		if(![[dic objectForKey:@"categoryValue"] isEqual:@"0"]) 
+	
+	
+		if(![[row objectForKey:@"commentCount"] isEqual:@"0"]) 
 		{
 		//	NSLog(@"dic is %@", dic);
-			NSNumber *value = [dic objectForKey:@"categoryValue"];
+			NSNumber *value = [row objectForKey:@"commentCount"];
+			NSLog(@"value is %@", value);
 			[valuesArray addObject:value];
+			[fruits addObject:row];
 		}
-
+		
 	}
+	
+	NSLog(@"fruits is %@", self.fruits);
+
+
+	
 	
 	
 	//NSLog(@"values %@", valuesArray);
 	
-	
+	/*
 	if([[NSUserDefaults standardUserDefaults] integerForKey:@"viewMode"])
 	{
 		//little hack to bump up the value of the largest item. this gives us a larger cell.
@@ -245,6 +185,7 @@
 				
 			}//endif
 		}
+	
 
 		
 		
@@ -257,7 +198,7 @@
 	{
 		
 	}//endelse
-
+ */
 		
 		
 	
@@ -282,16 +223,16 @@
 	//[self setTheBackgroundArray];
 	
 	
-	NSString *tText = [[fruits objectAtIndex:index] objectForKey:@"categoryValue"];
+	NSNumber *tText = [[fruits objectAtIndex:index] objectForKey:@"commentCount"];
 	
 	
-	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths objectAtIndex: 0];
-	//match the indexes through the cellForIndex/fruits objectAtIndex.
-	NSString *fn = [documentsDirectory stringByAppendingPathComponent: [[fruits objectAtIndex:index] objectForKey:@"filename"]];
+	
+	NSString *fn =  [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [[fruits  objectAtIndex:index] objectForKey:@"post_id" ]]];
 	UIImage *img = [UIImage imageWithContentsOfFile:fn];
+	NSLog(@"the fn is %@", fn);
 	
-	if([[[fruits objectAtIndex:index] objectForKey:@"type"] isEqual:@"video"])
+	 
+	if([[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"video"])
 	{
 		
 		cell.imageViewA.image = img;
@@ -312,8 +253,10 @@
 		cell.contentLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
 	}
 	   
-	cell.countLabel.text = tText;
-	cell.titleLabel.text = [[[fruits objectAtIndex:index] objectForKey:@"from"] uppercaseString];
+	
+	cell.countLabel.text = [tText stringValue];
+	
+	cell.titleLabel.text = [[[fruits objectAtIndex:index] objectForKey:@"poster_name"] uppercaseString];
 	
 	//add the post_id
 	cell.post_id = [[fruits objectAtIndex:index] objectForKey:@"post_id"];
@@ -323,6 +266,7 @@
 	//load the local images first here.
 	
 //	[self updateCell:cell forIndex:index];
+	 
 	return cell;
 }
 
@@ -352,7 +296,6 @@
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-
 	//if([(TreemapView*)self.treeMapView initialized]) [self resizeView];
 }
 

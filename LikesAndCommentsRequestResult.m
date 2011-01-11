@@ -39,7 +39,7 @@
 - (void)request:(FBRequest*)request didLoad:(id)result{
 	
    // NSMutableArray *fruits = [[[NSMutableArray alloc] init] autorelease];
-	NSLog(@"result %@", result);
+	//NSLog(@"result %@", result);
 
 	
 	
@@ -81,14 +81,6 @@
 
 	
 	
-	//let's init the arrays to be used for temporary plist holders
-	NSMutableArray *userPlistArray = [[NSMutableArray alloc] initWithCapacity:1];
-	NSMutableArray *pagePlistArray = [[NSMutableArray alloc] initWithCapacity:1];
-	
-	
-	
-
-	
 	
 	for (NSInteger i=0; i < [streamArray count]; i++)
 	{
@@ -106,19 +98,7 @@
 		NSNumber *_posted_time;
 		NSNumber *_updated_time;
 		
-		
-		
-		/*
-		 NSString *_from;
-		 NSString *_categoryValue;
-		 NSString *_actor_id;
-		 NSString *_image_url;
-		 NSString *_message;
-		 NSString *_post_id;
-		 NSString *_type;
-		 NSString *_fromType;
-		 */
-		
+	
 		//traverse the user array and match the actor_id ----> uid, then break the for loop;
 		for (NSInteger j=0; j < [userAndPageArray count]; j++)
 		{
@@ -341,13 +321,16 @@
 		[_peopleMapDB addItemRow:dict];
 	}//endfor
 	
-	[self callTheDB];
+	//[self downloadAndWriteImageFiles];
 	
 	
 		    
 }//endfunction
 
-- (void) callTheDB
+
+//TODO: remove this method from here, and add it to the treemapviewcontroller and manage it from there.
+
+- (void) downloadAndWriteImageFiles
 {
 	
 	

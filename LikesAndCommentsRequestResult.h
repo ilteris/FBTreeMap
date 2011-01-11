@@ -33,10 +33,7 @@
 
 - (id) initializeWithDelegate:(id <LikesAndCommentsRequestDelegate>)delegate;
 - (void)setTheBackgroundArray;
-- (NSMutableArray*) spliceArray:(NSMutableArray*)myArray;
-- (void) downloadImagesOf:(NSMutableArray*)myArray forPlistArray:(NSMutableArray*)_plistArray writeWithPrefix:(NSString*)pfx;
-
-- (void) callTheDB;
+- (void) downloadAndWriteImageFiles;
 
 
 
