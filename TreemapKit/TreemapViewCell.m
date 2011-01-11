@@ -214,7 +214,6 @@
 			titleLabel.alpha = 1;
 
 			self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(11, self.frame.size.height - 61, 200, 48)];
-			
 			countLabel.numberOfLines = 0;
 			countLabel.font = [UIFont boldSystemFontOfSize:0];
 			
@@ -225,8 +224,6 @@
 			countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
 
 			contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0)];
-
-			
 			contentLabel.font = [UIFont boldSystemFontOfSize:0];
 			contentLabel.text = @"";
 			contentLabel.textAlignment = UITextAlignmentLeft;

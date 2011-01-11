@@ -19,16 +19,18 @@
 @class ASINetworkQueue;
 
 
+
+
 @interface TreeMapViewController : UIViewController   <TreemapViewDelegate, TreemapViewDataSource, UIWebViewDelegate> {
    
 	
 
 	
-	ASINetworkQueue *networkQueue;
+	ASINetworkQueue *_networkQueue;
 
 	NSMutableArray *cells;
-
-	
+	NSMutableArray *_backgrounds;
+	NSMutableArray *_valuesArray;
 	//facebook
 
 	
@@ -73,11 +75,13 @@
 @property (nonatomic, retain) IBOutlet UIView *treeMapView;
 @property (nonatomic, retain) IBOutlet UIWebView *myWebView;
 
-
+- (void)setTheBackgroundArray;
 - (void)resizeView;
-
-
-
+-(void)displaySection:(NSString*)section andView:(NSString*)viewType;
+- (void)displayCommentsOfUsers;
+- (void)displayCommentsOfPages;
+- (void)displayLikesOfPages;
+- (void)displayLikesOfUsers;
 
 
 @end

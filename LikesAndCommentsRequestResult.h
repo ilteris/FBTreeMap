@@ -23,7 +23,6 @@
 	NSMutableArray *_plistUserArray;
 	NSMutableArray *_plistPageArray;
 	NSMutableArray *_backgrounds;
-	ASINetworkQueue *_networkQueue;
 
 	id<LikesAndCommentsRequestDelegate> _likesAndCommentsRequestDelegate;
 }
@@ -32,8 +31,8 @@
 
 
 - (id) initializeWithDelegate:(id <LikesAndCommentsRequestDelegate>)delegate;
-- (void)setTheBackgroundArray;
-- (void) downloadAndWriteImageFiles;
+
+
 
 
 

@@ -48,8 +48,47 @@
 	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
 	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local.db"];
 
-	//[self getItemsBasedOn:@"likeCount" andPosterType:@"user"];
+	[self setTheBackgroundArray];
+	
+	if (!_networkQueue) {
+		_networkQueue = [[ASINetworkQueue alloc] init];	
+	}
+	//failed = NO;
+	[_networkQueue reset];
+	//[networkQueue setDownloadProgressDelegate:progressIndicator];
+	[_networkQueue setRequestDidFinishSelector:@selector(imageFetchComplete:)];
+	[_networkQueue setRequestDidFailSelector:@selector(imageFetchFailed:)];
+	[_networkQueue setQueueDidFinishSelector:@selector(queueComplete:)]; 
+	//[networkQueue setShowAccurateProgress:[accurateProgress isOn]];
+	[_networkQueue setDelegate:self];
+	[_networkQueue go];
 
+	
+	//[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"displayMode"];
+	NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
+	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) //likes
+	{
+		if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
+		{
+			[self displaySection:@"likeCount" andView:@"user"];
+		}
+		else 
+		{
+			[self displaySection:@"likeCount" andView:@"page"];
+		}
+		
+	}
+	else
+	{
+		if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
+		{
+			[self displaySection:@"commentCount" andView:@"user"];
+		}
+		else 
+		{
+			[self displaySection:@"commentCount" andView:@"page"];
+		}
+	}
 }
 
 - (void)viewDidAppear:(BOOL)animated 
@@ -88,14 +127,156 @@
 	// NSLog(@"resizeView");
 	//[UIView beginAnimations:@"reload" context:nil];
 	//[UIView setAnimationDuration:0.5];
+	
+	
+	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) //likes
+	{
+		if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
+		{
+			[self displaySection:@"likeCount" andView:@"user"];
+		}
+		else 
+		{
+			[self displaySection:@"likeCount" andView:@"page"];
+			
+		}
+
+	}
+	else
+	{
+		if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
+		{
+			[self displaySection:@"commentCount" andView:@"user"];
+		}
+		else 
+		{
+			[self displaySection:@"commentCount" andView:@"page"];
+			
+		}
+		
+	}
+	//this is a hack so that hearts andcomments don't move on orientation change.
 	[UIView setAnimationsEnabled:NO];
+	
 	[(TreemapView *)self.treeMapView reloadData];
 	[UIView setAnimationsEnabled:YES];
 	//[UIView commitAnimations];
 	
+}
+
+
+
+
+
+- (void)setTheBackgroundArray
+{
+	_backgrounds = [[NSMutableArray alloc] initWithCapacity:1];
+	NSString *b0 = [NSString stringWithFormat:@"concrete"];
+	NSString *b1 = [NSString stringWithFormat:@"leather"];
+	//	NSString *b2 = [NSString stringWithFormat:@"play"];
+	NSString *b3 = [NSString stringWithFormat:@"rust"];
+	//NSString *b4 = [NSString stringWithFormat:@"video"];
+	NSString *b5 = [NSString stringWithFormat:@"wood"];
+	
+	
+	[_backgrounds addObject:b0];
+	[_backgrounds addObject:b1];
+	//	[_backgrounds addObject:b2];
+	[_backgrounds addObject:b3];
+	//	[_backgrounds addObject:b4];
+	[_backgrounds addObject:b5];
 	
 }
 
+- (void)displayCommentsOfUsers
+{
+	[self displaySection:@"commentCount" andView:@"user"];
+
+}
+
+- (void)displayCommentsOfPages
+{
+	[self displaySection:@"commentCount" andView:@"page"];
+	
+}
+
+
+- (void)displayLikesOfPages
+{
+	[self displaySection:@"likeCount" andView:@"page"];
+	
+}
+
+
+- (void)displayLikesOfUsers
+{
+	[self displaySection:@"likeCount" andView:@"user"];
+	
+}
+
+
+-(void)displaySection:(NSString*)section andView:(NSString*)viewType
+{
+	NSDictionary * row = nil;
+	//NSString* s = [NSString stringWithFormat:@"SELECT rowid, poster_name, %@ FROM \"object\" WHERE poster_type = \"%@\" ORDER BY \"%@\" DESC LIMIT 8", count, poster_type, count];
+	
+		
+		
+		_valuesArray = [NSMutableArray arrayWithCapacity:1];
+	
+		self.fruits = [[NSMutableArray alloc] initWithCapacity:1];
+	
+	
+	
+	ASIHTTPRequest *req;
+	
+	//NSLog(@"%@",s);
+	//	NSString* s = [NSString stringWithFormat:@"SELECT rowid, poster_name, %@ FROM \"object\" WHERE poster_type = \"%@\" ORDER BY \"%@\" DESC LIMIT 8", count, poster_type, count];
+//SELECT * FROM object WHERE updated >= DATETIME('now', '-5 hours');
+	
+	//select time('now');
+	[self setTheBackgroundArray];
+	
+	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT post_id, poster_name, objectType, message, image_url, %@ FROM \"object\" WHERE poster_type = \"%@\" AND updated >= DATETIME('now', '-24 hours') ORDER BY \"%@\" DESC LIMIT 8", section, viewType, section]])
+	{
+		//[self dispRow:row];
+		if(![[row objectForKey:[NSString stringWithFormat:@"%@",section]] isEqual:@"0"]) 
+		{
+			NSNumber *value = [row objectForKey:[NSString stringWithFormat:@"%@",section]];
+			NSLog(@"value is %@", value);
+			[_valuesArray addObject:value];
+			[fruits addObject:row];
+		}
+		NSLog(@"row is %@", row);
+		if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]])
+		{
+			NSLog(@"file is %@", [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]);
+			
+			if([[row objectForKey:@"objectType" ] isEqual:@"video"]) 
+			{//then put the video background there.
+				NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"video"  ofType:@"png"]];
+				[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]] atomically:YES];
+			}//endif
+			else if([[row objectForKey:@"objectType" ] isEqual:@"status"]) 
+			{//then put the custom background there.
+				NSInteger rand_ind = arc4random() % [_backgrounds count];
+				NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[_backgrounds objectAtIndex:rand_ind]  ofType:@"png"]];
+				[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]] atomically:YES];
+				[_backgrounds removeObjectAtIndex:rand_ind];
+				if([_backgrounds count] < 1) [self setTheBackgroundArray]; //if the backgroundarray gets empty, refill it.
+			}//endelseif
+			else 
+			{//then download the image
+				req = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:[row objectForKey:@"image_url"]]] autorelease];
+				[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]];
+				[_networkQueue addOperation:req];
+			}//endelse
+		}//endif
+	}
+	
+	NSLog(@"fruits is %@", self.fruits);
+	[(TreemapView *)self.treeMapView reloadData];
+}
 
 #pragma mark TreemapView data source
 //values that are passed to treemapview --> anytime there's an action with the tableview, source gets called first.
@@ -104,39 +285,8 @@
 {
 	NSLog(@"valuesForTreemapView");
 	
-	NSDictionary * row = nil;
-	//NSString* s = [NSString stringWithFormat:@"SELECT rowid, poster_name, %@ FROM \"object\" WHERE poster_type = \"%@\" ORDER BY \"%@\" DESC LIMIT 8", count, poster_type, count];
 	
-	NSMutableArray *valuesArray = [NSMutableArray arrayWithCapacity:1];
-	
-	self.fruits = [[NSMutableArray alloc] initWithCapacity:1];
-	
-	//NSLog(@"%@",s);
-	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT post_id, poster_name, commentCount, objectType, message FROM \"object\" WHERE poster_type = \"user\" ORDER BY \"commentCount\" DESC LIMIT 8"]]) 
-	{
-		//[self dispRow:row];
-		//	NSLog(@"row is %@", row);
-
-	
-	
-		if(![[row objectForKey:@"commentCount"] isEqual:@"0"]) 
-		{
-		//	NSLog(@"dic is %@", dic);
-			NSNumber *value = [row objectForKey:@"commentCount"];
-			NSLog(@"value is %@", value);
-			[valuesArray addObject:value];
-			[fruits addObject:row];
-		}
-		
-	}
-	
-	NSLog(@"fruits is %@", self.fruits);
-
-
-	
-	
-	
-	//NSLog(@"values %@", valuesArray);
+	NSLog(@"values %@", _valuesArray);
 	
 	/*
 	if([[NSUserDefaults standardUserDefaults] integerForKey:@"viewMode"])
@@ -202,10 +352,55 @@
 		
 		
 	
-	return valuesArray;
+	return _valuesArray;
 
 }
  
+
+#pragma mark imageDownload Delegates 
+
+- (void)imageFetchComplete:(ASIHTTPRequest *)request
+{
+	
+	
+}//endfunction
+
+
+
+- (void)imageFetchFailed:(ASIHTTPRequest *)request
+{
+	/*
+	 if (!failed) {
+	 if ([[request error] domain] != NetworkRequestErrorDomain || [[request error] code] != ASIRequestCancelledErrorType) {
+	 UIAlertView *alertView = [[[UIAlertView alloc] initWithTitle:@"Download failed" message:@"Failed to download images" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+	 [alertView show];
+	 }		failed = YES;
+	 }
+	 */
+}
+
+
+- (void)queueComplete:(ASINetworkQueue*)queue
+{
+	NSLog(@"Queue finished");
+	
+	//imagesLoaded = YES;
+	
+	
+	//NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
+	//plist file consists of objects of dictionaries wrapped in an array
+	
+	//NSLog(@"self._plistUserArray %@", _plistUserArray);
+	//NSLog(@"self._plistPageArray %@", _plistPageArray);
+	//[_plistUserArray writeToFile:plistFileForUsers atomically:NO];
+	//[_plistPageArray writeToFile:plistFileForPages atomically:NO];
+	
+	//[(TreemapView *)self.treeMapView reloadData];
+	
+}
+
+
+
  
 
 //this gets called @creation for each of the cell. 
@@ -222,8 +417,22 @@
 	
 	//[self setTheBackgroundArray];
 	
+	//need to figure out a way to pass the current stage so that we know what we are looking at here.
+	NSNumber *tText;
 	
-	NSNumber *tText = [[fruits objectAtIndex:index] objectForKey:@"commentCount"];
+	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
+
+	{
+		tText = [[fruits objectAtIndex:index] objectForKey:@"likeCount"];
+		
+	}
+	else 
+	{
+		
+		tText = [[fruits objectAtIndex:index] objectForKey:@"commentCount"];
+
+	}
+
 	
 	
 	

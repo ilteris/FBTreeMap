@@ -62,7 +62,6 @@
 - (IBAction)refreshDisplay: (id)sender;
 - (IBAction)displayLikes: (id)sender;
 - (IBAction)displayComments: (id)sender;
-- (IBAction) toggleEnabledForSwitch: (id) sender;  
-
+-(IBAction) switchValueChanged;
 
 @end

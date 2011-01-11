@@ -96,7 +96,9 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	[menu setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
 	menu.image = menuBgImage;
 	
-	if([[NSUserDefaults standardUserDefaults] integerForKey:@"viewMode"]) [mySwitch setOn:YES animated:NO];  
+	[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"switchMode"];
+	[mySwitch setOn:NO animated:NO];
+
 	
 	_treemapViewController = [[TreeMapViewController alloc] init];
 	
@@ -113,14 +115,52 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 #pragma mark -
 #pragma mark IBActions
 
-
-- (IBAction) toggleEnabledForSwitch: (id) sender
+-(IBAction) switchValueChanged 
 {
-	//NSLog(@"self.mySwitch state is %i", self.mySwitch.on);
-	
-	[[NSUserDefaults standardUserDefaults] setInteger:self.mySwitch.on forKey:@"viewMode"];
-	[(TreemapView*)self.treemapViewController.treeMapView reloadData];
+
+	if (!mySwitch.on) //user
+	{ 
+		NSLog(@"on");
+		[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"switchMode"];
+		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])
+		{
+			//load the user for the likes
+			[self.treemapViewController displayLikesOfUsers];
+
+		}
+		else
+		{
+			//load the user for the comments
+			[self.treemapViewController displayCommentsOfUsers];
+
+		}
+
+
+	}
+
+	else //page
+	{ 
+		NSLog(@"off");
+		[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"switchMode"];
+		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])
+		{
+			//load the page for the likes
+			[self.treemapViewController displayLikesOfPages];
+
+		}
+		else
+		{
+			//load the page for the comments
+			[self.treemapViewController displayCommentsOfPages];
+
+		}
+		
+	}
+
 }
+
+
+
 
 - (IBAction)refreshDisplay: (id) sender
 {
@@ -144,11 +184,23 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	
 	//if there's no action going on.
 	// in the future, make sure this doesn't get called a few times.
-		
+	
 	[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"displayMode"];
 	NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
+	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) //display comments of users (switch is off)
+	{
+		NSLog(@"switchMode mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]);
 
-	[_userInfo requestCountOf];
+		[self.treemapViewController displayCommentsOfUsers];
+	}
+	else //display comments of pages
+	{
+		NSLog(@"switchMode mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]);
+
+		[self.treemapViewController displayCommentsOfPages];
+	}
+	
+	//[_userInfo requestCountOf];
 	
 }
 
@@ -156,23 +208,33 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 
 - (IBAction)displayLikes: (id) sender
 {
-		NSLog(@"displayLikes");
-		like_btn.enabled =  NO;
-		comment_btn.enabled =  YES;
+	NSLog(@"displayLikes");
+	like_btn.enabled =  NO;
+	comment_btn.enabled =  YES;
 	
 	
-		//if there's no action going on.
-		// in the future, make sure this doesn't get called a few times.
+	//if there's no action going on.
+	// in the future, make sure this doesn't get called a few times.
 	
+	
+	//resetting the self.plistArray so we don't add to the old plistArray.
+	//self.plistArray = [[NSMutableArray alloc] initWithCapacity:1];
+	
+	[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"displayMode"];
+	NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
+	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) //display comments of users (switch is off)
+	{
+		NSLog(@"switchMode mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]);
 
-		//resetting the self.plistArray so we don't add to the old plistArray.
-		//self.plistArray = [[NSMutableArray alloc] initWithCapacity:1];
-		
-		[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"displayMode"];
-		NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
-		[_userInfo requestCountOf];
-		//[self getMeButtonPressed:@"likes"];
+		[self.treemapViewController displayLikesOfUsers];
+	}
+	else //display comments of pages
+	{
+		NSLog(@"switchMode mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]);
 
+		[self.treemapViewController displayLikesOfPages];
+	}
+	
 }
 
 
