@@ -219,15 +219,8 @@
 {
 	NSDictionary * row = nil;
 	//NSString* s = [NSString stringWithFormat:@"SELECT rowid, poster_name, %@ FROM \"object\" WHERE poster_type = \"%@\" ORDER BY \"%@\" DESC LIMIT 8", count, poster_type, count];
-	
-		
-		
-		_valuesArray = [NSMutableArray arrayWithCapacity:1];
-	
-		self.fruits = [[NSMutableArray alloc] initWithCapacity:1];
-	
-	
-	
+	_valuesArray = [NSMutableArray arrayWithCapacity:1];
+	self.fruits = [[NSMutableArray alloc] initWithCapacity:1];
 	ASIHTTPRequest *req;
 	
 	//NSLog(@"%@",s);
@@ -274,6 +267,7 @@
 		}//endif
 	}
 	
+	
 	NSLog(@"fruits is %@", self.fruits);
 	[(TreemapView *)self.treeMapView reloadData];
 }
@@ -284,9 +278,9 @@
 - (NSArray *)valuesForTreemapView:(TreemapView *)treemapView 
 {
 	NSLog(@"valuesForTreemapView");
-	
-	
 	NSLog(@"values %@", _valuesArray);
+	
+	
 	
 	/*
 	if([[NSUserDefaults standardUserDefaults] integerForKey:@"viewMode"])
