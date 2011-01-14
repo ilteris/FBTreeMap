@@ -320,7 +320,8 @@
 		
 		[_peopleMapDB addItemRow:dict];
 	}//endfor
-	
+	[_likesAndCommentsRequestDelegate likesAndCommentsRequestComplete];
+
 	//[self downloadAndWriteImageFiles];
 	
 	
@@ -377,7 +378,6 @@
 	//[(TreemapView *)self.treeMapView reloadData];
 	
 	//before I was passing the plist array back to the userInfo from here using the delegate, but what's the necessaty of this, plus I do have a few plist file now, so I am not sending it anymore.
-	[_likesAndCommentsRequestDelegate likesAndCommentsRequestComplete];
 	
 }
 

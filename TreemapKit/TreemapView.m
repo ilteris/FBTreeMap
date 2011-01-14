@@ -36,7 +36,8 @@
 			
 		//	NSLog(@"cell %@", cell);
 		//	NSLog(@"index here is %i", index);
-			
+		//	[cell layoutSubviews];
+
 		}
 		else 
 		{
@@ -63,7 +64,6 @@
 	int customSep = NSNotFound;
 	if ([dataSource respondsToSelector:@selector(treemapView:separationPositionForDepth:)])
 		customSep = [dataSource treemapView:self separationPositionForDepth:depth];
-	
 	int m;
 	if (customSep != NSNotFound) 
 	{
@@ -136,7 +136,7 @@
 	NSMutableArray *nodes = [NSMutableArray arrayWithCapacity:values.count];
 	for (int i = 0; i < values.count; i++) {
 		NSNumber *value = [values objectAtIndex:i];
-		NSLog(@"nodes value is %@", value);
+	//	NSLog(@"nodes value is %@", value);
 		NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:2];
 		[dic setValue:[NSNumber numberWithInt:i] forKey:@"index"];
 		[dic setValue:value forKey:@"value"];
@@ -147,16 +147,17 @@
 
 - (void)createNodes {
 	NSArray *nodes = [self getData];
-	NSLog(@"creating nodes");
+	//NSLog(@"creating nodes");
 	
-	NSLog(@"nodes inside create Nodes %@", nodes);
+	//NSLog(@"nodes inside create Nodes %@", nodes);
 
-	NSLog(@"view is %@", NSStringFromCGRect(self.frame));
+	//NSLog(@"view is %@", NSStringFromCGRect(self.frame));
 	
 	if (nodes && nodes.count > 0) 
 	{
 
-	
+		NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.bounds.size.width,self.bounds.size.height);
+
 		[self calcNodePositions:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)
 						  nodes:nodes
 						  width:ceil(self.bounds.size.width)
@@ -169,7 +170,7 @@
 
 //changed to withCreate:NO ---> YES;
 - (void)resizeNodes {
-	NSLog(@"resizing nodes");
+	//NSLog(@"resizing nodes");
 	
 	NSArray *nodes = [self getData];
 	
@@ -177,9 +178,13 @@
 //	NSLog(@"nodes %@", nodes);
 	if (nodes && nodes.count > 0) 
 	{
-		NSLog(@"calling calcNodePositions");
+	//	NSLog(@"calling calcNodePositions");
 		
-		[self calcNodePositions:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)
+		NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.bounds.size.width,self.bounds.size.height);
+
+		
+		
+		[self calcNodePositions:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)
 						  nodes:nodes
 						  width:ceil(self.bounds.size.width)
 						 height:ceil(self.bounds.size.height)

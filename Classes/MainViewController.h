@@ -34,11 +34,8 @@
 	IBOutlet UIButton *comment_btn;
 	IBOutlet UIButton *refresh_btn;
 	
-	
 	IBOutlet UISwitch *mySwitch;  
 
-	
-	
 	BOOL displayMode; //either comment mode or like mode. 1 is comment mode 0 is like mode
 
 	

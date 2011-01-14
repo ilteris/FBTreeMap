@@ -72,7 +72,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	}
 	
 	 [_fbButton updateImage];
-	 [self.containerView addSubview:_fbButton];
+	// [self.containerView addSubview:_fbButton];
 	
 	
 	//displayMode
@@ -99,14 +99,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"switchMode"];
 	[mySwitch setOn:NO animated:NO];
 
-	
-	_treemapViewController = [[TreeMapViewController alloc] init];
-	
-	[_treemapViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight];
-	
-	//[self.treemapViewController viewWillAppear:YES];
-	[self.containerView addSubview:self.treemapViewController.view];
-		
+			
 }
 
 
@@ -173,7 +166,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 		//resetting the self.plistArray so we don't add to the old plistArray.
 		//self.plistArray = [[NSMutableArray alloc] initWithCapacity:1];
 		//currentDisplayMode
-		[_userInfo requestCountOf];
+	//	[_userInfo requestCountOf];
 }
 
 - (IBAction)displayComments: (id) sender
@@ -253,7 +246,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration	
 {
 	
-	NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
+	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
 	//NSLog(@"self.treemapViewController %@", self.treemapViewController);
 	if([(TreemapView*)self.treemapViewController.treeMapView initialized]) [self.treemapViewController resizeView];
 }
@@ -318,6 +311,16 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	//[_userInfo requestCountOf:(NSString*)entity];
 	//[_userInfo requestAllInfo];
 	[_userInfo requestUid];
+	
+	
+	
+	_treemapViewController = [[TreeMapViewController alloc] init];
+	
+	[_treemapViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight];
+	
+	//[self.treemapViewController viewWillAppear:YES];
+	[self.containerView addSubview:self.treemapViewController.view];
+
 }
 
 /**
@@ -350,7 +353,29 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 - (void)likesAndCommentsDidLoad
 {
 	NSLog(@"likesAndCommentsDidLoad");
-	[(TreemapView*)self.treemapViewController.treeMapView reloadData];
+	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) //likes
+	{
+		if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
+		{
+			[_treemapViewController displaySection:@"likeCount" andView:@"user"];
+		}
+		else 
+		{
+			[_treemapViewController displaySection:@"likeCount" andView:@"page"];
+		}
+		
+	}
+	else
+	{
+		if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
+		{
+			[_treemapViewController displaySection:@"commentCount" andView:@"user"];
+		}
+		else 
+		{
+			[_treemapViewController displaySection:@"commentCount" andView:@"page"];
+		}
+	}
 }
 
 

@@ -58,11 +58,13 @@
 	//[networkQueue setDownloadProgressDelegate:progressIndicator];
 	[_networkQueue setRequestDidFinishSelector:@selector(imageFetchComplete:)];
 	[_networkQueue setRequestDidFailSelector:@selector(imageFetchFailed:)];
+	
 	[_networkQueue setQueueDidFinishSelector:@selector(queueComplete:)]; 
 	//[networkQueue setShowAccurateProgress:[accurateProgress isOn]];
 	[_networkQueue setDelegate:self];
 	[_networkQueue go];
 
+	_valuesArray =[[NSMutableArray alloc] initWithCapacity:1];	
 	
 	//[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"displayMode"];
 	NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
@@ -89,6 +91,7 @@
 			[self displaySection:@"commentCount" andView:@"page"];
 		}
 	}
+	
 }
 
 - (void)viewDidAppear:(BOOL)animated 
@@ -219,9 +222,9 @@
 {
 	NSDictionary * row = nil;
 	//NSString* s = [NSString stringWithFormat:@"SELECT rowid, poster_name, %@ FROM \"object\" WHERE poster_type = \"%@\" ORDER BY \"%@\" DESC LIMIT 8", count, poster_type, count];
-	_valuesArray = [NSMutableArray arrayWithCapacity:1];
+	_valuesArray =[[NSMutableArray alloc] initWithCapacity:1];
 	self.fruits = [[NSMutableArray alloc] initWithCapacity:1];
-	ASIHTTPRequest *req;
+
 	
 	//NSLog(@"%@",s);
 	//	NSString* s = [NSString stringWithFormat:@"SELECT rowid, poster_name, %@ FROM \"object\" WHERE poster_type = \"%@\" ORDER BY \"%@\" DESC LIMIT 8", count, poster_type, count];
@@ -230,45 +233,59 @@
 	//select time('now');
 	[self setTheBackgroundArray];
 	
-	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT post_id, poster_name, objectType, message, image_url, %@ FROM \"object\" WHERE poster_type = \"%@\" AND updated >= DATETIME('now', '-24 hours') ORDER BY \"%@\" DESC LIMIT 8", section, viewType, section]])
+	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT post_id, poster_name, objectType, message, image_url, %@ FROM \"object\" WHERE poster_type = \"%@\" AND updated >= DATETIME('now', '-6 hours') ORDER BY \"%@\" DESC LIMIT 8", section, viewType, section]])
 	{
 		//[self dispRow:row];
-		if(![[row objectForKey:[NSString stringWithFormat:@"%@",section]] isEqual:@"0"]) 
+		
+		NSLog(@"row is %@", row);
+
+		
+		if([[row objectForKey:[NSString stringWithFormat:@"%@",section]] intValue] != 0) 
 		{
 			NSNumber *value = [row objectForKey:[NSString stringWithFormat:@"%@",section]];
 			NSLog(@"value is %@", value);
+			NSLog(@"section is %@", section);
+			
 			[_valuesArray addObject:value];
 			[fruits addObject:row];
 		}
-		NSLog(@"row is %@", row);
-		if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]])
-		{
+		
 			NSLog(@"file is %@", [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]);
 			
 			if([[row objectForKey:@"objectType" ] isEqual:@"video"]) 
 			{//then put the video background there.
-				NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"video"  ofType:@"png"]];
-				[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]] atomically:YES];
+				if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]])
+					
+				{
+					NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"video"  ofType:@"png"]];
+					
+					[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]] atomically:YES];
+				}	
+				
 			}//endif
 			else if([[row objectForKey:@"objectType" ] isEqual:@"status"]) 
 			{//then put the custom background there.
-				NSInteger rand_ind = arc4random() % [_backgrounds count];
-				NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[_backgrounds objectAtIndex:rand_ind]  ofType:@"png"]];
-				[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]] atomically:YES];
-				[_backgrounds removeObjectAtIndex:rand_ind];
-				if([_backgrounds count] < 1) [self setTheBackgroundArray]; //if the backgroundarray gets empty, refill it.
+				if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]])
+				{
+					
+					NSInteger rand_ind = arc4random() % [_backgrounds count];
+					NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[_backgrounds objectAtIndex:rand_ind]  ofType:@"png"]];
+					[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]] atomically:YES];
+					[_backgrounds removeObjectAtIndex:rand_ind];
+					if([_backgrounds count] < 1) [self setTheBackgroundArray]; //if the backgroundarray gets empty, refill it.
+				}
 			}//endelseif
 			else 
 			{//then download the image
-				req = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:[row objectForKey:@"image_url"]]] autorelease];
-				[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]];
-				[_networkQueue addOperation:req];
+				//req = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:[row objectForKey:@"image_url"]]] autorelease];
+				//[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]];
+				//[_networkQueue addOperation:req];
 			}//endelse
-		}//endif
+	
 	}
 	
 	
-	NSLog(@"fruits is %@", self.fruits);
+	//NSLog(@"fruits is %@", self.fruits);
 	[(TreemapView *)self.treeMapView reloadData];
 }
 
@@ -280,10 +297,35 @@
 	NSLog(@"valuesForTreemapView");
 	NSLog(@"values %@", _valuesArray);
 	
+	if(!_valuesArray)
+	{
+		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) //likes
+		{
+			if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
+			{
+				[self displaySection:@"likeCount" andView:@"user"];
+			}
+			else 
+			{
+				[self displaySection:@"likeCount" andView:@"page"];
+			}
+			
+		}
+		else
+		{
+			if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
+			{
+				[self displaySection:@"commentCount" andView:@"user"];
+			}
+			else 
+			{
+				[self displaySection:@"commentCount" andView:@"page"];
+			}
+		}
+		
+	}
 	
-	
-	/*
-	if([[NSUserDefaults standardUserDefaults] integerForKey:@"viewMode"])
+	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) //if switchMode mode is users
 	{
 		//little hack to bump up the value of the largest item. this gives us a larger cell.
 		//this still needs to be improved. -what happens when there's two equal values? need to solve that.
@@ -293,40 +335,36 @@
 		int highestNumberIndex				= 0;
 		int highestSecondNumberIndex		= 0;
 		
-		for (NSNumber *theNumber in valuesArray)
+		for (NSNumber *theNumber in _valuesArray)
 		{
 			if ([theNumber intValue] >= highestNumber) {
 				highestSecondNumberIndex = highestNumberIndex;
 				highestSecondNumber = highestNumber;
 				highestNumber = [theNumber intValue];
-				highestNumberIndex = [valuesArray indexOfObject:theNumber];
+				highestNumberIndex = [_valuesArray indexOfObject:theNumber];
 			}
 			else if([theNumber intValue] > highestSecondNumber)
 			{
 				highestSecondNumber = [theNumber intValue];
-				highestSecondNumberIndex = [valuesArray indexOfObject:theNumber];
+				highestSecondNumberIndex = [_valuesArray indexOfObject:theNumber];
 			}
 		}//endfor
 		//TODO: if there's two 1 and 1 item, then this gets called. need to fix it. 
+		NSLog(@"Highest number: %i at index: %i", highestNumber, highestNumberIndex);
+		NSLog(@" highestSecondNumber: %i at index: %i", highestSecondNumber, highestSecondNumberIndex);
 		if(highestNumber==highestSecondNumber)
 		{
 			
 		}
 		else 
 		{
-			
 			if((highestNumber/highestSecondNumber) < 2) //if there's no duplicate winners AND difference between first two highest number is 1/2 then multiply.
 			{
-				
-				NSInteger tempValue = [[valuesArray objectAtIndex:highestNumberIndex] intValue];
-				
-				tempValue = round(tempValue*1.5);
+				NSInteger tempValue = [[_valuesArray objectAtIndex:highestNumberIndex] intValue];
+				tempValue = round(tempValue*2.5);
 				NSNumber *_inStr = [NSNumber numberWithInt:tempValue];
-				[valuesArray replaceObjectAtIndex:highestNumberIndex withObject:_inStr];
-				
+				[_valuesArray replaceObjectAtIndex:highestNumberIndex withObject:_inStr];
 				NSLog(@"tempValue is %i", tempValue);
-				
-				
 			}//endif
 		}
 	
@@ -334,7 +372,7 @@
 		
 		
 		NSLog(@"Highest number: %i at index: %i", highestNumber, highestNumberIndex);
-		NSLog(@"Highest number: %i at index: %i", highestSecondNumber, highestSecondNumberIndex);
+		NSLog(@" highestSecondNumber: %i at index: %i", highestSecondNumber, highestSecondNumberIndex);
 		
 
 	}
@@ -342,7 +380,7 @@
 	{
 		
 	}//endelse
- */
+ 
 		
 		
 	
@@ -355,7 +393,8 @@
 
 - (void)imageFetchComplete:(ASIHTTPRequest *)request
 {
-	
+[(TreemapView *)self.treeMapView reloadData];
+
 	
 }//endfunction
 
@@ -363,6 +402,7 @@
 
 - (void)imageFetchFailed:(ASIHTTPRequest *)request
 {
+	NSLog(@"imageFetchFailed");
 	/*
 	 if (!failed) {
 	 if ([[request error] domain] != NetworkRequestErrorDomain || [[request error] code] != ASIRequestCancelledErrorType) {
@@ -389,7 +429,6 @@
 	//[_plistUserArray writeToFile:plistFileForUsers atomically:NO];
 	//[_plistPageArray writeToFile:plistFileForPages atomically:NO];
 	
-	//[(TreemapView *)self.treeMapView reloadData];
 	
 }
 
@@ -418,27 +457,35 @@
 
 	{
 		tText = [[fruits objectAtIndex:index] objectForKey:@"likeCount"];
-		
 	}
 	else 
 	{
-		
 		tText = [[fruits objectAtIndex:index] objectForKey:@"commentCount"];
-
 	}
+	
 
-	
-	
+	ASIHTTPRequest *req;
 	
 	NSString *fn =  [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [[fruits  objectAtIndex:index] objectForKey:@"post_id" ]]];
 	UIImage *img = [UIImage imageWithContentsOfFile:fn];
-	NSLog(@"the fn is %@", fn);
+	NSLog(@"the name is %@", [[fruits  objectAtIndex:index] objectForKey:@"poster_name"]);
+	if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [[fruits  objectAtIndex:index] objectForKey:@"post_id" ]]]])
+
+	{
+		NSLog(@"img is not present %@", [[fruits  objectAtIndex:index] objectForKey:@"image_url"]);
+		req = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:[[fruits  objectAtIndex:index] objectForKey:@"image_url"]]] autorelease];
+		[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [[fruits  objectAtIndex:index] objectForKey:@"post_id" ]]]];
+		[_networkQueue addOperation:req];		
+	}
 	
-	 
+	
+		 
 	if([[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"video"])
 	{
-		
+		//when it's the video image, don't crop it, it makes the image looks awkward.
 		cell.imageViewA.image = img;
+		
+		//TODO: need to check the size of the frame and display the play button accordingly.
 		cell.playBtn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
 		cell.playBtn.frame = CGRectMake(0, 0, 56.0, 55.0);
 		cell.playBtn.frame = CGRectMake((cell.imageViewA.bounds.size.width-cell.playBtn.bounds.size.width)/2, (cell.imageViewA.bounds.size.height-cell.playBtn.bounds.size.height)/2, cell.playBtn.frame.size.width, cell.playBtn.frame.size.height);
@@ -450,11 +497,16 @@
 		cell.contentLabel.text = @"";//	[[fruits objectAtIndex:index] objectForKey:@"message"];
 
 	}
-	else
+	else if([[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"photo"] || [[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"link"])
+	{
+		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
+		//cell.contentLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
+	}else 
 	{
 		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 		cell.contentLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
 	}
+
 	   
 	
 	cell.countLabel.text = [tText stringValue];

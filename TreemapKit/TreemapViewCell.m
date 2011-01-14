@@ -59,7 +59,7 @@
 			titleLabel.font = [UIFont boldSystemFontOfSize:11];
 			titleLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
 			titleLabel.textAlignment = UITextAlignmentLeft;
-			titleLabel.textColor = [UIColor whiteColor];
+			titleLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
 			titleLabel.shadowColor  = [UIColor blackColor];
 			titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
 			titleLabel.lineBreakMode = UILineBreakModeCharacterWrap;
@@ -71,10 +71,10 @@
 			self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(11, self.frame.size.height - 61, 200, 48)];
 			
 			countLabel.numberOfLines = 0;
-			countLabel.font = [UIFont boldSystemFontOfSize:62];
+			countLabel.font = [UIFont boldSystemFontOfSize:60];
 			
 			
-			countLabel.textColor = [UIColor whiteColor];
+			countLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
 			countLabel.backgroundColor = [UIColor clearColor];
 			countLabel.shadowColor  = [UIColor blackColor];
 			countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
@@ -113,7 +113,8 @@
 			contentLabel.font = [UIFont boldSystemFontOfSize:48];
 			contentLabel.text = @"";
 			contentLabel.textAlignment = UITextAlignmentLeft;
-			contentLabel.textColor = [UIColor whiteColor];
+			//contentLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+			contentLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f]; 
 			contentLabel.backgroundColor = [UIColor clearColor];
 			contentLabel.shadowColor  = [UIColor blackColor];
 			contentLabel.shadowOffset = CGSizeMake(0.0, -1.0);
@@ -133,7 +134,7 @@
 			titleLabel.font = [UIFont boldSystemFontOfSize:11];
 			titleLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
 			titleLabel.textAlignment = UITextAlignmentLeft;
-			titleLabel.textColor = [UIColor whiteColor];
+			titleLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
 			titleLabel.shadowColor  = [UIColor blackColor];
 			titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
 			titleLabel.lineBreakMode = UILineBreakModeCharacterWrap;
@@ -145,10 +146,10 @@
 			self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(11, self.frame.size.height - 61, 200, 48)];
 			
 			countLabel.numberOfLines = 0;
-			countLabel.font = [UIFont boldSystemFontOfSize:62];
+			countLabel.font = [UIFont boldSystemFontOfSize:60];
 			
 			
-			countLabel.textColor = [UIColor whiteColor];
+			countLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
 			countLabel.backgroundColor = [UIColor clearColor];
 			countLabel.shadowColor  = [UIColor blackColor];
 			countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
@@ -183,7 +184,7 @@
 			contentLabel.font = [UIFont boldSystemFontOfSize:24];
 			contentLabel.text = @"";
 			contentLabel.textAlignment = UITextAlignmentLeft;
-			contentLabel.textColor = [UIColor whiteColor];
+			contentLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
 			contentLabel.backgroundColor = [UIColor clearColor];
 			contentLabel.shadowColor  = [UIColor blackColor];
 			contentLabel.shadowOffset = CGSizeMake(0.0, -1.0);
@@ -204,7 +205,7 @@
 			titleLabel.font = [UIFont boldSystemFontOfSize:0];
 			titleLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
 			titleLabel.textAlignment = UITextAlignmentLeft;
-			titleLabel.textColor = [UIColor whiteColor];
+			titleLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
 			titleLabel.shadowColor  = [UIColor blackColor];
 			titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
 			titleLabel.lineBreakMode = UILineBreakModeCharacterWrap;
@@ -218,7 +219,7 @@
 			countLabel.font = [UIFont boldSystemFontOfSize:0];
 			
 			
-			countLabel.textColor = [UIColor whiteColor];
+			countLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
 			countLabel.backgroundColor = [UIColor clearColor];
 			countLabel.shadowColor  = [UIColor blackColor];
 			countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
@@ -227,7 +228,7 @@
 			contentLabel.font = [UIFont boldSystemFontOfSize:0];
 			contentLabel.text = @"";
 			contentLabel.textAlignment = UITextAlignmentLeft;
-			contentLabel.textColor = [UIColor whiteColor];
+			contentLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
 			contentLabel.backgroundColor = [UIColor clearColor];
 			contentLabel.shadowColor  = [UIColor blackColor];
 			contentLabel.shadowOffset = CGSizeMake(0.0, -1.0);
@@ -247,7 +248,7 @@
 			titleLabel.font = [UIFont boldSystemFontOfSize:11];
 			titleLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
 			titleLabel.textAlignment = UITextAlignmentLeft;
-			titleLabel.textColor = [UIColor whiteColor];
+			titleLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
 			titleLabel.shadowColor  = [UIColor blackColor];
 			titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
 			titleLabel.lineBreakMode = UILineBreakModeCharacterWrap;
@@ -259,10 +260,10 @@
 			self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(11, self.frame.size.height - 61, 200, 48)];
 			
 			countLabel.numberOfLines = 0;
-			countLabel.font = [UIFont boldSystemFontOfSize:62];
+			countLabel.font = [UIFont boldSystemFontOfSize:60];
 			
 			
-			countLabel.textColor = [UIColor whiteColor];
+			countLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
 			countLabel.backgroundColor = [UIColor clearColor];
 			countLabel.shadowColor  = [UIColor blackColor];
 			countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
