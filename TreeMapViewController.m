@@ -154,9 +154,7 @@
 		else 
 		{
 			[self displaySection:@"commentCount" andView:@"page"];
-			
 		}
-		
 	}
 	//this is a hack so that hearts andcomments don't move on orientation change.
 	[UIView setAnimationsEnabled:NO];
@@ -533,26 +531,7 @@
 }
 
 
-#pragma mark -
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return YES;
-}
-
-
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
-{
-	
-	NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
-
-	//if([(TreemapView*)self.treeMapView initialized]) [self resizeView];
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-	//if([(TreemapView*)self.treeMapView initialized]) [self resizeView];
-}
 
 
 - (void)didReceiveMemoryWarning {

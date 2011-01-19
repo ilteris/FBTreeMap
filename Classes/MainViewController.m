@@ -246,7 +246,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration	
 {
 	
-	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
+	NSLog(@"main.bounds.size.width %f main.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
 	//NSLog(@"self.treemapViewController %@", self.treemapViewController);
 	if([(TreemapView*)self.treemapViewController.treeMapView initialized]) [self.treemapViewController resizeView];
 }
