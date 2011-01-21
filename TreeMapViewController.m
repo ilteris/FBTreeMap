@@ -31,7 +31,7 @@
 //fcebook
 
 @synthesize feedPostId;
-@synthesize myWebView;
+
 @synthesize jsonArray;
 
 @synthesize peopleMapDB = _peopleMapDB;
@@ -39,9 +39,8 @@
 
 #pragma mark -
 #pragma mark facebook delegate
-- (void)viewDidLoad {
-    [super viewDidLoad];
-	imagesLoaded = YES;
+-  init {
+
 
 	/*Facebook Application ID*/
 	//NSString *client_id = @"128496757192973";
@@ -67,39 +66,10 @@
 	_valuesArray =[[NSMutableArray alloc] initWithCapacity:1];	
 	
 	//[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"displayMode"];
-	NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
-	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) //likes
-	{
-		if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
-		{
-			[self displaySection:@"likeCount" andView:@"user"];
-		}
-		else 
-		{
-			[self displaySection:@"likeCount" andView:@"page"];
-		}
-		
-	}
-	else
-	{
-		if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
-		{
-			[self displaySection:@"commentCount" andView:@"user"];
-		}
-		else 
-		{
-			[self displaySection:@"commentCount" andView:@"page"];
-		}
-	}
+	//NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
 	
+	return self;
 }
-
-- (void)viewDidAppear:(BOOL)animated 
-{
-	
-}
-
-
 
 
 #pragma mark -
@@ -116,10 +86,36 @@
 
 - (void)treemapView:(TreemapView *)treemapView tapped:(NSInteger)index 
 {
+	NSLog(@"here");
 	TreemapViewCell *cell = (TreemapViewCell *)[self.treeMapView.subviews objectAtIndex:index];	
 	[cell flipIt];
 }
 
+-(NSString*)returnDurationString:(int)integer
+{
+	NSString *temp_string;
+
+	
+	switch ([[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]) {
+		case 0:
+			temp_string = [NSString stringWithFormat:@"-2 hours"];
+			break;
+		case 1:
+			temp_string = [NSString stringWithFormat:@"-6 hours"];
+			break;
+		case 2:
+			temp_string = [NSString stringWithFormat:@"-12 hours"];
+			break;
+		case 3:
+			temp_string = [NSString stringWithFormat:@"-24 hours"];
+			break;
+			
+		default:
+			break;
+	}
+	
+	return temp_string;
+}
 
 
 #pragma mark -
@@ -131,16 +127,21 @@
 	//[UIView beginAnimations:@"reload" context:nil];
 	//[UIView setAnimationDuration:0.5];
 	
-	
+	NSString *durationString = [self returnDurationString:[[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]];
+
+
 	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) //likes
 	{
+		
 		if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
 		{
-			[self displaySection:@"likeCount" andView:@"user"];
+			
+			
+			[self displaySection:@"likeCount" andView:@"user" withDuration:durationString];
 		}
 		else 
 		{
-			[self displaySection:@"likeCount" andView:@"page"];
+			[self displaySection:@"likeCount" andView:@"page" withDuration:durationString];
 			
 		}
 
@@ -149,16 +150,15 @@
 	{
 		if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
 		{
-			[self displaySection:@"commentCount" andView:@"user"];
+			[self displaySection:@"commentCount" andView:@"user" withDuration:durationString];
 		}
 		else 
 		{
-			[self displaySection:@"commentCount" andView:@"page"];
+			[self displaySection:@"commentCount" andView:@"page" withDuration:durationString];
 		}
 	}
 	//this is a hack so that hearts andcomments don't move on orientation change.
 	[UIView setAnimationsEnabled:NO];
-	
 	[(TreemapView *)self.treeMapView reloadData];
 	[UIView setAnimationsEnabled:YES];
 	//[UIView commitAnimations];
@@ -180,6 +180,7 @@
 	NSString *b5 = [NSString stringWithFormat:@"wood"];
 	
 	
+	
 	[_backgrounds addObject:b0];
 	[_backgrounds addObject:b1];
 	//	[_backgrounds addObject:b2];
@@ -191,32 +192,59 @@
 
 - (void)displayCommentsOfUsers
 {
-	[self displaySection:@"commentCount" andView:@"user"];
+//	NSString *durationString = [self returnDurationString:[[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]];
+
+	[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"displayMode"];
+	[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"switchMode"];
+	
+	[self resizeView];
+	//[self displaySection:@"commentCount" andView:@"user" withDuration:durationString];
 
 }
 
 - (void)displayCommentsOfPages
 {
-	[self displaySection:@"commentCount" andView:@"page"];
+	[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"displayMode"];
+	[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"switchMode"];
+	
+	[self resizeView];
+	
+//	NSString *durationString = [self returnDurationString:[[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]];
+
+	//[self displaySection:@"commentCount" andView:@"page" withDuration:durationString];
 	
 }
 
 
 - (void)displayLikesOfPages
 {
-	[self displaySection:@"likeCount" andView:@"page"];
+	[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"displayMode"];
+	[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"switchMode"];
+	
+	[self resizeView];
+	
+//	NSString *durationString = [self returnDurationString:[[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]];
+
+	//[self displaySection:@"likeCount" andView:@"page" withDuration:durationString];
 	
 }
 
 
 - (void)displayLikesOfUsers
 {
-	[self displaySection:@"likeCount" andView:@"user"];
+	[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"displayMode"];
+	[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"switchMode"];
+	
+	[self resizeView];
+	
+	//NSString *durationString = [self returnDurationString:[[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]];
+
+	//[self displaySection:@"likeCount" andView:@"user" withDuration:durationString];
 	
 }
 
 
--(void)displaySection:(NSString*)section andView:(NSString*)viewType
+-(void)displaySection:(NSString*)section andView:(NSString*)viewType withDuration:(NSString*)duration
 {
 	NSDictionary * row = nil;
 	//NSString* s = [NSString stringWithFormat:@"SELECT rowid, poster_name, %@ FROM \"object\" WHERE poster_type = \"%@\" ORDER BY \"%@\" DESC LIMIT 8", count, poster_type, count];
@@ -230,8 +258,9 @@
 	
 	//select time('now');
 	[self setTheBackgroundArray];
-	
-	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT post_id, poster_name, objectType, message, image_url, %@ FROM \"object\" WHERE poster_type = \"%@\" AND updated >= DATETIME('now', '-6 hours') ORDER BY \"%@\" DESC LIMIT 8", section, viewType, section]])
+	//SELECT post_id, poster_name, objectType, message, image_url, commentCount, datetime(posted_time,'unixepoch', 'localtime') FROM "object" WHERE poster_type = "user" AND datetime(posted_time,'unixepoch', 'localtime') >= datetime('now', '-2 hours', 'localtime') ORDER BY "commentCount" DESC LIMIT 8
+
+	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT post_id, poster_name, objectType, message, image_url, %@ FROM \"object\" WHERE poster_type = \"%@\" AND datetime(posted_time,'unixepoch', 'localtime') >= datetime('now', '%@', 'localtime') ORDER BY \"%@\" DESC LIMIT 8", section, viewType, duration, section]])
 	{
 		//[self dispRow:row];
 		
@@ -284,6 +313,7 @@
 	
 	
 	//NSLog(@"fruits is %@", self.fruits);
+	NSLog(@"treemap is %@", self.treeMapView);
 	[(TreemapView *)self.treeMapView reloadData];
 }
 
@@ -293,7 +323,11 @@
 - (NSArray *)valuesForTreemapView:(TreemapView *)treemapView 
 {
 	NSLog(@"valuesForTreemapView");
-	NSLog(@"values %@", _valuesArray);
+	//NSLog(@"values %@", _valuesArray);
+	
+	NSString *durationString = [self returnDurationString:[[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]];
+
+	
 	
 	if(!_valuesArray)
 	{
@@ -301,11 +335,11 @@
 		{
 			if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
 			{
-				[self displaySection:@"likeCount" andView:@"user"];
+				[self displaySection:@"likeCount" andView:@"user" withDuration:durationString];
 			}
 			else 
 			{
-				[self displaySection:@"likeCount" andView:@"page"];
+				[self displaySection:@"likeCount" andView:@"page" withDuration:durationString];
 			}
 			
 		}
@@ -313,11 +347,11 @@
 		{
 			if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
 			{
-				[self displaySection:@"commentCount" andView:@"user"];
+				[self displaySection:@"commentCount" andView:@"user" withDuration:durationString];
 			}
 			else 
 			{
-				[self displaySection:@"commentCount" andView:@"page"];
+				[self displaySection:@"commentCount" andView:@"page" withDuration:durationString];
 			}
 		}
 		
@@ -535,18 +569,17 @@
 
 
 - (void)didReceiveMemoryWarning {
-	[super didReceiveMemoryWarning];
+
 }
 
 - (void)viewDidUnload {
-	[super viewDidUnload];
+
 	
 	fruits = nil;
 }
 
 - (void)dealloc {
 	[fruits release];
-	
 	[super dealloc];
 }
 

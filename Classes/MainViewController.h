@@ -13,6 +13,8 @@
 #import "Session.h"
 #import "UserInfo.h"
 #import "TreeMapViewController.h"
+#import "TreemapView.h"
+
 
 
 
@@ -38,10 +40,14 @@
 
 	BOOL displayMode; //either comment mode or like mode. 1 is comment mode 0 is like mode
 
+	IBOutlet TreemapView *treeMapView;
+	IBOutlet UISegmentedControl *segmentedControl;
+
 	
 }
 
 	
+@property (nonatomic, retain) IBOutlet TreemapView *treeMapView;
 	
 
 @property(nonatomic, retain) TreeMapViewController *treemapViewController;
@@ -51,6 +57,7 @@
 @property (nonatomic, retain) IBOutlet UIButton *like_btn;
 @property (nonatomic, retain) IBOutlet UIButton *comment_btn;
 @property (nonatomic, retain) IBOutlet UIButton *refresh_btn;
+@property (nonatomic, retain) IBOutlet UISegmentedControl *segmentedControl;
 
 @property (nonatomic, retain) IBOutlet UISwitch *mySwitch; 
 
@@ -59,6 +66,7 @@
 - (IBAction)refreshDisplay: (id)sender;
 - (IBAction)displayLikes: (id)sender;
 - (IBAction)displayComments: (id)sender;
--(IBAction) switchValueChanged;
+- (IBAction) switchValueChanged;
+- (IBAction) segmentedControlIndexChanged;
 
 @end

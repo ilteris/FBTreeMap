@@ -21,11 +21,9 @@
 
 
 
-@interface TreeMapViewController : UIViewController   <TreemapViewDelegate, TreemapViewDataSource, UIWebViewDelegate> {
+@interface TreeMapViewController: NSObject   <TreemapViewDelegate, TreemapViewDataSource> {
    
-	
 
-	
 	ASINetworkQueue *_networkQueue;
 
 	NSMutableArray *cells;
@@ -42,7 +40,7 @@
 	
 
 	IBOutlet UIView *treeMapView;
-	IBOutlet UIWebView *myWebView;
+
 	
 	
 	BOOL failed;
@@ -73,15 +71,15 @@
 
 
 @property (nonatomic, retain) IBOutlet UIView *treeMapView;
-@property (nonatomic, retain) IBOutlet UIWebView *myWebView;
+
 
 - (void)setTheBackgroundArray;
 - (void)resizeView;
--(void)displaySection:(NSString*)section andView:(NSString*)viewType;
+- (void)displaySection:(NSString*)section andView:(NSString*)viewType withDuration:(NSString*)duration;
 - (void)displayCommentsOfUsers;
 - (void)displayCommentsOfPages;
 - (void)displayLikesOfPages;
 - (void)displayLikesOfUsers;
-
+-(NSString*)returnDurationString:(int)integer;
 
 @end

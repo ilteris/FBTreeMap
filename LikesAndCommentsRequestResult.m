@@ -39,7 +39,7 @@
 - (void)request:(FBRequest*)request didLoad:(id)result{
 	
    // NSMutableArray *fruits = [[[NSMutableArray alloc] init] autorelease];
-	//NSLog(@"result %@", result);
+	NSLog(@"result %@", result);
 
 	
 	
@@ -95,6 +95,8 @@
 		NSString *_message;
 		NSString *_image_url;
 		NSString *_permalink;
+		NSNumber *_canLike;
+		NSNumber *_canComment;
 		NSNumber *_posted_time;
 		NSNumber *_updated_time;
 		
@@ -118,7 +120,14 @@
 		//first _categoryValue -->count of current displayMode(likes/comments)
 		
 		_likeCount = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"likes"] objectForKey:@"count"] integerValue]];
+		_canLike = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"likes"] objectForKey:@"can_like"] integerValue]];
+		
 		_commentCount = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"count"] integerValue]];
+		_canComment = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"can_post"] integerValue]];
+
+		NSLog(@"_canLike is %@", _canLike);
+		NSLog(@"_canComment is %@", _canComment);
+		
 		_permalink = [NSString stringWithFormat:@"%@", [[streamArray objectAtIndex:i] objectForKey:@"permalink"]];
 
 		//NSString *_post_id = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"post_id"]];

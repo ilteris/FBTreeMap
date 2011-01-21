@@ -20,17 +20,19 @@ static NSString* kAppId =  @"128496757192973";
 
 @synthesize  treemapViewController = _treemapViewController,
 menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
-
-	
+@synthesize treeMapView;
+@synthesize segmentedControl;	
 	
 #pragma mark -
 #pragma mark Private helper function for login/logout	
-- (void) login {
+- (void) login 
+{
 	NSLog(@"hereee");
 	[_facebook authorize:kAppId permissions:_permissions delegate:self];
 }
 
-- (void) logout {
+- (void) logout 
+{
 	[_session unsave];
 	[_facebook logout:self]; 
 }
@@ -39,9 +41,11 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
+{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
+    if (self) 
+	{
         _permissions =  [[NSArray arrayWithObjects: 
 						  @"publish_stream", @"read_stream", @"offline_access",nil] retain];
     }
@@ -71,6 +75,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 		[self fbDidLogin];
 	}
 	
+	
 	 [_fbButton updateImage];
 	// [self.containerView addSubview:_fbButton];
 	
@@ -97,9 +102,21 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	menu.image = menuBgImage;
 	
 	[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"switchMode"];
+	
+	[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"durationMode"]; //set the duration mode to default mode.
+	
+	
 	[mySwitch setOn:NO animated:NO];
 
-			
+	
+	_treemapViewController = [[TreeMapViewController alloc] init];
+	NSLog(@"treemapView is %@", self.treeMapView);
+	[treeMapView setDataSource:_treemapViewController];
+	[treeMapView setDelegate:_treemapViewController];
+	
+	_treemapViewController.treeMapView = treeMapView;
+	if([(TreemapView*)self.treemapViewController.treeMapView initialized]) [self.treemapViewController resizeView];
+	
 }
 
 
@@ -114,7 +131,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	if (!mySwitch.on) //user
 	{ 
 		NSLog(@"on");
-		[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"switchMode"];
+	//	[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"switchMode"];
 		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"])
 		{
 			//load the user for the likes
@@ -153,6 +170,41 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 }
 
 
+-(IBAction) segmentedControlIndexChanged
+{
+	
+	switch (self.segmentedControl.selectedSegmentIndex) 
+	{
+		case 0:
+			[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"durationMode"]; //set the duration mode to default mode.
+			[self.treemapViewController resizeView];
+			NSLog( @"case is 0");
+			break;
+
+		case 1:
+			[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"durationMode"]; //set the duration mode to default mode.
+			[self.treemapViewController resizeView];
+			NSLog( @"case is 1");
+			break;
+		case 2:
+			[[NSUserDefaults standardUserDefaults] setInteger:2 forKey:@"durationMode"]; //set the duration mode to default mode.
+			[self.treemapViewController resizeView];
+			NSLog( @"case is 2");
+			break;
+		case 3:
+			[[NSUserDefaults standardUserDefaults] setInteger:3 forKey:@"durationMode"]; //set the duration mode to default mode.
+			[self.treemapViewController resizeView];
+			NSLog( @"case is 3");
+			break;
+		default:
+			[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"durationMode"]; //set the duration mode to default mode.
+			[self.treemapViewController resizeView];
+
+			break;			
+	}
+}
+
+
 
 
 - (IBAction)refreshDisplay: (id) sender
@@ -179,7 +231,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	// in the future, make sure this doesn't get called a few times.
 	
 	[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"displayMode"];
-	NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
+	//NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
 	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) //display comments of users (switch is off)
 	{
 		NSLog(@"switchMode mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]);
@@ -312,20 +364,32 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	//[_userInfo requestAllInfo];
 	[_userInfo requestUid];
 	
+
 	
+
 	
-	_treemapViewController = [[TreeMapViewController alloc] init];
-	
-	[_treemapViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight];
+//	[_treemapViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight];
 	
 	//[self.treemapViewController viewWillAppear:YES];
-	[self.containerView addSubview:self.treemapViewController.view];
+//	[self.containerView addSubview:self.treemapViewController.view];
 
 }
 
 /**
  * FBSessionDelegate
  */ 
+
+
+
+- (void)treemapView:(TreemapView *)treemapView tapped:(NSInteger)index 
+{
+	NSLog(@"here");
+	TreemapViewCell *cell = (TreemapViewCell *)[self.treeMapView.subviews objectAtIndex:index];	
+	[cell flipIt];
+}
+
+
+
 -(void) fbDidLogout 
 {
 	 [_session unsave];
@@ -352,7 +416,11 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 
 - (void)likesAndCommentsDidLoad
 {
+
 	NSLog(@"likesAndCommentsDidLoad");
+	if([(TreemapView*)self.treemapViewController.treeMapView initialized]) [self.treemapViewController resizeView];
+
+	/*
 	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) //likes
 	{
 		if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
@@ -376,6 +444,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 			[_treemapViewController displaySection:@"commentCount" andView:@"page"];
 		}
 	}
+	 */
 }
 
 
