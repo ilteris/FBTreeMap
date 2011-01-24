@@ -51,7 +51,6 @@
   [super dealloc];
 }
 
-
 /**
  * Request all info from the user is start with request user id as the authorization flow does not 
  * return the user id. This is an intermediate solution to obtain the logged in user id
