@@ -26,9 +26,9 @@
 
 	ASINetworkQueue *_networkQueue;
 
-	NSMutableArray *cells;
+
 	NSMutableArray *_backgrounds;
-	NSMutableArray *_valuesArray;
+
 	//facebook
 
 	

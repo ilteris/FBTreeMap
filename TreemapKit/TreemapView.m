@@ -17,15 +17,16 @@
 {
     
 	
-//    NSLog(@"nodes %@", nodes);
-	if (nodes.count <= 1) {
+	//    NSLog(@"nodes %@", nodes);
+	if (nodes.count <= 1) 
+	{
 		NSLog(@"inside");
-	//	NSLog(@"nodes %@", nodes);
+		//	NSLog(@"nodes %@", nodes);
 		NSInteger index = [[[nodes objectAtIndex:0] objectForKey:@"index"] intValue];
- //      	NSInteger index = [[[nodes objectAtIndex:0] objectForKey:@"index"] integerValue];
-  //      NSLog(@"index here is %i", index);
-	//	NSLog(@"self.subviews %@", self.subviews);
-		if (createNode) 
+		//      	NSInteger index = [[[nodes objectAtIndex:0] objectForKey:@"index"] integerValue];
+		//      NSLog(@"index here is %i", index);
+		//	NSLog(@"self.subviews %@", self.subviews);
+		if (createNode) //if yes 
 		{
 			TreemapViewCell *cell = [dataSource treemapView:self cellForIndex:index forRect:rect];
 			NSLog(@"createNode");
@@ -34,12 +35,12 @@
 			
 			[self addSubview:cell];
 			
-		//	NSLog(@"cell %@", cell);
-		//	NSLog(@"index here is %i", index);
-		//	[cell layoutSubviews];
-
+			//	NSLog(@"cell %@", cell);
+			//	NSLog(@"index here is %i", index);
+			//	[cell layoutSubviews];
+			
 		}
-		else 
+		else //nope don't create.
 		{
 			//THIS GETS CALLED ON THE UPDATE
 			TreemapViewCell *cell = [self.subviews objectAtIndex:index];
@@ -52,7 +53,7 @@
 		return;
 	}
 	
-
+	
     
 	float total = 0;
 	for (NSDictionary *dic in nodes) 
@@ -118,8 +119,8 @@
 		aRect = CGRectMake(rect.origin.x, rect.origin.y, aWidth, aHeight);
 		bRect = CGRectMake(rect.origin.x, rect.origin.y + aHeight + sep, bWidth, bHeight);
 	}
-//	NSLog(@"array a %@", aArray);
-//	NSLog(@"array b %@", bArray);
+	//	NSLog(@"array a %@", aArray);
+	//	NSLog(@"array b %@", bArray);
 	[self calcNodePositions:aRect nodes:aArray width:aWidth height:aHeight depth:depth + 1 withCreate:createNode];
 	[self calcNodePositions:bRect nodes:bArray width:bWidth height:bHeight depth:depth + 1 withCreate:createNode];
 }
@@ -129,14 +130,14 @@
 	//NSLog(@"values inside getData");
 	NSArray *values = [dataSource valuesForTreemapView:self];
 	//	NSLog(@"values inside getData");
-
-
-	//NSLog(@"values %@",values);	
+	
+	
+	NSLog(@"values for getData %@",values);	
     
 	NSMutableArray *nodes = [NSMutableArray arrayWithCapacity:values.count];
 	for (int i = 0; i < values.count; i++) {
 		NSNumber *value = [values objectAtIndex:i];
-	//	NSLog(@"nodes value is %@", value);
+		//	NSLog(@"nodes value is %@", value);
 		NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:2];
 		[dic setValue:[NSNumber numberWithInt:i] forKey:@"index"];
 		[dic setValue:value forKey:@"value"];
@@ -147,41 +148,44 @@
 
 - (void)createNodes {
 	NSArray *nodes = [self getData];
-	//NSLog(@"creating nodes");
+	NSLog(@"creating nodes");
 	
-	//NSLog(@"nodes inside create Nodes %@", nodes);
-
+	NSLog(@"nodes inside create Nodes %@", nodes);
+	
 	//NSLog(@"view is %@", NSStringFromCGRect(self.frame));
 	
 	if (nodes && nodes.count > 0) 
 	{
-
+		
 		NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.bounds.size.width,self.bounds.size.height);
-
+		
 		[self calcNodePositions:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)
 						  nodes:nodes
 						  width:ceil(self.bounds.size.width)
 						 height:ceil(self.bounds.size.height)
 						  depth:0
 					 withCreate:YES];
-	
+		
 	}
 }
 
 //changed to withCreate:NO ---> YES;
 - (void)resizeNodes {
-	//NSLog(@"resizing nodes");
+	NSLog(@"resizing nodes");
+	//need an extra method here to address the change in the count of the nodes. when the app
+	//begins the nodes array is zero, then this method is getting called and since the nodes are now one, 
+	// it tries to cal the calcNodePositions and failing of course.
 	
 	NSArray *nodes = [self getData];
 	
 	//NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.bounds.size.width,self.bounds.size.height);
-//	NSLog(@"nodes %@", nodes);
+	//	NSLog(@"nodes %@", nodes);
 	if (nodes && nodes.count > 0) 
 	{
-	//	NSLog(@"calling calcNodePositions");
+		//	NSLog(@"calling calcNodePositions");
 		
 		NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.bounds.size.width,self.bounds.size.height);
-
+		
 		
 		
 		[self calcNodePositions:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)
@@ -189,7 +193,7 @@
 						  width:ceil(self.bounds.size.width)
 						 height:ceil(self.bounds.size.height)
 						  depth:0
-					 withCreate:YES];
+					 withCreate:NO];
 	}
 }
 
@@ -208,7 +212,11 @@
 
 - (void)reloadData {
 	NSLog(@"turning turning");
-	[self removeNodes];
+	//it's here that I need to create and add new nodes to existing ones. check the length of the fruits and nodes and if they are not equal make them equal somehow,
+	
+	//NSArray *nodes = [self getData];
+
+	//[self removeNodes];
 	[self resizeNodes];
 }
 
@@ -231,6 +239,7 @@
 - (id)initWithFrame:(CGRect)frame {
 	if ((self = [super initWithFrame:frame])) {
 		initialized = NO;
+		NSLog(@"initWithFrame");
 	}
 	return self;
 }
@@ -239,19 +248,21 @@
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
-	
+	NSLog(@"layoutSubviews");
 	if (!initialized) {
 		NSLog(@"initialized initialized");
-		[self createNodes];
+		//[self createNodes];
 		initialized = YES;
 	}
 }
 
+
+
 - (void)dealloc {
 	[dataSource release];
 	[delegate release];
-
-	 
+	
+	
 	[super dealloc];
 }
 
