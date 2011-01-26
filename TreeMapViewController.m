@@ -94,7 +94,7 @@
 -(NSString*)returnDurationString:(int)integer
 {
 	NSString *temp_string;
-
+	
 	
 	switch ([[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]) {
 		case 0:
@@ -125,24 +125,36 @@
 	
 	TreemapViewCell *cell = [self.cells objectAtIndex:[sender tag]];
 	
-	NSNumber *tempNumber = [NSNumber numberWithInt:[[cell.countLabel text] intValue] + 1];
-	NSLog(@"tempNumber %@", tempNumber);
+	NSLog(@"_cell is %@", cell);
+	NSLog(@"cell count text is %@", cell.countLabel.text);
 	
 	NSNumber *value = [_valuesArray objectAtIndex:[sender tag]];
 	
 	NSLog(@"value %@", value);
-
-	//replace the old value with the new value
-	[_valuesArray replaceObjectAtIndex:[sender tag] withObject:tempNumber];
+	
+	NSNumber *tempNumber = [NSNumber numberWithInt:[[cell.countLabel text] intValue] + 1];
+	NSLog(@"tempNumber %@", tempNumber);
+	
 	
 	cell.countLabel.text = [tempNumber stringValue];
-	
-	[UIView beginAnimations:@"reload" context:nil];
-	[UIView setAnimationDuration:0.5];
-	
+	NSLog(@"cell count text is %@", cell.countLabel.text);
 	//[(TreemapView *)self.treeMapView reloadData];
 	
-	[UIView commitAnimations];
+	[cell setNeedsDisplay];
+
+	//replace the old value with the new value
+	//need to do the multiplication before replacing it. need to do the multiplication only if its the first one.
+		
+	//[_valuesArray replaceObjectAtIndex:[sender tag] withObject:tempNumber];
+	
+	//cell.countLabel.text = [tempNumber stringValue];
+	
+	//[UIView beginAnimations:@"reload" context:nil];
+	//[UIView setAnimationDuration:0.5];
+	
+	
+	
+	//[UIView commitAnimations];
 	
 
 	
@@ -405,7 +417,7 @@
 				[self displaySection:@"commentCount" andView:@"user" withDuration:durationString];
 			}
 			else 
-			{
+			{ 
 				[self displaySection:@"commentCount" andView:@"page" withDuration:durationString];
 			}
 		}
@@ -538,6 +550,8 @@
 	
 	[cell.countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
 	cell.countBtn.tag = index;
+	
+	NSLog(@"index is %i", index);
 	
 	NSLog(@"treemapView cellForIndex");
 	//NSLog(@"comments is %@", [[fruits objectAtIndex:index] objectForKey:@"comments"]);

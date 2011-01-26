@@ -86,7 +86,8 @@
 			
 			
 			
-			
+			//	[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+
 			
 			if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 			{
@@ -385,7 +386,9 @@
 
 	//[contentLabel sizeToFit];
 	
-//	countLabel.text = @"1290";	
+	//countLabel.text = @"1290";	
+	NSNumber *tempNumber =  [NSNumber numberWithInt:[countLabel.text intValue]];
+	countLabel.text = [tempNumber stringValue];
 	
 	// calculate the position of the icon according to the width of the countLabel.
 	// can you set the width of the countLabel ==>countLabelWidth  to countLabel's width?
@@ -454,16 +457,12 @@
 #pragma mark === Flip action ===
 #pragma mark -
 - (void)onCountBtnPress:(id)sender {
-	NSLog(@"flipAction");
-	NSLog(@"post_id is %@", _post_id);
+	NSLog(@"onCountBtnPress");
+
 	
 	NSNumber *tempNumber = [NSNumber numberWithInt:[[countLabel text] intValue] + 1];
 	NSLog(@"tempNumber %@", tempNumber);
-	
-	
-	
-
-	
+		
 	countLabel.text = [tempNumber stringValue];
 	
 }

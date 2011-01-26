@@ -356,15 +356,15 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	 _fbButton.isLoggedIn         = YES;
 	 [_fbButton updateImage];
 	
-	
+	/*
 	_userInfo = [[[[UserInfo alloc] initializeWithFacebook:_facebook andDelegate: self] 
 				  autorelease] 
 				 retain];
-	//[_userInfo requestCountOf:(NSString*)entity];
-	//[_userInfo requestAllInfo];
+
+
 	[_userInfo requestUid];
 	
-
+*/
 	
 
 	
