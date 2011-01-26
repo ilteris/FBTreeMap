@@ -26,7 +26,7 @@
 	self = [super init];
 	_likesAndCommentsRequestDelegate = [delegate retain];
 
-	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local.db"];
+	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local1.db"];
 	
 
 	return self;
@@ -96,7 +96,8 @@
 		NSString *_image_url;
 		NSString *_permalink;
 		NSNumber *_canLike;
-		NSNumber *_canComment;
+		NSNumber *_canPostComment;
+		NSNumber *_canRemoveComment;
 		NSNumber *_posted_time;
 		NSNumber *_updated_time;
 		
@@ -123,10 +124,11 @@
 		_canLike = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"likes"] objectForKey:@"can_like"] integerValue]];
 		
 		_commentCount = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"count"] integerValue]];
-		_canComment = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"can_post"] integerValue]];
+		_canPostComment = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"can_post"] integerValue]];
+		_canRemoveComment = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"can_remove"] integerValue]];
 
 		NSLog(@"_canLike is %@", _canLike);
-		NSLog(@"_canComment is %@", _canComment);
+		NSLog(@"_canPostComment is %@", _canPostComment);
 		
 		_permalink = [NSString stringWithFormat:@"%@", [[streamArray objectAtIndex:i] objectForKey:@"permalink"]];
 
@@ -320,6 +322,9 @@
 							  _poster_id, @"poster_id",
 							  _poster_name, @"poster_name",
 							  _poster_type, @"poster_type",
+							  _canLike, @"canLike",
+							  _canPostComment, @"canPostComment",
+							  _canRemoveComment, @"canRemoveComment",
 							  _message, @"message",
 							  _permalink, @"permalink",
 							  _image_url, @"image_url",

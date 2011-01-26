@@ -72,6 +72,7 @@
 		F0A76CD312D408F9004437D0 /* BWUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A76CD012D408F9004437D0 /* BWUtilities.m */; };
 		F0A76CE212D4090C004437D0 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F0A76CE112D4090C004437D0 /* libsqlite3.dylib */; };
 		F0A76DE112D429A7004437D0 /* p_local.db in Resources */ = {isa = PBXBuildFile; fileRef = F0A76DE012D429A7004437D0 /* p_local.db */; };
+		F0AEE41212EF580D00B9B533 /* p_local1.db in Resources */ = {isa = PBXBuildFile; fileRef = F0AEE41112EF580D00B9B533 /* p_local1.db */; };
 		F0CDA9161267BAA700D03C50 /* pm_menu_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = F0CDA9151267BAA700D03C50 /* pm_menu_bg.png */; };
 		F0F00BDF1215D57100DB0EF9 /* UIImage+ProportionalFill.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F00BDC1215D57100DB0EF9 /* UIImage+ProportionalFill.m */; };
 		F0F00BE01215D57100DB0EF9 /* UIImage+Tint.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F00BDE1215D57100DB0EF9 /* UIImage+Tint.m */; };
@@ -187,6 +188,7 @@
 		F0A76CD012D408F9004437D0 /* BWUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWUtilities.m; sourceTree = "<group>"; };
 		F0A76CE112D4090C004437D0 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		F0A76DE012D429A7004437D0 /* p_local.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = p_local.db; sourceTree = "<group>"; };
+		F0AEE41112EF580D00B9B533 /* p_local1.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = p_local1.db; sourceTree = "<group>"; };
 		F0CDA9151267BAA700D03C50 /* pm_menu_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pm_menu_bg.png; sourceTree = "<group>"; };
 		F0ECFA2C1266557D0075C90F /* NSMutableArray_Shuffling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMutableArray_Shuffling.h; sourceTree = "<group>"; };
 		F0F00BDB1215D57100DB0EF9 /* UIImage+ProportionalFill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ProportionalFill.h"; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				F0AEE41112EF580D00B9B533 /* p_local1.db */,
 				F0A76DE012D429A7004437D0 /* p_local.db */,
 				F01C0EAB128329A900CF1476 /* UserInfo.h */,
 				F01C0EAC128329A900CF1476 /* UserInfo.m */,
@@ -499,6 +502,7 @@
 				F020072C129C2BA4004647DB /* video.png in Resources */,
 				F020072D129C2BA4004647DB /* wood.png in Resources */,
 				F0A76DE112D429A7004437D0 /* p_local.db in Resources */,
+				F0AEE41212EF580D00B9B533 /* p_local1.db in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -45,7 +45,7 @@
 	/*Facebook Application ID*/
 	//NSString *client_id = @"128496757192973";
 	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
-	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local.db"];
+	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local1.db"];
 
 	[self setTheBackgroundArray];
 	
@@ -118,6 +118,63 @@
 }
 
 
+- (void)onCountBtnPress:(id)sender {
+	NSLog(@"flipAction");
+	
+	//NSLog(@"post_id is %@", _post_id);
+	
+	TreemapViewCell *cell = [self.cells objectAtIndex:[sender tag]];
+	
+	NSNumber *tempNumber = [NSNumber numberWithInt:[[cell.countLabel text] intValue] + 1];
+	NSLog(@"tempNumber %@", tempNumber);
+	
+	NSNumber *value = [_valuesArray objectAtIndex:[sender tag]];
+	
+	NSLog(@"value %@", value);
+
+	//replace the old value with the new value
+	[_valuesArray replaceObjectAtIndex:[sender tag] withObject:tempNumber];
+	
+	cell.countLabel.text = [tempNumber stringValue];
+	
+	[UIView beginAnimations:@"reload" context:nil];
+	[UIView setAnimationDuration:0.5];
+	
+	//[(TreemapView *)self.treeMapView reloadData];
+	
+	[UIView commitAnimations];
+	
+
+	
+	
+//	NSDictionary *dic = [fruits objectAtIndex:index];
+//	[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"value"] intValue] + 300] forKey:@"value"];
+
+	
+	
+	
+	
+}
+
+
+
+#pragma mark -
+
+
+- (void)resizeCell
+{
+	/*
+	 * resize rectangles with animation
+	 */
+	[UIView beginAnimations:@"reload" context:nil];
+	[UIView setAnimationDuration:0.5];
+	
+	[(TreemapView *)self.treeMapView reloadData];
+	
+	[UIView commitAnimations];
+}
+
+
 #pragma mark -
 - (void)resizeView
 {
@@ -135,8 +192,6 @@
 		
 		if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
 		{
-			
-			
 			[self displaySection:@"likeCount" andView:@"user" withDuration:durationString];
 		}
 		else 
@@ -153,7 +208,7 @@
 			[self displaySection:@"commentCount" andView:@"user" withDuration:durationString];
 		}
 		else 
-		{
+		{	
 			[self displaySection:@"commentCount" andView:@"page" withDuration:durationString];
 		}
 	}
@@ -390,13 +445,21 @@
 		}
 		else 
 		{
-			if((highestNumber/highestSecondNumber) < 2) //if there's no duplicate winners AND difference between first two highest number is 1/2 then multiply.
+			NSLog(@"highestNumber is %i", highestNumber);
+			NSLog(@"highestSecondNumber is %i", highestSecondNumber);
+			
+			if (highestSecondNumber != 0) 
 			{
-				NSInteger tempValue = [[_valuesArray objectAtIndex:highestNumberIndex] intValue];
-				tempValue = round(tempValue*2.5);
-				NSNumber *_inStr = [NSNumber numberWithInt:tempValue];
-				[_valuesArray replaceObjectAtIndex:highestNumberIndex withObject:_inStr];
-				NSLog(@"tempValue is %i", tempValue);
+				
+				
+				if((highestNumber/highestSecondNumber) < 2) //if there's no duplicate winners AND difference between first two highest number is 1/2 then multiply.
+				{
+					NSInteger tempValue = [[_valuesArray objectAtIndex:highestNumberIndex] intValue];
+					tempValue = round(tempValue*2.5);
+					NSNumber *_inStr = [NSNumber numberWithInt:tempValue];
+					[_valuesArray replaceObjectAtIndex:highestNumberIndex withObject:_inStr];
+					NSLog(@"tempValue is %i", tempValue);
+				}//endif
 			}//endif
 		}
 	
@@ -473,6 +536,8 @@
 {
 	TreemapViewCell *cell = [[TreemapViewCell alloc] initWithFrame:rect];
 	
+	[cell.countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+	cell.countBtn.tag = index;
 	
 	NSLog(@"treemapView cellForIndex");
 	//NSLog(@"comments is %@", [[fruits objectAtIndex:index] objectForKey:@"comments"]);

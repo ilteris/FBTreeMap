@@ -106,13 +106,17 @@
 
 - (void) requestCountOf
 {	
+	//created_time is smaller than the closer time and larger than the further time
+	//SELECT post_id, actor_id, source_id, message,  likes, comments, created_time FROM stream  WHERE source_id IN(SELECT target_id FROM connection WHERE source_id=me()) 
+	//AND is_hidden = 0 AND (created_time <= '1295969630' AND created_time >= '1295855322')
+	
 	NSLog(@"requestCountOf");
 	LikesAndCommentsRequestResult *likesAndCommentsRequestResult = [[[[LikesAndCommentsRequestResult alloc] initializeWithDelegate:self] autorelease] retain];		
 				
 	// create the multiquery
 	NSLog(@"uid %@", _uid);
 	NSString* friendIDs = @"SELECT actor_id, post_id,likes, message, comments, permalink, type, attachment, created_time, updated_time FROM stream WHERE source_id IN(";
-	friendIDs = [friendIDs stringByAppendingFormat:@"SELECT target_id FROM connection WHERE source_id=%@) AND is_hidden = 0 LIMIT 80", _uid];
+	friendIDs = [friendIDs stringByAppendingFormat:@"SELECT target_id FROM connection WHERE source_id=%@) AND is_hidden = 0 LIMIT 1000", _uid];
 	
 	NSString* userName = [NSString stringWithFormat:@"SELECT name, uid FROM user WHERE uid IN (SELECT actor_id FROM #friendIDs)"];
 	NSString* pageName = [NSString stringWithFormat:@"SELECT name, page_id FROM page WHERE page_id IN (SELECT actor_id FROM #friendIDs)"];

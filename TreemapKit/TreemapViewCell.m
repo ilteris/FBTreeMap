@@ -21,6 +21,7 @@
 
 @synthesize post_id = _post_id;
 @synthesize playBtn = _playBtn;
+@synthesize countBtn = _countBtn;
 
 #pragma mark -
 
@@ -86,7 +87,6 @@
 			
 			
 			
-			[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
 			
 			if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 			{
@@ -161,7 +161,7 @@
 			
 			
 			
-			[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+		//	[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
 			
 			if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 			{
@@ -275,7 +275,7 @@
 			
 			
 			
-			[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+		//	[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
 			
 			if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 			{
@@ -456,6 +456,16 @@
 - (void)onCountBtnPress:(id)sender {
 	NSLog(@"flipAction");
 	NSLog(@"post_id is %@", _post_id);
+	
+	NSNumber *tempNumber = [NSNumber numberWithInt:[[countLabel text] intValue] + 1];
+	NSLog(@"tempNumber %@", tempNumber);
+	
+	
+	
+
+	
+	countLabel.text = [tempNumber stringValue];
+	
 }
 
 
@@ -476,6 +486,7 @@
 	[imageViewB release];
 	[delegate	release];
 	[_playBtn release];
+	[_countBtn release];
 	
 	[_post_id release];
 

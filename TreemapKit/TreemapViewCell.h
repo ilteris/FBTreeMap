@@ -35,7 +35,10 @@
 }
 
 @property(nonatomic, retain) NSString *post_id;
+
 @property (nonatomic, retain) UIButton *playBtn;
+@property (nonatomic, retain) UIButton *countBtn;
+
 
 @property (nonatomic, retain) UILabel *titleLabel;
 @property (nonatomic, retain) UILabel *countLabel;
@@ -46,6 +49,8 @@
 
 @property (nonatomic, retain) UIView *aView;
 @property (nonatomic, retain) UIView *bView;
+
+
 
 
 @property (nonatomic, retain) NSString *downloadDestinationPath;

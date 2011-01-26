@@ -72,9 +72,12 @@
 
 @property (nonatomic, retain) IBOutlet UIView *treeMapView;
 
+- (IBAction)onCountBtnPress:(id)sender; 
+
 
 - (void)setTheBackgroundArray;
 - (void)resizeView;
+- (void)resizeCell;
 - (void)displaySection:(NSString*)section andView:(NSString*)viewType withDuration:(NSString*)duration;
 - (void)displayCommentsOfUsers;
 - (void)displayCommentsOfPages;
