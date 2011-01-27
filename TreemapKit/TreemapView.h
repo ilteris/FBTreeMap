@@ -19,6 +19,7 @@
 - (void)resizeNodes;
 - (BOOL)initialized;
 - (void)removeNodes;
+- (void)createNodes;
 
 @end
 

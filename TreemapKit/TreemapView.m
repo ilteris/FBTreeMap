@@ -42,6 +42,7 @@
 		}
 		else //nope don't create.
 		{
+			NSLog(@"updateNode");
 			//THIS GETS CALLED ON THE UPDATE
 			TreemapViewCell *cell = [self.subviews objectAtIndex:index];
 			
@@ -126,13 +127,14 @@
 }
 
 
+
 - (NSArray *)getData {
 	//NSLog(@"values inside getData");
 	NSArray *values = [dataSource valuesForTreemapView:self];
 	//	NSLog(@"values inside getData");
 	
 	
-	NSLog(@"values for getData %@",values);	
+	//	NSLog(@"values for getData %@",values);	
     
 	NSMutableArray *nodes = [NSMutableArray arrayWithCapacity:values.count];
 	for (int i = 0; i < values.count; i++) {
@@ -146,8 +148,12 @@
 	return nodes;
 }
 
+
+
 - (void)createNodes {
-	NSArray *nodes = [self getData];
+	
+	NSArray *nodes = [self getData]; //this calls the valuesForTreemapView in the treemapcontroller.
+	
 	NSLog(@"creating nodes");
 	
 	NSLog(@"nodes inside create Nodes %@", nodes);
@@ -167,6 +173,7 @@
 					 withCreate:YES];
 		
 	}
+	 
 }
 
 //changed to withCreate:NO ---> YES;
@@ -185,7 +192,8 @@
 		//	NSLog(@"calling calcNodePositions");
 		
 		NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.bounds.size.width,self.bounds.size.height);
-		
+		NSLog(@"self.frame.size.width %f self.frame.size.height %f",self.frame.size.width,self.frame.size.height);
+
 		
 		
 		[self calcNodePositions:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)
@@ -206,18 +214,16 @@
 
 
 
-
 #pragma mark -
 #pragma mark Public methods
 
 - (void)reloadData {
-	NSLog(@"turning turning");
+	NSLog(@"reloadData");
 	//it's here that I need to create and add new nodes to existing ones. check the length of the fruits and nodes and if they are not equal make them equal somehow,
-	
-	//NSArray *nodes = [self getData];
 
-	//[self removeNodes];
 	[self resizeNodes];
+	//[self removeNodes];
+	
 }
 
 - (BOOL)initialized

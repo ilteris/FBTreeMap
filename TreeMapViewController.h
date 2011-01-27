@@ -39,7 +39,7 @@
 	PeopleMapDB *_peopleMapDB;
 	
 
-	IBOutlet UIView *treeMapView;
+	IBOutlet TreemapView *treeMapView;
 
 	
 	
@@ -70,10 +70,11 @@
 
 
 
-@property (nonatomic, retain) IBOutlet UIView *treeMapView;
+@property (nonatomic, retain) IBOutlet TreemapView *treeMapView;
 
 - (IBAction)onCountBtnPress:(id)sender; 
 
+- (void)createCellsForTheFirstTime;
 
 - (void)setTheBackgroundArray;
 - (void)resizeView;

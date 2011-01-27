@@ -116,14 +116,14 @@
 		cell.imageViewA.image = img;
 		
 		//TODO: need to check the size of the frame and display the play button accordingly.
-		cell.playBtn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
-		cell.playBtn.frame = CGRectMake(0, 0, 56.0, 55.0);
-		cell.playBtn.frame = CGRectMake((cell.imageViewA.bounds.size.width-cell.playBtn.bounds.size.width)/2, (cell.imageViewA.bounds.size.height-cell.playBtn.bounds.size.height)/2, cell.playBtn.frame.size.width, cell.playBtn.frame.size.height);
-		UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"play" ofType:@"png"]];
-		[cell.playBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
-		[tImage release];
+		//cell.playBtn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+		//cell.playBtn.frame = CGRectMake(0, 0, 56.0, 55.0);
+		//cell.playBtn.frame = CGRectMake((cell.imageViewA.bounds.size.width-cell.playBtn.bounds.size.width)/2, (cell.imageViewA.bounds.size.height-cell.playBtn.bounds.size.height)/2, cell.playBtn.frame.size.width, cell.playBtn.frame.size.height);
+		//UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"play" ofType:@"png"]];
+		//[cell.playBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+		//[tImage release];
 		
-		[cell.aView addSubview:cell.playBtn];
+		//[cell.aView addSubview:cell.playBtn];
 		cell.contentLabel.text = @"";//	[[fruits objectAtIndex:index] objectForKey:@"message"];
 		
 	}
@@ -145,12 +145,12 @@
 	
 	//add the post_id
 	cell.post_id = [[fruits objectAtIndex:index] objectForKey:@"post_id"];
-	//[self.cells addObject:cell];
-	//[cell release];
+
+
 	
-	//load the local images first here.
+
 	
-	//	[self updateCell:cell forIndex:index];
+
 	
 	
 	
@@ -166,6 +166,7 @@
 	NSLog(@"here");
 	//TreemapViewCell *cell = (TreemapViewCell *)[self.treeMapView.subviews objectAtIndex:index];	
 
+	//normally need to add the value to the database and run this again. 
 	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 	{
 		NSDictionary *dic = [fruits objectAtIndex:index];
@@ -178,13 +179,14 @@
 	else {
 		NSDictionary *dic = [fruits objectAtIndex:index];
 
-		NSLog(@"dic is %i", [[dic valueForKey:@"likeCount"] intValue]);
+		NSLog(@"dic is %i", [[dic valueForKey:@"commentCount"] intValue]);
 		[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"commentCount"] intValue] + 2] forKey:@"commentCount"];
 
 	}
 
-	[self resizeView];
+	//[self resizeView];
 	
+	[self.treeMapView reloadData];
 	//[cell flipIt];
 }
 
@@ -278,7 +280,7 @@
 	[UIView beginAnimations:@"reload" context:nil];
 	[UIView setAnimationDuration:0.5];
 	
-	[(TreemapView *)self.treeMapView reloadData];
+	//[(TreemapView *)self.treeMapView reloadData];
 	
 	[UIView commitAnimations];
 }
@@ -292,7 +294,7 @@
 	// NSLog(@"resizeView");
 	//[UIView beginAnimations:@"reload" context:nil];
 	//[UIView setAnimationDuration:0.5];
-	/*
+	
 	NSString *durationString = [self returnDurationString:[[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]];
 	
 	
@@ -321,24 +323,29 @@
 			[self displaySection:@"commentCount" andView:@"page" withDuration:durationString];
 		}
 	}
-	 */
+	 
 	//this is a hack so that hearts andcomments don't move on orientation change.
 	/*
 	[UIView setAnimationsEnabled:NO];
-	[(TreemapView *)self.treeMapView reloadData];
+	//[(TreemapView *)self.treeMapView reloadData];
 	[UIView setAnimationsEnabled:YES];
 	//[UIView commitAnimations];
 	*/
-	[UIView beginAnimations:@"reload" context:nil];
-	[UIView setAnimationDuration:0.5];
+//	[UIView beginAnimations:@"reload" context:nil];
+//	[UIView setAnimationDuration:0.5];
 	
-	[(TreemapView *)self.treeMapView reloadData];
+	[self.treeMapView reloadData];
 	
-	[UIView commitAnimations];
+//	[UIView commitAnimations];
 	
 	
 }
 
+
+- (void) createCellsForTheFirstTime
+{
+	[self.treeMapView createNodes];
+}
 
 
 

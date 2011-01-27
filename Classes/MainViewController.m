@@ -116,7 +116,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	
 	_treemapViewController.treeMapView = treeMapView;
 	
-	if([(TreemapView*)self.treemapViewController.treeMapView initialized]) [self.treemapViewController resizeView];
+	[_treemapViewController createCellsForTheFirstTime];
 	
 }
 

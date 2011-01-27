@@ -21,8 +21,8 @@
 	//models
 	NSString* downloadDestinationPath;
 	
-	BOOL loaded;
-	
+
+
 	UIButton *_countBtn;
 	UIButton *_playBtn;
 	
@@ -55,7 +55,7 @@
 
 @property (nonatomic, retain) NSString *downloadDestinationPath;
 
-@property(nonatomic, assign) BOOL loaded;
+
 
 @property (nonatomic, assign) NSInteger index;
 

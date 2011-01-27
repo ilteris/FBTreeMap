@@ -17,7 +17,7 @@
 @synthesize bView;
 
 @synthesize downloadDestinationPath;
-@synthesize loaded;
+
 
 @synthesize post_id = _post_id;
 @synthesize playBtn = _playBtn;
@@ -45,7 +45,7 @@
 		self.bView.backgroundColor = [UIColor whiteColor];
 		self.downloadDestinationPath = [NSString stringWithFormat:@""];
 		
-		loaded = false;
+
 		
 		self.layer.borderWidth = .5;
 
@@ -68,7 +68,7 @@
 			titleLabel.backgroundColor = [UIColor clearColor];
 			
 			titleLabel.alpha = 1;
-
+			
 			self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(11, self.frame.size.height - 61, 200, 48)];
 			
 			countLabel.numberOfLines = 0;
@@ -79,7 +79,7 @@
 			countLabel.backgroundColor = [UIColor clearColor];
 			countLabel.shadowColor  = [UIColor blackColor];
 			countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-
+			
 			
 			_countBtn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
 			_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
@@ -87,7 +87,7 @@
 			
 			
 			//	[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
-
+			
 			
 			if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 			{
@@ -110,7 +110,7 @@
 			NSLog(@"status big");
 			
 			contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0)];
-
+			
 			contentLabel.font = [UIFont boldSystemFontOfSize:48];
 			contentLabel.text = @"";
 			contentLabel.textAlignment = UITextAlignmentLeft;
@@ -143,7 +143,7 @@
 			titleLabel.backgroundColor = [UIColor clearColor];
 			
 			titleLabel.alpha = 1;
-
+			
 			self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(11, self.frame.size.height - 61, 200, 48)];
 			
 			countLabel.numberOfLines = 0;
@@ -154,7 +154,7 @@
 			countLabel.backgroundColor = [UIColor clearColor];
 			countLabel.shadowColor  = [UIColor blackColor];
 			countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-
+			
 			
 			_countBtn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
 			_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
@@ -162,7 +162,7 @@
 			
 			
 			
-		//	[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+			//	[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
 			
 			if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 			{
@@ -181,7 +181,7 @@
 			_countBtn.alpha = 0.5;
 			
 			contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0)];
-
+			
 			contentLabel.font = [UIFont boldSystemFontOfSize:24];
 			contentLabel.text = @"";
 			contentLabel.textAlignment = UITextAlignmentLeft;
@@ -196,7 +196,7 @@
 			contentLabel.alpha = 1;
 			
 		}
-
+		
 		//very small sized cells
 		else if(self.frame.size.width < 113)
 		{
@@ -214,7 +214,7 @@
 			titleLabel.backgroundColor = [UIColor clearColor];
 			
 			titleLabel.alpha = 1;
-
+			
 			self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(11, self.frame.size.height - 61, 200, 48)];
 			countLabel.numberOfLines = 0;
 			countLabel.font = [UIFont boldSystemFontOfSize:0];
@@ -224,7 +224,7 @@
 			countLabel.backgroundColor = [UIColor clearColor];
 			countLabel.shadowColor  = [UIColor blackColor];
 			countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-
+			
 			contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0)];
 			contentLabel.font = [UIFont boldSystemFontOfSize:0];
 			contentLabel.text = @"";
@@ -276,7 +276,7 @@
 			
 			
 			
-		//	[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+			//	[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
 			
 			if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 			{
@@ -293,7 +293,7 @@
 			
 			
 			_countBtn.alpha = 0.5;
-
+			
 			
 			
 		}
@@ -301,7 +301,7 @@
 		{
 			NSLog(@"god knows where");
 		}
-
+		
 		
 
 
@@ -359,6 +359,8 @@
 	//CGRect boundRect2 = CGRectMake(0, 0, rect.size.width, rect.size.height);
 
 	self.contentMode = UIViewContentModeCenter;
+	self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:0] CGColor];
+
 	[UIView beginAnimations:@"UIBase Hide" context:nil];
 	[UIView setAnimationDelegate:self];
 	[UIView setAnimationDuration:.5f]; 
@@ -375,15 +377,16 @@
 
 - (void)animationDidStop {
 	NSLog(@"animationDidStop");
+	
 	self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:1] CGColor];
-	self.imageViewA.image = [self.imageViewB.image imageCroppedToFitSize:self.frame.size];
+	//self.imageViewA.image = [self.imageViewB.image imageCroppedToFitSize:self.frame.size];
 	//self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.3] CGColor];
 }
 
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
-
+	NSLog(@"layoutSubviews");
 	//[contentLabel sizeToFit];
 	
 	//countLabel.text = @"1290";	
