@@ -74,11 +74,13 @@
 
 - (IBAction)onCountBtnPress:(id)sender; 
 
-- (void)createCellsForTheFirstTime;
+- (void)createCellsFromZero;
+-(void)likesAndCommentsDidLoadView;
 
+-(void) changeTime;
 - (void)setTheBackgroundArray;
 - (void)resizeView;
-- (void)resizeCell;
+
 - (void)displaySection:(NSString*)section andView:(NSString*)viewType withDuration:(NSString*)duration;
 - (void)displayCommentsOfUsers;
 - (void)displayCommentsOfPages;

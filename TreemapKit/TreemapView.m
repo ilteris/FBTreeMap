@@ -49,7 +49,7 @@
 			[cell moveAndScale:rect];
 			if ([delegate respondsToSelector:@selector(treemapView:updateCell:forIndex:forRect:)])
 				[delegate treemapView:self updateCell:cell forIndex:index forRect:rect];
-			[cell layoutSubviews];
+			//[cell layoutSubviews];
 		}
 		return;
 	}
@@ -163,7 +163,7 @@
 	if (nodes && nodes.count > 0) 
 	{
 		
-		NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.bounds.size.width,self.bounds.size.height);
+	//	NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.bounds.size.width,self.bounds.size.height);
 		
 		[self calcNodePositions:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)
 						  nodes:nodes
@@ -191,9 +191,9 @@
 	{
 		//	NSLog(@"calling calcNodePositions");
 		
-		NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.bounds.size.width,self.bounds.size.height);
-		NSLog(@"self.frame.size.width %f self.frame.size.height %f",self.frame.size.width,self.frame.size.height);
-
+	//	NSLog(@"self.bounds.size.width %f self.bounds.size.height %f",self.bounds.size.width,self.bounds.size.height);
+	//	NSLog(@"self.frame.size.width %f self.frame.size.height %f",self.frame.size.width,self.frame.size.height);
+//
 		
 		
 		[self calcNodePositions:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)
@@ -254,7 +254,7 @@
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
-	NSLog(@"layoutSubviews");
+	NSLog(@"layoutSubviews in treemapview");
 	if (!initialized) {
 		NSLog(@"initialized initialized");
 		//[self createNodes];

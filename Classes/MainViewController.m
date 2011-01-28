@@ -116,7 +116,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	
 	_treemapViewController.treeMapView = treeMapView;
 	
-	[_treemapViewController createCellsForTheFirstTime];
+	[_treemapViewController createCellsFromZero];
 	
 }
 
@@ -178,29 +178,35 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	{
 		case 0:
 			[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"durationMode"]; //set the duration mode to default mode.
-			[self.treemapViewController resizeView];
+			//[self.treemapViewController resizeView];
+			[self.treemapViewController changeTime];
 			NSLog( @"case is 0");
 			break;
-
+			
 		case 1:
 			[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"durationMode"]; //set the duration mode to default mode.
-			[self.treemapViewController resizeView];
+			//[self.treemapViewController resizeView];
+			[self.treemapViewController changeTime];
 			NSLog( @"case is 1");
 			break;
 		case 2:
 			[[NSUserDefaults standardUserDefaults] setInteger:2 forKey:@"durationMode"]; //set the duration mode to default mode.
-			[self.treemapViewController resizeView];
+			//[self.treemapViewController resizeView];
+			[self.treemapViewController changeTime];
 			NSLog( @"case is 2");
 			break;
 		case 3:
 			[[NSUserDefaults standardUserDefaults] setInteger:3 forKey:@"durationMode"]; //set the duration mode to default mode.
-			[self.treemapViewController resizeView];
+			//[self.treemapViewController resizeView];
+			[self.treemapViewController changeTime];
+			
 			NSLog( @"case is 3");
 			break;
 		default:
 			[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"durationMode"]; //set the duration mode to default mode.
-			[self.treemapViewController resizeView];
-
+			//[self.treemapViewController resizeView];
+			[self.treemapViewController changeTime];
+			
 			break;			
 	}
 }
@@ -301,7 +307,9 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	
 	NSLog(@"main.bounds.size.width %f main.bounds.size.height %f",self.view.bounds.size.width,self.view.bounds.size.height);
 	//NSLog(@"self.treemapViewController %@", self.treemapViewController);
-	if([(TreemapView*)self.treemapViewController.treeMapView initialized]) [self.treemapViewController resizeView];
+	[UIView setAnimationsEnabled:NO];
+	if([(TreemapView*)self.treemapViewController.treeMapView initialized]) [self.treemapViewController createCellsFromZero];
+	[UIView setAnimationsEnabled:YES];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -357,18 +365,14 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	 _fbButton.isLoggedIn         = YES;
 	 [_fbButton updateImage];
 	
-	/*
+	
 	_userInfo = [[[[UserInfo alloc] initializeWithFacebook:_facebook andDelegate: self] 
 				  autorelease] 
 				 retain];
 
-
 	[_userInfo requestUid];
 	
-*/
-	
 
-	
 //	[_treemapViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight];
 	
 	//[self.treemapViewController viewWillAppear:YES];
@@ -419,33 +423,14 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 {
 
 	NSLog(@"likesAndCommentsDidLoad");
-	if([(TreemapView*)self.treemapViewController.treeMapView initialized]) [self.treemapViewController resizeView];
+	//if([(TreemapView*)self.treemapViewController.treeMapView initialized]) [self.treemapViewController resizeView];
 
-	/*
-	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) //likes
-	{
-		if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
-		{
-			[_treemapViewController displaySection:@"likeCount" andView:@"user"];
-		}
-		else 
-		{
-			[_treemapViewController displaySection:@"likeCount" andView:@"page"];
-		}
-		
-	}
-	else
-	{
-		if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
-		{
-			[_treemapViewController displaySection:@"commentCount" andView:@"user"];
-		}
-		else 
-		{
-			[_treemapViewController displaySection:@"commentCount" andView:@"page"];
-		}
-	}
-	 */
+	
+	[_treemapViewController resizeView];
+	[_treemapViewController createCellsFromZero];
+
+
+	 
 }
 
 

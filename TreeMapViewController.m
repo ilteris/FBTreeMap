@@ -98,7 +98,7 @@
 	
 	NSString *fn =  [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [[fruits  objectAtIndex:index] objectForKey:@"post_id" ]]];
 	UIImage *img = [UIImage imageWithContentsOfFile:fn];
-	NSLog(@"the name is %@", [[fruits  objectAtIndex:index] objectForKey:@"poster_name"]);
+	//NSLog(@"the name is %@", [[fruits  objectAtIndex:index] objectForKey:@"poster_name"]);
 	if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [[fruits  objectAtIndex:index] objectForKey:@"post_id" ]]]])
 		
 	{
@@ -173,14 +173,14 @@
 
 		NSLog(@"dic is %i", [[dic valueForKey:@"likeCount"] intValue]);
 		
-		[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] + 2] forKey:@"likeCount"];
+		[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] + 1] forKey:@"likeCount"];
 
 	}
 	else {
 		NSDictionary *dic = [fruits objectAtIndex:index];
 
 		NSLog(@"dic is %i", [[dic valueForKey:@"commentCount"] intValue]);
-		[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"commentCount"] intValue] + 2] forKey:@"commentCount"];
+		[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"commentCount"] intValue] + 1] forKey:@"commentCount"];
 
 	}
 
@@ -286,6 +286,40 @@
 }
 
 
+-(void) changeTime
+{
+	NSString *durationString = [self returnDurationString:[[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]];
+	
+	
+	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) //likes
+	{
+		
+		if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
+		{
+			[self displaySection:@"likeCount" andView:@"user" withDuration:durationString];
+		}
+		else 
+		{
+			[self displaySection:@"likeCount" andView:@"page" withDuration:durationString];
+			
+		}
+		
+	}
+	else
+	{
+		if (![[NSUserDefaults standardUserDefaults] integerForKey:@"switchMode"]) 
+		{
+			[self displaySection:@"commentCount" andView:@"user" withDuration:durationString];
+		}
+		else 
+		{	
+			[self displaySection:@"commentCount" andView:@"page" withDuration:durationString];
+		}
+	}
+	
+	[self createCellsFromZero];
+}
+
 #pragma mark -
 - (void)resizeView
 {
@@ -334,7 +368,7 @@
 //	[UIView beginAnimations:@"reload" context:nil];
 //	[UIView setAnimationDuration:0.5];
 	
-	[self.treeMapView reloadData];
+//	[self.treeMapView reloadData];
 	
 //	[UIView commitAnimations];
 	
@@ -342,8 +376,9 @@
 }
 
 
-- (void) createCellsForTheFirstTime
+- (void) createCellsFromZero
 {
+	[self.treeMapView removeNodes];
 	[self.treeMapView createNodes];
 }
 
@@ -681,9 +716,11 @@
 	[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"displayMode"];
 	[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"switchMode"];
 	
+	NSString *durationString = [self returnDurationString:[[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]];
+
 	//[self resizeView];
-	//[self displaySection:@"commentCount" andView:@"user" withDuration:durationString];
-	
+	[self displaySection:@"commentCount" andView:@"user" withDuration:durationString];
+	[self createCellsFromZero];
 }
 
 - (void)displayCommentsOfPages
@@ -693,10 +730,10 @@
 	
 	//[self resizeView];
 	
-	//	NSString *durationString = [self returnDurationString:[[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]];
+	NSString *durationString = [self returnDurationString:[[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]];
 	
-	//[self displaySection:@"commentCount" andView:@"page" withDuration:durationString];
-	
+	[self displaySection:@"commentCount" andView:@"page" withDuration:durationString];
+	[self createCellsFromZero];
 }
 
 
@@ -705,12 +742,13 @@
 	[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"displayMode"];
 	[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"switchMode"];
 	
+	
 	//[self resizeView];
 	
-	//	NSString *durationString = [self returnDurationString:[[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]];
+	NSString *durationString = [self returnDurationString:[[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]];
 	
-	//[self displaySection:@"likeCount" andView:@"page" withDuration:durationString];
-	
+	[self displaySection:@"likeCount" andView:@"page" withDuration:durationString];
+	[self createCellsFromZero];
 }
 
 
@@ -721,10 +759,10 @@
 	
 	//[self resizeView];
 	
-	//NSString *durationString = [self returnDurationString:[[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]];
+	NSString *durationString = [self returnDurationString:[[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]];
 	
-	//[self displaySection:@"likeCount" andView:@"user" withDuration:durationString];
-	
+	[self displaySection:@"likeCount" andView:@"user" withDuration:durationString];
+	[self createCellsFromZero];
 }
 
 

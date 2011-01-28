@@ -39,7 +39,7 @@
 - (void)request:(FBRequest*)request didLoad:(id)result{
 	
    // NSMutableArray *fruits = [[[NSMutableArray alloc] init] autorelease];
-	NSLog(@"result %@", result);
+//	NSLog(@"result %@", result);
 
 	
 	
@@ -127,8 +127,8 @@
 		_canPostComment = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"can_post"] integerValue]];
 		_canRemoveComment = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"can_remove"] integerValue]];
 
-		NSLog(@"_canLike is %@", _canLike);
-		NSLog(@"_canPostComment is %@", _canPostComment);
+	//	NSLog(@"_canLike is %@", _canLike);
+	//	NSLog(@"_canPostComment is %@", _canPostComment);
 		
 		_permalink = [NSString stringWithFormat:@"%@", [[streamArray objectAtIndex:i] objectForKey:@"permalink"]];
 

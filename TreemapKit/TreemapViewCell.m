@@ -357,7 +357,8 @@
 	
 	//self.imageView.alpha = 0.0;
 	//CGRect boundRect2 = CGRectMake(0, 0, rect.size.width, rect.size.height);
-
+	//[UIView setAnimationsEnabled:NO];
+	
 	self.contentMode = UIViewContentModeCenter;
 	self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:0] CGColor];
 
@@ -369,6 +370,7 @@
 	self.frame = rect;
 	//self.transform = CGAffineTransformMakeScale(.8, .8);
 	[UIView commitAnimations];	
+	//[UIView setAnimationsEnabled:NO];
 }
 
 
@@ -389,6 +391,239 @@
 	NSLog(@"layoutSubviews");
 	//[contentLabel sizeToFit];
 	
+	NSLog(@"frame in layoutSubviews : %@", NSStringFromCGRect(self.frame));
+
+	
+	imageViewA.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+	aView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+	bView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+	
+	
+	if(self.frame.size.width > 400 && self.frame.size.height > 200)
+	{
+		titleLabel.frame = CGRectMake(0, 0, self.frame.size.width, 10);
+		titleLabel.font = [UIFont boldSystemFontOfSize:11];
+		titleLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
+		titleLabel.textAlignment = UITextAlignmentLeft;
+		titleLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		titleLabel.shadowColor  = [UIColor blackColor];
+		titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		titleLabel.lineBreakMode = UILineBreakModeCharacterWrap;
+		
+		titleLabel.backgroundColor = [UIColor clearColor];
+		
+		titleLabel.alpha = 1;
+		
+		self.countLabel.frame = CGRectMake(11, self.frame.size.height - 61, 200, 48);
+		
+		countLabel.numberOfLines = 0;
+		countLabel.font = [UIFont boldSystemFontOfSize:60];
+		
+		
+		countLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		countLabel.backgroundColor = [UIColor clearColor];
+		countLabel.shadowColor  = [UIColor blackColor];
+		countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		
+		
+		//_countBtn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+		_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
+		
+		
+		
+		//	[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+		
+		NSLog(@"status big");
+		
+		contentLabel.frame = CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0);
+		
+		contentLabel.font = [UIFont boldSystemFontOfSize:48];
+		
+		contentLabel.textAlignment = UITextAlignmentLeft;
+
+		contentLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f]; 
+		contentLabel.backgroundColor = [UIColor clearColor];
+		contentLabel.shadowColor  = [UIColor blackColor];
+		contentLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		contentLabel.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
+		
+		contentLabel.numberOfLines = 0;
+		
+		contentLabel.alpha = 1;
+		
+	}
+	else if(((self.frame.size.height > 130 && self.frame.size.height < 200) && self.frame.size.width > 113) || ((self.frame.size.width > 113 && self.frame.size.width < 400) && self.frame.size.height > 200))
+	{
+		titleLabel.frame = CGRectMake(0, 0, self.frame.size.width, 10);
+		titleLabel.font = [UIFont boldSystemFontOfSize:11];
+		titleLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
+		titleLabel.textAlignment = UITextAlignmentLeft;
+		titleLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		titleLabel.shadowColor  = [UIColor blackColor];
+		titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		titleLabel.lineBreakMode = UILineBreakModeCharacterWrap;
+		
+		titleLabel.backgroundColor = [UIColor clearColor];
+		
+		titleLabel.alpha = 1;
+		
+		self.countLabel.frame = CGRectMake(11, self.frame.size.height - 61, 200, 48);
+		
+		countLabel.numberOfLines = 0;
+		countLabel.font = [UIFont boldSystemFontOfSize:60];
+		
+		
+		countLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		countLabel.backgroundColor = [UIColor clearColor];
+		countLabel.shadowColor  = [UIColor blackColor];
+		countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		
+		
+
+		_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
+		
+		
+
+		
+		contentLabel.frame = CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0);
+		
+		contentLabel.font = [UIFont boldSystemFontOfSize:24];
+		
+		contentLabel.textAlignment = UITextAlignmentLeft;
+		
+		contentLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f]; 
+		contentLabel.backgroundColor = [UIColor clearColor];
+		contentLabel.shadowColor  = [UIColor blackColor];
+		contentLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		contentLabel.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
+		
+		contentLabel.numberOfLines = 0;
+		
+		contentLabel.alpha = 1;
+		
+	}
+	else if(self.frame.size.width < 113)
+	{
+		titleLabel.frame = CGRectMake(0, 0, self.frame.size.width, 10);
+		titleLabel.font = [UIFont boldSystemFontOfSize:0];
+		titleLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
+		titleLabel.textAlignment = UITextAlignmentLeft;
+		titleLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		titleLabel.shadowColor  = [UIColor blackColor];
+		titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		titleLabel.lineBreakMode = UILineBreakModeCharacterWrap;
+		
+		titleLabel.backgroundColor = [UIColor clearColor];
+		
+		titleLabel.alpha = 1;
+		
+		self.countLabel.frame = CGRectMake(11, self.frame.size.height - 61, 200, 48);
+		
+		countLabel.numberOfLines = 0;
+		countLabel.font = [UIFont boldSystemFontOfSize:0];
+		
+		
+		countLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		countLabel.backgroundColor = [UIColor clearColor];
+		countLabel.shadowColor  = [UIColor blackColor];
+		countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		
+		
+		
+		_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
+		
+		
+		contentLabel.frame = CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0);
+		
+		contentLabel.font = [UIFont boldSystemFontOfSize:0];
+		
+		contentLabel.textAlignment = UITextAlignmentLeft;
+		
+		contentLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f]; 
+		contentLabel.backgroundColor = [UIColor clearColor];
+		contentLabel.shadowColor  = [UIColor blackColor];
+		contentLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		contentLabel.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
+		
+		contentLabel.numberOfLines = 0;
+		
+		contentLabel.alpha = 1;
+		
+	}
+	else if(self.frame.size.height < 130)
+	{
+		titleLabel.frame = CGRectMake(0, 0, self.frame.size.width, 10);
+		titleLabel.font = [UIFont boldSystemFontOfSize:0];
+		titleLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
+		titleLabel.textAlignment = UITextAlignmentLeft;
+		titleLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		titleLabel.shadowColor  = [UIColor blackColor];
+		titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		titleLabel.lineBreakMode = UILineBreakModeCharacterWrap;
+		
+		titleLabel.backgroundColor = [UIColor clearColor];
+		
+		titleLabel.alpha = 1;
+		
+		self.countLabel.frame = CGRectMake(11, self.frame.size.height - 61, 200, 48);
+		
+		countLabel.numberOfLines = 0;
+		countLabel.font = [UIFont boldSystemFontOfSize:0];
+		
+		
+		countLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		countLabel.backgroundColor = [UIColor clearColor];
+		countLabel.shadowColor  = [UIColor blackColor];
+		countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		
+		
+		
+		_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
+		
+		
+		contentLabel.frame = CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0);
+		
+		contentLabel.font = [UIFont boldSystemFontOfSize:0];
+		
+		contentLabel.textAlignment = UITextAlignmentLeft;
+		
+		contentLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f]; 
+		contentLabel.backgroundColor = [UIColor clearColor];
+		contentLabel.shadowColor  = [UIColor blackColor];
+		contentLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		contentLabel.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
+		
+		contentLabel.numberOfLines = 0;
+		
+		contentLabel.alpha = 1;
+	}
+	else 
+	{
+		NSLog(@"god knows where");
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//set the height for the contentLabel.
+	CGSize maximumLabelSize = CGSizeMake(self.frame.size.width,self.frame.size.height);
+	CGSize expectedLabelSize = [contentLabel.text sizeWithFont:contentLabel.font 
+											 constrainedToSize:maximumLabelSize 
+												 lineBreakMode:contentLabel.lineBreakMode]; 
+	
+	
+	//adjust the label to the new height.
+	CGRect newFrame = contentLabel.frame;
+	newFrame.size.height = expectedLabelSize.height;
+	contentLabel.frame = newFrame;
+
+	
+	
 	//countLabel.text = @"1290";	
 	NSNumber *tempNumber =  [NSNumber numberWithInt:[countLabel.text intValue]];
 	countLabel.text = [tempNumber stringValue];
@@ -401,18 +636,7 @@
 	_countBtn.frame = _countBtn_frame;
 	
 	
-	//set the height for the contentLabel.
-	CGSize maximumLabelSize = CGSizeMake(self.frame.size.width,self.frame.size.height);
-	CGSize expectedLabelSize = [contentLabel.text sizeWithFont:contentLabel.font 
-										  constrainedToSize:maximumLabelSize 
-											  lineBreakMode:contentLabel.lineBreakMode]; 
 	
-
-	//adjust the label to the new height.
-	CGRect newFrame = contentLabel.frame;
-	newFrame.size.height = expectedLabelSize.height;
-	contentLabel.frame = newFrame;
-
 	NSLog(@"@@@@@@@@@@@");
 
 	NSLog(@"titleLabel is %@", titleLabel.text);
@@ -430,7 +654,6 @@
 	
 //	NSLog(@"actualNoOfLines %f", (contentLabel.frame.size.height/contentLabel.font.lineHeight));
 	
-	NSLog(@"frame : %@", NSStringFromCGRect(self.frame));
 
 	if(actualNoOfLines >= possibleNoOfLines)
 	{
@@ -449,9 +672,11 @@
 	titleLabel.frame = CGRectMake(11, contentLabel.frame.origin.y + contentLabel.frame.size.height + 12, self.titleLabel.frame.size.width, self.titleLabel.frame.size.height);
 	
 	//titleLabel.frame = CGRectMake(0, 0, self.frame.size.width, self.titleLabel.frame.size.height);
-	imageViewA.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-	aView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-	bView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+	
+	
+	
+	
+	
 
 }
 
