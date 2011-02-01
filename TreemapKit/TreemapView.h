@@ -27,6 +27,7 @@
 
 @optional
 
+- (void)onCountBtnPress:(TreemapView *)treemapView onCell:(TreemapViewCell*)cell;
 - (void)treemapView:(TreemapView *)treemapView tapped:(NSInteger)index;
 - (void)treemapView:(TreemapView *)treemapView updateCell:(TreemapViewCell *)cell forIndex:(NSInteger)index forRect:(CGRect)rect;
 

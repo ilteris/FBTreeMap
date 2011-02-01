@@ -240,6 +240,13 @@
 }
 
 
+- (void)onCountBtnPress:(TreemapViewCell*)treemapViewCell
+{
+		NSLog(@"onCountBtnPress on view");
+	if ([delegate respondsToSelector:@selector(onCountBtnPress:onCell:)])
+		[delegate onCountBtnPress:self onCell:treemapViewCell];
+}
+
 #pragma mark -
 
 - (id)initWithFrame:(CGRect)frame {

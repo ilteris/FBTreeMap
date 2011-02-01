@@ -45,7 +45,7 @@
 					<object class="IBUIView" id="766721923">
 						<reference key="NSNextResponder" ref="93669837"/>
 						<int key="NSvFlags">319</int>
-						<string key="NSFrame">{{123, 51}, {768, 974}}</string>
+						<string key="NSFrameSize">{768, 974}</string>
 						<reference key="NSSuperview" ref="93669837"/>
 						<object class="NSColor" key="IBUIBackgroundColor" id="301655199">
 							<int key="NSColorSpace">3</int>
@@ -148,13 +148,13 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>TreeMapViewController</string>
 					<string>UIResponder</string>
-					<string>{{535, 141}, {768, 974}}</string>
+					<string>{{627, 118}, {768, 974}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>TreemapView</string>
 					<string>{{86, 103}, {768, 1024}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABC9gAAxH/AAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAABAoAAAxHRAAA</bytes>
 					</object>
 				</object>
 			</object>
@@ -198,13 +198,13 @@
 					<string key="superclassName">NSObject</string>
 					<object class="NSMutableDictionary" key="outlets">
 						<string key="NS.key.0">treeMapView</string>
-						<string key="NS.object.0">UIView</string>
+						<string key="NS.object.0">TreemapView</string>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<string key="NS.key.0">treeMapView</string>
 						<object class="IBToOneOutletInfo" key="NS.object.0">
 							<string key="name">treeMapView</string>
-							<string key="candidateClassName">UIView</string>
+							<string key="candidateClassName">TreemapView</string>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">

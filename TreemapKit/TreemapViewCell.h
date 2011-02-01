@@ -74,5 +74,5 @@
 @optional
 
 - (void)treemapViewCell:(TreemapViewCell *)treemapViewCell tapped:(NSInteger)index;
-
+- (void)onCountBtnPress:(TreemapViewCell *)treemapViewCell;
 @end

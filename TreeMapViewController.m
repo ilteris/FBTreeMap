@@ -147,13 +147,6 @@
 	cell.post_id = [[fruits objectAtIndex:index] objectForKey:@"post_id"];
 
 
-	
-
-	
-
-	
-	
-	
 }
 
 
@@ -161,33 +154,66 @@
 #pragma mark -
 #pragma mark TreemapView delegate
 
-- (void)treemapView:(TreemapView *)treemapView tapped:(NSInteger)index 
+- (void)onCountBtnPress:(TreemapView*)treemapView onCell:(TreemapViewCell*)cell
 {
-	NSLog(@"here");
-	//TreemapViewCell *cell = (TreemapViewCell *)[self.treeMapView.subviews objectAtIndex:index];	
-
-	//normally need to add the value to the database and run this again. 
+	NSLog(@"onCountBtnPress on treemapViewController");
+	
 	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 	{
-		NSDictionary *dic = [fruits objectAtIndex:index];
-
+		NSDictionary *dic = [fruits objectAtIndex:cell.index];
+		
 		NSLog(@"dic is %i", [[dic valueForKey:@"likeCount"] intValue]);
 		
 		[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] + 1] forKey:@"likeCount"];
-
+		
 	}
 	else {
-		NSDictionary *dic = [fruits objectAtIndex:index];
-
+		NSDictionary *dic = [fruits objectAtIndex:cell.index];
+		
 		NSLog(@"dic is %i", [[dic valueForKey:@"commentCount"] intValue]);
 		[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"commentCount"] intValue] + 1] forKey:@"commentCount"];
-
+		
 	}
-
+	
 	//[self resizeView];
 	
 	[self.treeMapView reloadData];
-	//[cell flipIt];
+	
+
+	
+	//replace the old value with the new value
+	//need to do the multiplication before replacing it. need to do the multiplication only if its the first one.
+	
+	//[_valuesArray replaceObjectAtIndex:[sender tag] withObject:tempNumber];
+	
+	//cell.countLabel.text = [tempNumber stringValue];
+	
+	//[UIView beginAnimations:@"reload" context:nil];
+	//[UIView setAnimationDuration:0.5];
+	
+	
+	
+	//[UIView commitAnimations];
+	
+	
+	
+	
+	//	NSDictionary *dic = [fruits objectAtIndex:index];
+	//	[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"value"] intValue] + 300] forKey:@"value"];
+	
+	
+	
+
+	
+}
+
+- (void)treemapView:(TreemapView *)treemapView tapped:(NSInteger)index 
+{
+	NSLog(@"here");
+	TreemapViewCell *cell = (TreemapViewCell *)[self.treeMapView.subviews objectAtIndex:index];	
+
+	
+	[cell flipIt];
 }
 
 -(NSString*)returnDurationString:(int)integer
@@ -217,55 +243,6 @@
 }
 
 
-- (void)onCountBtnPress:(id)sender {
-	NSLog(@"flipAction");
-	
-	//NSLog(@"post_id is %@", _post_id);
-	
-	TreemapViewCell *cell = [self.cells objectAtIndex:[sender tag]];
-	
-	NSLog(@"_cell is %@", cell);
-	NSLog(@"cell count text is %@", cell.countLabel.text);
-	
-//	NSNumber *value = [_valuesArray objectAtIndex:[sender tag]];
-	
-
-	
-	NSNumber *tempNumber = [NSNumber numberWithInt:[[cell.countLabel text] intValue] + 1];
-	NSLog(@"tempNumber %@", tempNumber);
-	
-	
-	cell.countLabel.text = [tempNumber stringValue];
-	NSLog(@"cell count text is %@", cell.countLabel.text);
-	//[(TreemapView *)self.treeMapView reloadData];
-	
-	[cell setNeedsDisplay];
-	
-	//replace the old value with the new value
-	//need to do the multiplication before replacing it. need to do the multiplication only if its the first one.
-	
-	//[_valuesArray replaceObjectAtIndex:[sender tag] withObject:tempNumber];
-	
-	//cell.countLabel.text = [tempNumber stringValue];
-	
-	//[UIView beginAnimations:@"reload" context:nil];
-	//[UIView setAnimationDuration:0.5];
-	
-	
-	
-	//[UIView commitAnimations];
-	
-	
-	
-	
-	//	NSDictionary *dic = [fruits objectAtIndex:index];
-	//	[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"value"] intValue] + 300] forKey:@"value"];
-	
-	
-	
-	
-	
-}
 
 
 
@@ -551,7 +528,7 @@
 		
 		if([[row objectForKey:[NSString stringWithFormat:@"%@",section]] intValue] != 0) 
 		{
-			NSNumber *value = [row objectForKey:[NSString stringWithFormat:@"%@",section]];
+			//NSNumber *value = [row objectForKey:[NSString stringWithFormat:@"%@",section]];
 			//NSLog(@"value is %@", value);
 			//NSLog(@"section is %@", section);
 			

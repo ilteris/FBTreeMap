@@ -72,10 +72,10 @@
 
 @property (nonatomic, retain) IBOutlet TreemapView *treeMapView;
 
-- (IBAction)onCountBtnPress:(id)sender; 
+
 
 - (void)createCellsFromZero;
--(void)likesAndCommentsDidLoadView;
+
 
 -(void) changeTime;
 - (void)setTheBackgroundArray;

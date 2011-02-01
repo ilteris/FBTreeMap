@@ -86,7 +86,7 @@
 			
 			
 			
-			//	[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+				[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
 			
 			
 			if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
@@ -162,7 +162,7 @@
 			
 			
 			
-			//	[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+			[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
 			
 			if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 			{
@@ -218,6 +218,7 @@
 			self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(11, self.frame.size.height - 61, 200, 48)];
 			countLabel.numberOfLines = 0;
 			countLabel.font = [UIFont boldSystemFontOfSize:0];
+			
 			
 			
 			countLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
@@ -685,13 +686,18 @@
 #pragma mark === Flip action ===
 #pragma mark -
 - (void)onCountBtnPress:(id)sender {
-	NSLog(@"onCountBtnPress");
+	
+	NSLog(@"onCountBtnPress on viewCell");
+	if ([delegate respondsToSelector:@selector(onCountBtnPress:)])
+		[delegate onCountBtnPress:self];
+	
+	//
 
 	
-	NSNumber *tempNumber = [NSNumber numberWithInt:[[countLabel text] intValue] + 1];
-	NSLog(@"tempNumber %@", tempNumber);
+	//NSNumber *tempNumber = [NSNumber numberWithInt:[[countLabel text] intValue] + 1];
+	//NSLog(@"tempNumber %@", tempNumber);
 		
-	countLabel.text = [tempNumber stringValue];
+	//countLabel.text = [tempNumber stringValue];
 	
 }
 
