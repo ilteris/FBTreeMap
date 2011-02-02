@@ -96,15 +96,15 @@
 	
 	ASIHTTPRequest *req;
 	
-	NSString *fn =  [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [[fruits  objectAtIndex:index] objectForKey:@"post_id" ]]];
+	NSString *fn =  [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", [[fruits  objectAtIndex:index] objectForKey:@"post_id" ]]];
 	UIImage *img = [UIImage imageWithContentsOfFile:fn];
 	//NSLog(@"the name is %@", [[fruits  objectAtIndex:index] objectForKey:@"poster_name"]);
-	if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [[fruits  objectAtIndex:index] objectForKey:@"post_id" ]]]])
+	if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", [[fruits  objectAtIndex:index] objectForKey:@"post_id" ]]]])
 		
 	{
 		NSLog(@"img is not present %@", [[fruits  objectAtIndex:index] objectForKey:@"image_url"]);
 		req = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:[[fruits  objectAtIndex:index] objectForKey:@"image_url"]]] autorelease];
-		[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [[fruits  objectAtIndex:index] objectForKey:@"post_id" ]]]];
+		[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", [[fruits  objectAtIndex:index] objectForKey:@"post_id" ]]]];
 		[_networkQueue addOperation:req];		
 	}
 	
@@ -129,27 +129,21 @@
 	}
 	else if([[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"photo"] || [[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"link"])
 	{
+
 		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 		//cell.contentLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
-	}else 
+	}else //if it's a status just display the background uncropped.
 	{
+		//cell.imageViewA.image = img;
 		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 		cell.contentLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
 	}
 	
-	
-	
 	cell.countLabel.text = [tText stringValue];
-	
 	cell.titleLabel.text = [[[fruits objectAtIndex:index] objectForKey:@"poster_name"] uppercaseString];
-	
 	//add the post_id
 	cell.post_id = [[fruits objectAtIndex:index] objectForKey:@"post_id"];
-
-
 }
-
-
 
 #pragma mark -
 #pragma mark TreemapView delegate
@@ -234,16 +228,12 @@
 		case 3:
 			temp_string = [NSString stringWithFormat:@"-24 hours"];
 			break;
-			
 		default:
 			break;
 	}
 	
 	return temp_string;
 }
-
-
-
 
 
 #pragma mark -
@@ -540,23 +530,23 @@
 		
 		if([[row objectForKey:@"objectType" ] isEqual:@"video"]) 
 		{//then put the video background there.
-			if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]])
+			if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", [row objectForKey:@"post_id" ]]]])
 				
 			{
-				NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"video"  ofType:@"png"]];
+				NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"video"  ofType:@"jpg"]];
 				
-				[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]] atomically:YES];
+				[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", [row objectForKey:@"post_id" ]]] atomically:YES];
 			}	
 			
 		}//endif
 		else if([[row objectForKey:@"objectType" ] isEqual:@"status"]) 
 		{//then put the custom background there.
-			if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]]])
+			if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", [row objectForKey:@"post_id" ]]]])
 			{
 				
 				NSInteger rand_ind = arc4random() % [_backgrounds count];
-				NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[_backgrounds objectAtIndex:rand_ind]  ofType:@"png"]];
-				[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [row objectForKey:@"post_id" ]]] atomically:YES];
+				NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[_backgrounds objectAtIndex:rand_ind]  ofType:@"jpg"]];
+				[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", [row objectForKey:@"post_id" ]]] atomically:YES];
 				[_backgrounds removeObjectAtIndex:rand_ind];
 				if([_backgrounds count] < 1) [self setTheBackgroundArray]; //if the backgroundarray gets empty, refill it.
 			}
@@ -629,23 +619,6 @@
 - (TreemapViewCell *)treemapView:(TreemapView *)treemapView cellForIndex:(NSInteger)index forRect:(CGRect)rect 
 {
 	TreemapViewCell *cell = [[TreemapViewCell alloc] initWithFrame:rect];
-	
-	
-	//[cell.countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
-	//cell.countBtn.tag = index;
-	
-	//NSLog(@"index is %i", index);
-	
-	//NSLog(@"treemapView cellForIndex");
-	//NSLog(@"comments is %@", [[fruits objectAtIndex:index] objectForKey:@"comments"]);
-	//NSLog(@"likes is %@", [[fruits objectAtIndex:index] objectForKey:@"likes"]);
-	
-	//here give the document thingie so that we can load the images from the plist file.
-	
-	//[self setTheBackgroundArray];
-	
-	//need to figure out a way to pass the current stage so that we know what we are looking at here.
-	
 	[self updateCell:cell forIndex:index];
 	
 	
@@ -664,25 +637,49 @@
 
 
 
-
+//background is being assigned here.
 - (void)setTheBackgroundArray
 {
 	_backgrounds = [[NSMutableArray alloc] initWithCapacity:1];
-	NSString *b0 = [NSString stringWithFormat:@"concrete"];
-	NSString *b1 = [NSString stringWithFormat:@"leather"];
-	//	NSString *b2 = [NSString stringWithFormat:@"play"];
-	NSString *b3 = [NSString stringWithFormat:@"rust"];
-	//NSString *b4 = [NSString stringWithFormat:@"video"];
-	NSString *b5 = [NSString stringWithFormat:@"wood"];
-	
+	NSString *b0 = [NSString stringWithFormat:@"blacksand"];
+	NSString *b1 = [NSString stringWithFormat:@"carbonfiber"];
+	NSString *b2 = [NSString stringWithFormat:@"concrete"];
+	NSString *b3 = [NSString stringWithFormat:@"diamondsteel"];
+	NSString *b4 = [NSString stringWithFormat:@"fabricburgundy"];
+	NSString *b5 = [NSString stringWithFormat:@"gold"];
+	NSString *b6 = [NSString stringWithFormat:@"granulardark"];
+	NSString *b7 = [NSString stringWithFormat:@"greenmarble"];
+	NSString *b8 = [NSString stringWithFormat:@"ice"];
+	NSString *b9 = [NSString stringWithFormat:@"leather"];
+	NSString *b10 = [NSString stringWithFormat:@"metalmesh"];
+	NSString *b11 = [NSString stringWithFormat:@"metalmesh"];
+	NSString *b12 = [NSString stringWithFormat:@"metalscratched"];
+	NSString *b13 = [NSString stringWithFormat:@"russian"];
+	NSString *b14 = [NSString stringWithFormat:@"rust"];
+	NSString *b15 = [NSString stringWithFormat:@"slate"];
+	NSString *b16 = [NSString stringWithFormat:@"wood"];
+	NSString *b17 = [NSString stringWithFormat:@"concrete"];
+
 	
 	
 	[_backgrounds addObject:b0];
 	[_backgrounds addObject:b1];
-	//	[_backgrounds addObject:b2];
+	[_backgrounds addObject:b2];
 	[_backgrounds addObject:b3];
-	//	[_backgrounds addObject:b4];
+	[_backgrounds addObject:b4];
 	[_backgrounds addObject:b5];
+	[_backgrounds addObject:b6];
+	[_backgrounds addObject:b7];
+	[_backgrounds addObject:b8];
+	[_backgrounds addObject:b9];
+	[_backgrounds addObject:b10];
+	[_backgrounds addObject:b11];
+	[_backgrounds addObject:b12];
+	[_backgrounds addObject:b13];
+	[_backgrounds addObject:b14];
+	[_backgrounds addObject:b15];
+	[_backgrounds addObject:b16];
+	[_backgrounds addObject:b17];
 	
 }
 

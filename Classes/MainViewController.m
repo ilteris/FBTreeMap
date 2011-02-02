@@ -218,14 +218,11 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 {
 	NSLog(@"refreshDisplay");
 	
-	//if there's no action going on.
-	// in the future, make sure this doesn't get called a few times.
-	
+	[_session setSessionWithFacebook:_facebook andUid:_userInfo.uid];
+	[_session save];
+	[_userInfo requestCountOf];
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 
-		//resetting the self.plistArray so we don't add to the old plistArray.
-		//self.plistArray = [[NSMutableArray alloc] initWithCapacity:1];
-		//currentDisplayMode
-	//	[_userInfo requestCountOf];
 }
 
 - (IBAction)displayComments: (id) sender
@@ -372,13 +369,10 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 
 	[_userInfo requestUid];
 	
-
-//	[_treemapViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight];
-	
-	//[self.treemapViewController viewWillAppear:YES];
-//	[self.containerView addSubview:self.treemapViewController.view];
-
 }
+
+
+
 
 /**
  * FBSessionDelegate
@@ -428,6 +422,8 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	
 	[_treemapViewController resizeView];
 	[_treemapViewController createCellsFromZero];
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+
 
 
 	 
@@ -436,9 +432,13 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 
 - (void)userInfoDidLoad 
 {
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+
 	[_session setSessionWithFacebook:_facebook andUid:_userInfo.uid];
 	[_session save];
+	
 	[_userInfo requestCountOf];
+	
 	
 }
 
