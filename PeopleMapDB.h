@@ -34,6 +34,7 @@ static NSUInteger const kDefaultMaxItemsPerFeed = 50;
 
 // Item methods
 - (NSDictionary *) getItemRow: (NSNumber *) rowid;
+- (NSNumber*) updateItemRow:(NSDictionary*) item;
 - (void) deleteItemRow: (NSNumber *) rowid;
 - (void) deleteOldItems:(NSNumber *)feedID;
 - (NSArray *) getItemIDs:(NSNumber *)feedID;

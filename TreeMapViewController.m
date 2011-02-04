@@ -45,7 +45,7 @@
 	/*Facebook Application ID*/
 	//NSString *client_id = @"128496757192973";
 	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
-	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local1.db"];
+	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local3.db"];
 	
 	[self setTheBackgroundArray];
 	
@@ -77,8 +77,7 @@
 - (void)updateCell:(TreemapViewCell *)cell forIndex:(NSInteger)index 
 {
 	NSLog(@"updating cell");
-	//NSLog(@"fruits %@", fruits);
-	
+	NSLog(@"fruits %@", fruits);
 	
 	
 	NSNumber *tText;
@@ -100,7 +99,6 @@
 	UIImage *img = [UIImage imageWithContentsOfFile:fn];
 	//NSLog(@"the name is %@", [[fruits  objectAtIndex:index] objectForKey:@"poster_name"]);
 	if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", [[fruits  objectAtIndex:index] objectForKey:@"post_id" ]]]])
-		
 	{
 		NSLog(@"img is not present %@", [[fruits  objectAtIndex:index] objectForKey:@"image_url"]);
 		req = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:[[fruits  objectAtIndex:index] objectForKey:@"image_url"]]] autorelease];
@@ -129,21 +127,25 @@
 	}
 	else if([[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"photo"] || [[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"link"])
 	{
-
+		
 		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
-		//cell.contentLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
+		cell.contentLabel.text = @"";//	[[fruits objectAtIndex:index] objectForKey:@"message"];
 	}else //if it's a status just display the background uncropped.
 	{
 		//cell.imageViewA.image = img;
 		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 		cell.contentLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
 	}
+    cell.canLike = [[[fruits  objectAtIndex:index] objectForKey:@"canLike"] intValue];
+    cell.canPostComment = [[[fruits  objectAtIndex:index] objectForKey:@"canPostComment"] intValue];
 	
 	cell.countLabel.text = [tText stringValue];
 	cell.titleLabel.text = [[[fruits objectAtIndex:index] objectForKey:@"poster_name"] uppercaseString];
 	//add the post_id
 	cell.post_id = [[fruits objectAtIndex:index] objectForKey:@"post_id"];
 }
+
+
 
 #pragma mark -
 #pragma mark TreemapView delegate
@@ -152,52 +154,93 @@
 {
 	NSLog(@"onCountBtnPress on treemapViewController");
 	
+	//step 1 check if the item is already liked through the local db
+	//step 2 if not then like it or comment it to your hearts content
+	//step 3 update the local database, so it's not likeable anymore but still commentable. | so pressing heart likes it and press it again unlikes it. | each press of comment adds a new comment.
+	
+	NSLog(@"_canLike is %i", cell.canLike);
+	NSLog(@"_canPostComment is %i", cell.canPostComment);
 	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 	{
-		NSDictionary *dic = [fruits objectAtIndex:cell.index];
-		
-		NSLog(@"dic is %i", [[dic valueForKey:@"likeCount"] intValue]);
-		
-		[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] + 1] forKey:@"likeCount"];
-		
+        
+        if(cell.canLike) // meaning I can like this motherfucker
+        {
+            NSDictionary *dic = [fruits objectAtIndex:cell.index];
+            
+            // NSLog(@"dic is %i", [[dic valueForKey:@"likeCount"] intValue]);
+            
+			//update locally because layout kinda fucks up if we reload the fruits array doing resizeview due nature of creation of treemapview.
+            [dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] + 1] forKey:@"likeCount"];
+			[dic setValue:[NSNumber numberWithInt:0] forKey:@"canLike"];
+			//update  local database
+			NSNumber* _likeCount = [NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] + 1];
+            NSNumber* _canLike = [NSNumber numberWithInt:0];
+            //cell.canLike = 0; //cannot like it anymore
+            NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  cell.post_id, @"post_id",
+                                  _canLike, @"canLike",
+                                  _likeCount, @"likeCount",
+                                  nil];
+            [_peopleMapDB updateItemRow:dict];  
+			
+			//TODO: update facebook here.
+		}
+        else //dislike this motherfucker
+        {
+            NSDictionary *dic = [fruits objectAtIndex:cell.index];
+            
+            //   NSLog(@"dic is %i", [[dic valueForKey:@"likeCount"] intValue]);
+			//update locally because layout kinda fucks up if we reload the fruits array doing resizeview due nature of creation of treemapview.
+            [dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] - 1] forKey:@"likeCount"];
+			[dic setValue:[NSNumber numberWithInt:1] forKey:@"canLike"];
+			 
+			//update local database
+            NSNumber* _likeCount = [NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] - 1];
+            NSNumber* _canLike = [NSNumber numberWithInt:1];
+            NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  cell.post_id, @"post_id",
+                                  _canLike, @"canLike",
+                                  _likeCount, @"likeCount",
+                                  nil];
+            [_peopleMapDB updateItemRow:dict];  
+			
+			//TODO: update facebook here.
+            
+        }
 	}
-	else {
-		NSDictionary *dic = [fruits objectAtIndex:cell.index];
+	else //comment area
+	{
+			//we can only add comment in the first screen, no removing comment.
+            NSDictionary *dic = [fruits objectAtIndex:cell.index];
+            
+            // NSLog(@"dic is %i", [[dic valueForKey:@"likeCount"] intValue]);
+            
+			//update locally because layout kinda fucks up if we reload the fruits array doing resizeview due nature of creation of treemapview.
+            [dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"commentCount"] intValue] + 1] forKey:@"commentCount"];
 		
-		NSLog(@"dic is %i", [[dic valueForKey:@"commentCount"] intValue]);
-		[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"commentCount"] intValue] + 1] forKey:@"commentCount"];
+			//update  local database
+			NSNumber* _commentCount = [NSNumber numberWithInt:[[dic valueForKey:@"commentCount"] intValue] + 1];
+
+            //cell.canLike = 0; //cannot like it anymore
+            NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  cell.post_id, @"post_id",
+                                  _commentCount, @"commentCount",
+                                  nil];
+            [_peopleMapDB updateItemRow:dict];  
+			
+			//TODO: update facebook here.
 		
 	}
 	
-	//[self resizeView];
+	//[self resizeView]; //so that fruit gets updated for new values to take effect.
+	//[self updateCell:cell forIndex:cell.index];
 	
 	[self.treeMapView reloadData];
 	
-
 	
-	//replace the old value with the new value
-	//need to do the multiplication before replacing it. need to do the multiplication only if its the first one.
-	
-	//[_valuesArray replaceObjectAtIndex:[sender tag] withObject:tempNumber];
-	
-	//cell.countLabel.text = [tempNumber stringValue];
-	
-	//[UIView beginAnimations:@"reload" context:nil];
-	//[UIView setAnimationDuration:0.5];
+		
 	
 	
-	
-	//[UIView commitAnimations];
-	
-	
-	
-	
-	//	NSDictionary *dic = [fruits objectAtIndex:index];
-	//	[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"value"] intValue] + 300] forKey:@"value"];
-	
-	
-	
-
 	
 }
 
@@ -415,7 +458,7 @@
 		
 	}
 	
-	NSLog(@"fruits %@", fruits);
+	//NSLog(@"fruits %@", fruits);
 	
 	return values;
 	
@@ -492,7 +535,7 @@
 	
 }
 
-
+//this is where I pull back data from local DB. called after resizeView
 -(void)displaySection:(NSString*)section andView:(NSString*)viewType withDuration:(NSString*)duration
 {
 	NSDictionary * row = nil;
@@ -509,7 +552,7 @@
 	[self setTheBackgroundArray];
 	//SELECT post_id, poster_name, objectType, message, image_url, commentCount, datetime(posted_time,'unixepoch', 'localtime') FROM "object" WHERE poster_type = "user" AND datetime(posted_time,'unixepoch', 'localtime') >= datetime('now', '-2 hours', 'localtime') ORDER BY "commentCount" DESC LIMIT 8
 	
-	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT post_id, poster_name, objectType, message, image_url, %@ FROM \"object\" WHERE poster_type = \"%@\" AND datetime(posted_time,'unixepoch', 'localtime') >= datetime('now', '%@', 'localtime') ORDER BY \"%@\" DESC LIMIT 8", section, viewType, duration, section]])
+	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT post_id, poster_name, objectType, message, image_url, canLike, canPostComment, %@ FROM \"object\" WHERE poster_type = \"%@\" AND datetime(posted_time,'unixepoch', 'localtime') >= datetime('now', '%@', 'localtime') ORDER BY \"%@\" DESC LIMIT 8", section, viewType, duration, section]])
 	{
 		//[self dispRow:row];
 		
@@ -572,8 +615,8 @@
 
 - (void)imageFetchComplete:(ASIHTTPRequest *)request
 {
-	[(TreemapView *)self.treeMapView reloadData];
-	
+	//[(TreemapView *)self.treeMapView reloadData];
+	[self updateCell:cell forIndex:index];
 	
 }//endfunction
 
@@ -620,8 +663,6 @@
 {
 	TreemapViewCell *cell = [[TreemapViewCell alloc] initWithFrame:rect];
 	[self updateCell:cell forIndex:index];
-	
-	
 	
 	return cell;
 }

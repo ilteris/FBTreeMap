@@ -17,7 +17,7 @@
 #import "PeopleMapDB.h"
 
 @class ASINetworkQueue;
-
+@class TreemapViewCell;
 
 
 

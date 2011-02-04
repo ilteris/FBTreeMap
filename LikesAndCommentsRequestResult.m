@@ -26,7 +26,7 @@
 	self = [super init];
 	_likesAndCommentsRequestDelegate = [delegate retain];
 
-	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local1.db"];
+	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local3.db"];
 	
 
 	return self;
@@ -39,7 +39,7 @@
 - (void)request:(FBRequest*)request didLoad:(id)result{
 	
    // NSMutableArray *fruits = [[[NSMutableArray alloc] init] autorelease];
-//	NSLog(@"result %@", result);
+	//NSLog(@"result %@", result);
 
 	
 	
@@ -95,6 +95,7 @@
 		NSString *_message;
 		NSString *_image_url;
 		NSString *_permalink;
+		NSString *_href;
 		NSNumber *_canLike;
 		NSNumber *_canPostComment;
 		NSNumber *_canRemoveComment;
@@ -117,9 +118,8 @@
 		
 				
 		//you have figured out the name now. why don't you go ahead and fill other things too, so we have a proper dictionary/arrays.
-		
+		_href = [NSString stringWithFormat:@""];
 		//first _categoryValue -->count of current displayMode(likes/comments)
-		
 		_likeCount = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"likes"] objectForKey:@"count"] integerValue]];
 		_canLike = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"likes"] objectForKey:@"can_like"] integerValue]];
 		
@@ -176,7 +176,17 @@
 						_image_url = [_temp stringByReplacingOccurrencesOfString:@"_s" withString:@"_n"];
 						_message =   [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
 						if([_message length] == 0) _message = [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"name"];
-						_objectType = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
+						if([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"] isEqual:@"event"])
+						{
+							_objectType = [NSString stringWithFormat:@"event"];
+
+						}
+						else
+						{
+							_objectType = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
+
+						}
+						   
 						NSLog(@"objectType is %@", _objectType);
 						if([_objectType isEqual:@"video"])
 						   {
@@ -195,7 +205,7 @@
 						//NSLog(@"count one %@", [streamArray objectAtIndex:i] );
 						
 						
-
+						
 						NSString *_temp = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"src"]];
 						
 						NSString *filePath = [_temp stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -206,16 +216,16 @@
 						if(![filePath stringByMatching:regexString capture:1L]) 
 						{
 							_image_url =  [NSString stringWithFormat:@"%@", _temp];
-						//	NSLog(@"_image_url is %@", _image_url);
+							//	NSLog(@"_image_url is %@", _image_url);
 							_image_url = [_temp stringByReplacingOccurrencesOfString:@"_s" withString:@"_n"];
-						//	NSLog(@"_image_url is %@", _image_url);
+							//	NSLog(@"_image_url is %@", _image_url);
 							//_image_url =  [NSString stringWithFormat:@"%@", _temp];
 						}
 						else 
 						{
 							_image_url = [NSString stringWithFormat:@"%@", [filePath stringByMatching:regexString capture:1L]];
 						}
-
+						
 						
 						
 						_message =   [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
@@ -235,6 +245,14 @@
 						//	NSLog(@"video_source is %@", video_source);
 							
 						}
+						else if([_objectType isEqual:@"link"])
+						{
+                            NSLog(@"poster_name %@", _poster_name);
+							_href = [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"href"]];
+
+
+						}
+
 												
 						
 					}//endelse
@@ -271,14 +289,23 @@
 					else 
 					{
 						_image_url = [NSString stringWithFormat:@"%@", [filePath stringByMatching:regexString capture:1L]];
+                        _image_url = [_image_url stringByReplacingOccurrencesOfString:@"_s" withString:@""];
 					}
 					
 					_message =   [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
 					
 					if([_message length] == 0) _message = [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"name"];
-					_objectType = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
 					
+                    _objectType = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
 					
+					if([_objectType isEqual:@"link"])
+                    {
+                        NSLog(@"poster_name %@", _poster_name);
+
+                        if([_href length] == 0) _href = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"href"]];
+                        NSLog(@"href is %@", _href);
+                    }
+                    
 				}//endelse
 				
 			}
@@ -308,11 +335,12 @@
 			_objectType = [NSString stringWithFormat:@"status"];
 		}//endelse
 		
-		
-		
+    		
 		/*
 		 // Dictionary keys
 		*/
+
+        NSLog(@"href is %@", _href);
 			
 		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
 							  _post_id, @"post_id",
@@ -326,6 +354,7 @@
 							  _canPostComment, @"canPostComment",
 							  _canRemoveComment, @"canRemoveComment",
 							  _message, @"message",
+                              _href, @"href",
 							  _permalink, @"permalink",
 							  _image_url, @"image_url",
 							  _posted_time, @"posted_time",

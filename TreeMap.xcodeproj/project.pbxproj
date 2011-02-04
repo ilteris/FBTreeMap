@@ -42,6 +42,8 @@
 		F020072B129C2BA4004647DB /* rust.png in Resources */ = {isa = PBXBuildFile; fileRef = F0200725129C2BA4004647DB /* rust.png */; };
 		F020072C129C2BA4004647DB /* video.png in Resources */ = {isa = PBXBuildFile; fileRef = F0200726129C2BA4004647DB /* video.png */; };
 		F020072D129C2BA4004647DB /* wood.png in Resources */ = {isa = PBXBuildFile; fileRef = F0200727129C2BA4004647DB /* wood.png */; };
+		F02010A912FC65630006C29F /* p_local2.db in Resources */ = {isa = PBXBuildFile; fileRef = F02010A812FC65630006C29F /* p_local2.db */; };
+		F02010AB12FC7F720006C29F /* p_local3.db in Resources */ = {isa = PBXBuildFile; fileRef = F02010AA12FC7F720006C29F /* p_local3.db */; };
 		F033EA4E118A24C30020F23D /* TreeMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F033EA4C118A24C30020F23D /* TreeMapViewController.m */; };
 		F033EA4F118A24C30020F23D /* TreeMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F033EA4D118A24C30020F23D /* TreeMapViewController.xib */; };
 		F033EA5B118A25230020F23D /* data.plist in Resources */ = {isa = PBXBuildFile; fileRef = F033EA5A118A25230020F23D /* data.plist */; };
@@ -88,8 +90,6 @@
 		F0A76CD212D408F9004437D0 /* BWDB.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A76CCE12D408F9004437D0 /* BWDB.m */; };
 		F0A76CD312D408F9004437D0 /* BWUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A76CD012D408F9004437D0 /* BWUtilities.m */; };
 		F0A76CE212D4090C004437D0 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F0A76CE112D4090C004437D0 /* libsqlite3.dylib */; };
-		F0A76DE112D429A7004437D0 /* p_local.db in Resources */ = {isa = PBXBuildFile; fileRef = F0A76DE012D429A7004437D0 /* p_local.db */; };
-		F0AEE41212EF580D00B9B533 /* p_local1.db in Resources */ = {isa = PBXBuildFile; fileRef = F0AEE41112EF580D00B9B533 /* p_local1.db */; };
 		F0CDA9161267BAA700D03C50 /* pm_menu_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = F0CDA9151267BAA700D03C50 /* pm_menu_bg.png */; };
 		F0F00BDF1215D57100DB0EF9 /* UIImage+ProportionalFill.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F00BDC1215D57100DB0EF9 /* UIImage+ProportionalFill.m */; };
 		F0F00BE01215D57100DB0EF9 /* UIImage+Tint.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F00BDE1215D57100DB0EF9 /* UIImage+Tint.m */; };
@@ -156,6 +156,8 @@
 		F0200725129C2BA4004647DB /* rust.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rust.png; sourceTree = "<group>"; };
 		F0200726129C2BA4004647DB /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video.png; sourceTree = "<group>"; };
 		F0200727129C2BA4004647DB /* wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wood.png; sourceTree = "<group>"; };
+		F02010A812FC65630006C29F /* p_local2.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = p_local2.db; sourceTree = "<group>"; };
+		F02010AA12FC7F720006C29F /* p_local3.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = p_local3.db; sourceTree = "<group>"; };
 		F033EA4B118A24C30020F23D /* TreeMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TreeMapViewController.h; path = ../TreeMapViewController.h; sourceTree = "<group>"; };
 		F033EA4C118A24C30020F23D /* TreeMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TreeMapViewController.m; path = ../TreeMapViewController.m; sourceTree = "<group>"; };
 		F033EA4D118A24C30020F23D /* TreeMapViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TreeMapViewController.xib; path = ../TreeMapViewController.xib; sourceTree = "<group>"; };
@@ -221,8 +223,6 @@
 		F0A76CCF12D408F9004437D0 /* BWUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWUtilities.h; sourceTree = "<group>"; };
 		F0A76CD012D408F9004437D0 /* BWUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWUtilities.m; sourceTree = "<group>"; };
 		F0A76CE112D4090C004437D0 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		F0A76DE012D429A7004437D0 /* p_local.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = p_local.db; sourceTree = "<group>"; };
-		F0AEE41112EF580D00B9B533 /* p_local1.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = p_local1.db; sourceTree = "<group>"; };
 		F0CDA9151267BAA700D03C50 /* pm_menu_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pm_menu_bg.png; sourceTree = "<group>"; };
 		F0ECFA2C1266557D0075C90F /* NSMutableArray_Shuffling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMutableArray_Shuffling.h; sourceTree = "<group>"; };
 		F0F00BDB1215D57100DB0EF9 /* UIImage+ProportionalFill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ProportionalFill.h"; sourceTree = "<group>"; };
@@ -281,8 +281,8 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				F0AEE41112EF580D00B9B533 /* p_local1.db */,
-				F0A76DE012D429A7004437D0 /* p_local.db */,
+				F02010AA12FC7F720006C29F /* p_local3.db */,
+				F02010A812FC65630006C29F /* p_local2.db */,
 				F01C0EAB128329A900CF1476 /* UserInfo.h */,
 				F01C0EAC128329A900CF1476 /* UserInfo.m */,
 				F01C0AE01281D62A00CF1476 /* Session.h */,
@@ -552,8 +552,6 @@
 				F020072B129C2BA4004647DB /* rust.png in Resources */,
 				F020072C129C2BA4004647DB /* video.png in Resources */,
 				F020072D129C2BA4004647DB /* wood.png in Resources */,
-				F0A76DE112D429A7004437D0 /* p_local.db in Resources */,
-				F0AEE41212EF580D00B9B533 /* p_local1.db in Resources */,
 				F063C3F712F8734400634008 /* blacksand.jpg in Resources */,
 				F063C3F812F8734400634008 /* carbonfiber.jpg in Resources */,
 				F063C3F912F8734400634008 /* concrete.jpg in Resources */,
@@ -571,6 +569,8 @@
 				F063C40512F8734400634008 /* slate.jpg in Resources */,
 				F063C40612F8734400634008 /* wood.jpg in Resources */,
 				F063C40B12F8746A00634008 /* video.jpg in Resources */,
+				F02010A912FC65630006C29F /* p_local2.db in Resources */,
+				F02010AB12FC7F720006C29F /* p_local3.db in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -663,7 +663,7 @@
 				OTHER_LDFLAGS = "-licucore";
 				PREBINDING = NO;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "BF809993-E03D-470B-8F49-E43F6C208635";
-				SDKROOT = iphoneos4.2;
+				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
@@ -681,7 +681,7 @@
 				OTHER_LDFLAGS = "-licucore";
 				PREBINDING = NO;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "488A8087-40DE-42B0-9FB5-28A2D8869620";
-				SDKROOT = iphoneos4.2;
+				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;

@@ -116,7 +116,7 @@
 	// create the multiquery
 	NSLog(@"uid %@", _uid);
 	NSString* friendIDs = @"SELECT actor_id, post_id,likes, message, comments, permalink, type, attachment, created_time, updated_time FROM stream WHERE source_id IN(";
-	friendIDs = [friendIDs stringByAppendingFormat:@"SELECT target_id FROM connection WHERE source_id=%@) AND is_hidden = 0 LIMIT 300", _uid];
+	friendIDs = [friendIDs stringByAppendingFormat:@"SELECT target_id FROM connection WHERE source_id=%@) AND is_hidden = 0 LIMIT 1000", _uid];
 	
 	NSString* userName = [NSString stringWithFormat:@"SELECT name, uid FROM user WHERE uid IN (SELECT actor_id FROM #friendIDs)"];
 	NSString* pageName = [NSString stringWithFormat:@"SELECT name, page_id FROM page WHERE page_id IN (SELECT actor_id FROM #friendIDs)"];

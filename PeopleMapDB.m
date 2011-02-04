@@ -142,7 +142,16 @@ static NSString * const kDBItemFeedIDKey = @"feed_id";
     }
     return idList;
 }
+- (NSNumber*) updateItemRow:(NSDictionary*) item
+{
+    // NSLog(@"%s", __FUNCTION__);
+    self.tableName = kItemTableName;
+    NSNumber * rowid = [self valueFromQuery:@"SELECT id FROM object WHERE post_id = ?",
+                        [item objectForKey:@"post_id"]];
+    [self updateRow:item :rowid];
 
+    return rowid;
+}
 - (NSNumber *) addItemRow: (NSDictionary *) item {
     // NSLog(@"%s", __FUNCTION__);
     self.tableName = kItemTableName;
