@@ -21,7 +21,7 @@
 
 @synthesize post_id = _post_id;
 @synthesize canPostComment = _canPostComment;
-@synthesize canLike = _canLike;
+@synthesize user_likes = _user_likes;
 
 @synthesize playBtn = _playBtn;
 @synthesize countBtn = _countBtn;
@@ -82,6 +82,7 @@
 
 - (void) setLayout:(CGRect)frame
 {
+	NSLog(@"self.user_likes is %i", self.user_likes);
 	//big sized cells
 	if(self.frame.size.width > 400 && self.frame.size.height > 200)
 	{
@@ -132,9 +133,17 @@
 			[tImage release];
 		}
 		
-		
-		_countBtn.alpha = 0.5;
-		
+		if(self.user_likes)
+		{
+			//_countBtn.alpha = 1.0;
+			
+		}
+		else 
+		{
+			//_countBtn.alpha = 0.4;
+			//NSLog(@"self.user_likes is 0");
+		}
+
 		
 		
 		NSLog(@"status big");
@@ -208,7 +217,18 @@
 		}
 		
 		
-		_countBtn.alpha = 0.5;
+		if(self.user_likes)
+		{
+			//_countBtn.alpha = 1.0;
+			//NSLog(@"self.user_likes is 1");
+		}
+		else 
+		{
+			//_countBtn.alpha = 0.4;
+			//NSLog(@"self.user_likes is 0");
+		}
+		
+		
 		
 		contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0)];
 		
@@ -322,8 +342,18 @@
 			[tImage release];
 		}
 		
+		if(self.user_likes)
+		{
+			//_countBtn.alpha = 1.0;
+			//NSLog(@"self.user_likes is 1");
+		}
+		else 
+		{
+			//_countBtn.alpha = 0.4;
+			//NSLog(@"self.user_likes is 0");
+		}
 		
-		_countBtn.alpha = 0.5;
+		
 		
 		
 		

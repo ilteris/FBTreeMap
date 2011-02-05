@@ -23,7 +23,7 @@
 
 @protocol UserInfoLoadDelegate;
 
-@interface UserInfo : NSObject<UserRequestDelegate, FriendsRequestDelegate, LikesAndCommentsRequestDelegate> {
+@interface UserInfo : NSObject<FBRequestDelegate, UserRequestDelegate, FriendsRequestDelegate, LikesAndCommentsRequestDelegate> {
 	NSString *_uid;
 	NSMutableArray * _friendsList;
 	
@@ -51,7 +51,7 @@
 - (id) initializeWithFacebook:(Facebook *)facebook andDelegate:(id<UserInfoLoadDelegate>)delegate;
 - (void) requestAllInfo;
 - (void) requestCountOf;
-- (void)requestWithGraph:(NSString*)string andParams:(NSDictionary*)dict;
+- (void)requestWithGraph:(NSString*)post_id andHttpMethod:(NSString*)httpMethod;
 
 @end
 

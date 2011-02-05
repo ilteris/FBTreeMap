@@ -45,7 +45,7 @@
 	/*Facebook Application ID*/
 	//NSString *client_id = @"128496757192973";
 	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
-	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local3.db"];
+	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local4.db"];
 	
 	[self setTheBackgroundArray];
 	
@@ -77,7 +77,7 @@
 - (void)updateCell:(TreemapViewCell *)cell forIndex:(NSInteger)index 
 {
 	NSLog(@"updating cell");
-	NSLog(@"fruits %@", fruits);
+	//NSLog(@"fruits %@", fruits);
 	
 	
 	NSNumber *tText;
@@ -136,7 +136,17 @@
 		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 		cell.contentLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
 	}
-    cell.canLike = [[[fruits  objectAtIndex:index] objectForKey:@"canLike"] intValue];
+    cell.user_likes = [[[fruits  objectAtIndex:index] objectForKey:@"user_likes"] intValue];
+	if(cell.user_likes)
+	{
+		cell.countBtn.alpha = 1.0f;
+	}
+	else 
+	{
+		cell.countBtn.alpha = 0.5f;
+	}
+
+	NSLog(@"cell.user_likes is %i", cell.user_likes);
     cell.canPostComment = [[[fruits  objectAtIndex:index] objectForKey:@"canPostComment"] intValue];
 	
 	cell.countLabel.text = [tText stringValue];
@@ -158,12 +168,13 @@
 	//step 2 if not then like it or comment it to your hearts content
 	//step 3 update the local database, so it's not likeable anymore but still commentable. | so pressing heart likes it and press it again unlikes it. | each press of comment adds a new comment.
 	
-	NSLog(@"_canLike is %i", cell.canLike);
+	NSLog(@"_user_likes is %i", cell.user_likes);
 	NSLog(@"_canPostComment is %i", cell.canPostComment);
+	
 	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 	{
         
-        if(cell.canLike) // meaning I can like this motherfucker
+        if(!cell.user_likes) // meaning I can like this motherfucker
         {
             NSDictionary *dic = [fruits objectAtIndex:cell.index];
             
@@ -171,43 +182,23 @@
             
 			//update locally because layout kinda fucks up if we reload the fruits array doing resizeview due nature of creation of treemapview.
             [dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] + 1] forKey:@"likeCount"];
-			[dic setValue:[NSNumber numberWithInt:0] forKey:@"canLike"];
+			[dic setValue:[NSNumber numberWithInt:1] forKey:@"user_likes"];
 			//update  local database
 			NSNumber* _likeCount = [NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] + 1];
-            NSNumber* _canLike = [NSNumber numberWithInt:0];
-            //cell.canLike = 0; //cannot like it anymore
+            NSNumber* _user_likes = [NSNumber numberWithInt:1];
+            //cell.user_likes = 0; //cannot like it anymore
             NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                   cell.post_id, @"post_id",
-                                  _canLike, @"canLike",
+                                 _user_likes, @"user_likes",
                                   _likeCount, @"likeCount",
                                   nil];
             [_peopleMapDB updateItemRow:dict];  
 			
 			//TODO: update facebook here.
-		//	NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[_facebook accessToken],@"access_token",nil];
 			
-			[_userInfo requestWithGraph:cell.post_id andParams:dict];
-			/*
-			[_facebook 
-			 requestWithGraphPath:[NSString stringWithFormat:@"%@", cell.post_id] 
-			 andParams:dict 
-			 andHttpMethod:@"POST" 
-			 andDelegate:self];
-			*/
+			[_userInfo requestWithGraph:cell.post_id andHttpMethod:@"POST"];
 			
-			/*
-			 NSMutableDictionary* params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-			 @"Facebook developer support sucks",@"message",
-			 @"Suck it!",@"name",
-			 @"http://www.bushmackel.com/2010/01/11/facebook-development-sucks/", @"link",
-			 @"http://www.flatblackfilms.com/finger.JPG", @"picture",
-			 nil];
-			 
-			 [_facebook requestWithGraphPath:@"/me/feed"   // or use page ID instead of 'me'
-			 andParams:params
-			 andHttpMethod:@"POST"
-			 andDelegate:self];
-			 */
+			
 		}
         else //dislike this motherfucker
         {
@@ -216,21 +207,23 @@
             //   NSLog(@"dic is %i", [[dic valueForKey:@"likeCount"] intValue]);
 			//update locally because layout kinda fucks up if we reload the fruits array doing resizeview due nature of creation of treemapview.
             [dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] - 1] forKey:@"likeCount"];
-			[dic setValue:[NSNumber numberWithInt:1] forKey:@"canLike"];
+			[dic setValue:[NSNumber numberWithInt:0] forKey:@"user_likes"];
 			 
 			//update local database
             NSNumber* _likeCount = [NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] - 1];
-            NSNumber* _canLike = [NSNumber numberWithInt:1];
+           //it's likeable again.
+			NSNumber* _user_likes = [NSNumber numberWithInt:0];
             NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                   cell.post_id, @"post_id",
-                                  _canLike, @"canLike",
+                                  _user_likes, @"user_likes",
                                   _likeCount, @"likeCount",
                                   nil];
             [_peopleMapDB updateItemRow:dict];  
 			
 			//TODO: update facebook here.
-            
+			[_userInfo requestWithGraph:cell.post_id andHttpMethod:@"DELETE"];
         }
+		 
 	}
 	else //comment area
 	{
@@ -245,7 +238,7 @@
 			//update  local database
 			NSNumber* _commentCount = [NSNumber numberWithInt:[[dic valueForKey:@"commentCount"] intValue] + 1];
 
-            //cell.canLike = 0; //cannot like it anymore
+            //cell.user_likes = 0; //cannot like it anymore
             NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                   cell.post_id, @"post_id",
                                   _commentCount, @"commentCount",
@@ -576,7 +569,7 @@
 	[self setTheBackgroundArray];
 	//SELECT post_id, poster_name, objectType, message, image_url, commentCount, datetime(posted_time,'unixepoch', 'localtime') FROM "object" WHERE poster_type = "user" AND datetime(posted_time,'unixepoch', 'localtime') >= datetime('now', '-2 hours', 'localtime') ORDER BY "commentCount" DESC LIMIT 8
 	
-	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT post_id, poster_name, objectType, message, image_url, canLike, canPostComment, %@ FROM \"object\" WHERE poster_type = \"%@\" AND datetime(posted_time,'unixepoch', 'localtime') >= datetime('now', '%@', 'localtime') ORDER BY \"%@\" DESC LIMIT 8", section, viewType, duration, section]])
+	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT post_id, poster_name, objectType, message, image_url, user_likes, canPostComment, %@ FROM \"object\" WHERE poster_type = \"%@\" AND datetime(posted_time,'unixepoch', 'localtime') >= datetime('now', '%@', 'localtime') ORDER BY \"%@\" DESC LIMIT 8", section, viewType, duration, section]])
 	{
 		//[self dispRow:row];
 		

@@ -26,7 +26,7 @@
 	self = [super init];
 	_likesAndCommentsRequestDelegate = [delegate retain];
 
-	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local3.db"];
+	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local4.db"];
 	return self;
 }
 
@@ -94,7 +94,7 @@
 		NSString *_image_url;
 		NSString *_permalink;
 		NSString *_href;
-		NSNumber *_canLike;
+		NSNumber *_user_likes;
 		NSNumber *_canPostComment;
 		NSNumber *_canRemoveComment;
 		NSNumber *_posted_time;
@@ -119,13 +119,13 @@
 		_href = [NSString stringWithFormat:@""];
 		//first _categoryValue -->count of current displayMode(likes/comments)
 		_likeCount = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"likes"] objectForKey:@"count"] integerValue]];
-		_canLike = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"likes"] objectForKey:@"can_like"] integerValue]];
+		_user_likes = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"likes"] objectForKey:@"user_likes"] integerValue]];
 		
 		_commentCount = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"count"] integerValue]];
 		_canPostComment = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"can_post"] integerValue]];
 		_canRemoveComment = [NSNumber numberWithInt:[[[[streamArray objectAtIndex:i] objectForKey:@"comments"] objectForKey:@"can_remove"] integerValue]];
 
-	//	NSLog(@"_canLike is %@", _canLike);
+	//	NSLog(@"user_likes is %@", _user_likes);
 	//	NSLog(@"_canPostComment is %@", _canPostComment);
 		
 		_permalink = [NSString stringWithFormat:@"%@", [[streamArray objectAtIndex:i] objectForKey:@"permalink"]];
@@ -339,7 +339,7 @@
 		*/
 
         NSLog(@"href is %@", _href);
-			
+
 		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
 							  _post_id, @"post_id",
 							  _objectType, @"objectType", 
@@ -348,7 +348,7 @@
 							  _poster_id, @"poster_id",
 							  _poster_name, @"poster_name",
 							  _poster_type, @"poster_type",
-							  _canLike, @"canLike",
+							  _user_likes, @"user_likes",
 							  _canPostComment, @"canPostComment",
 							  _canRemoveComment, @"canRemoveComment",
 							  _message, @"message",

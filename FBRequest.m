@@ -273,6 +273,7 @@ static const NSTimeInterval kTimeoutInterval = 180.0;
   }
   
   NSString* url = [self generateGetURL];
+	NSLog(@"url is %@", url);
   NSMutableURLRequest* request = 
     [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]
                             cachePolicy:NSURLRequestReloadIgnoringLocalCacheData 

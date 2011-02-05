@@ -105,15 +105,33 @@
  */
 
 
-- (void)requestWithGraph:(NSString*)string andParams:(NSDictionary*)dict 
+- (void)requestWithGraph:(NSString*)post_id andHttpMethod:(NSString*)httpMethod
 {
-	/*
+	NSLog(@"requestWithGraph in userInfo");
+	NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[_facebook accessToken],@"access_token",nil];
+
 	 [_facebook 
-	 requestWithGraphPath:[NSString stringWithFormat:@"%@", cell.post_id] 
+	 requestWithGraphPath:[NSString stringWithFormat:@"%@/likes", post_id] 
 	 andParams:dict 
-	 andHttpMethod:@"POST" 
+	 andHttpMethod:httpMethod 
+	 andDelegate:self];
+	 
+	
+	
+	/*
+	 NSMutableDictionary* params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+	 @"Facebook developer support sucks",@"message",
+	 @"Suck it!",@"name",
+	 @"http://www.bushmackel.com/2010/01/11/facebook-development-sucks/", @"link",
+	 @"http://www.flatblackfilms.com/finger.JPG", @"picture",
+	 nil];
+	 
+	 [_facebook requestWithGraphPath:@"/me/feed"   // or use page ID instead of 'me'
+	 andParams:params
+	 andHttpMethod:@"POST"
 	 andDelegate:self];
 	 */
+	
 	
 }
 - (void) requestCountOf
@@ -177,6 +195,23 @@
 	{
 		[_userInfoDelegate likesAndCommentsDidLoad];
 	}
+}
+
+
+
+/**
+ * FBRequestDelegate
+ */
+- (void)request:(FBRequest*)request didLoad:(id)result{
+	
+	NSLog(@"result is %@", result);   
+	
+}
+
+
+- (void)request:(FBRequest*)request didFailWithError:(NSError*)error {
+	NSLog(@"%@",[error localizedDescription]);
+	
 }
 
 
