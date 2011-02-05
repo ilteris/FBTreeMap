@@ -128,6 +128,7 @@
 	else if([[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"photo"] || [[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"link"])
 	{
 		
+		
 		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 		cell.contentLabel.text = @"";//	[[fruits objectAtIndex:index] objectForKey:@"message"];
 	}else //if it's a status just display the background uncropped.
