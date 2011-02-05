@@ -51,16 +51,14 @@
 - (id) initializeWithFacebook:(Facebook *)facebook andDelegate:(id<UserInfoLoadDelegate>)delegate;
 - (void) requestAllInfo;
 - (void) requestCountOf;
-
+- (void)requestWithGraph:(NSString*)string andParams:(NSDictionary*)dict;
 
 @end
 
 @protocol UserInfoLoadDelegate <NSObject>
-
+@optional
 - (void)userInfoDidLoad;
-
 - (void)likesAndCommentsDidLoad;
-
 - (void)userInfoFailToLoad;
 
 @end

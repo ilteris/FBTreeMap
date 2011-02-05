@@ -111,6 +111,7 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	
 	_treemapViewController = [[TreeMapViewController alloc] init];
 	NSLog(@"treemapView is %@", self.treeMapView);
+	_treemapViewController.userInfo = _userInfo;
 	[treeMapView setDataSource:_treemapViewController];
 	[treeMapView setDelegate:_treemapViewController];
 	

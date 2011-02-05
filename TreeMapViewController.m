@@ -35,7 +35,7 @@
 @synthesize jsonArray;
 
 @synthesize peopleMapDB = _peopleMapDB;
-
+@synthesize userInfo = _userInfo;
 
 #pragma mark -
 #pragma mark facebook delegate
@@ -184,6 +184,30 @@
             [_peopleMapDB updateItemRow:dict];  
 			
 			//TODO: update facebook here.
+		//	NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[_facebook accessToken],@"access_token",nil];
+			
+			[_userInfo requestWithGraph:cell.post_id andParams:dict];
+			/*
+			[_facebook 
+			 requestWithGraphPath:[NSString stringWithFormat:@"%@", cell.post_id] 
+			 andParams:dict 
+			 andHttpMethod:@"POST" 
+			 andDelegate:self];
+			*/
+			
+			/*
+			 NSMutableDictionary* params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+			 @"Facebook developer support sucks",@"message",
+			 @"Suck it!",@"name",
+			 @"http://www.bushmackel.com/2010/01/11/facebook-development-sucks/", @"link",
+			 @"http://www.flatblackfilms.com/finger.JPG", @"picture",
+			 nil];
+			 
+			 [_facebook requestWithGraphPath:@"/me/feed"   // or use page ID instead of 'me'
+			 andParams:params
+			 andHttpMethod:@"POST"
+			 andDelegate:self];
+			 */
 		}
         else //dislike this motherfucker
         {
@@ -616,7 +640,7 @@
 - (void)imageFetchComplete:(ASIHTTPRequest *)request
 {
 	//[(TreemapView *)self.treeMapView reloadData];
-	[self updateCell:cell forIndex:index];
+	//[self updateCell:cell forIndex:index];
 	
 }//endfunction
 
@@ -639,19 +663,9 @@
 - (void)queueComplete:(ASINetworkQueue*)queue
 {
 	NSLog(@"Queue finished");
+	[self.treeMapView reloadData];
 	
-	//imagesLoaded = YES;
-	
-	
-	//NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:plistFile]; 
-	//plist file consists of objects of dictionaries wrapped in an array
-	
-	//NSLog(@"self._plistUserArray %@", _plistUserArray);
-	//NSLog(@"self._plistPageArray %@", _plistPageArray);
-	//[_plistUserArray writeToFile:plistFileForUsers atomically:NO];
-	//[_plistPageArray writeToFile:plistFileForPages atomically:NO];
-	
-	
+		
 }
 
 

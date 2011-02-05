@@ -42,7 +42,7 @@
 
 	IBOutlet TreemapView *treeMapView;
 	IBOutlet UISegmentedControl *segmentedControl;
-
+	
 	
 }
 

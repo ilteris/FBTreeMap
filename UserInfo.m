@@ -104,9 +104,21 @@
  * Use FQL to query detailed friends information
  */
 
+
+- (void)requestWithGraph:(NSString*)string andParams:(NSDictionary*)dict 
+{
+	/*
+	 [_facebook 
+	 requestWithGraphPath:[NSString stringWithFormat:@"%@", cell.post_id] 
+	 andParams:dict 
+	 andHttpMethod:@"POST" 
+	 andDelegate:self];
+	 */
+	
+}
 - (void) requestCountOf
 {	
-	//created_time is smaller than the closer time and larger than the further time
+	//created_time is smaller than closer time and larger than the further time
 	//SELECT post_id, actor_id, source_id, message,  likes, comments, created_time FROM stream  WHERE source_id IN(SELECT target_id FROM connection WHERE source_id=me()) 
 	//AND is_hidden = 0 AND (created_time <= '1295969630' AND created_time >= '1295855322')
 	

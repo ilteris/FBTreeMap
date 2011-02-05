@@ -27,8 +27,6 @@
 	_likesAndCommentsRequestDelegate = [delegate retain];
 
 	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local3.db"];
-	
-
 	return self;
 }
 
@@ -39,7 +37,7 @@
 - (void)request:(FBRequest*)request didLoad:(id)result{
 	
    // NSMutableArray *fruits = [[[NSMutableArray alloc] init] autorelease];
-	//NSLog(@"result %@", result);
+	NSLog(@"result %@", result);
 
 	
 	

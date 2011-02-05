@@ -12,7 +12,7 @@
 
 #import "RegexKitLite.h"
 
-#import "FBConnect.h"
+
 #import "UserInfo.h"
 #import "PeopleMapDB.h"
 
@@ -21,16 +21,16 @@
 
 
 
-@interface TreeMapViewController: NSObject   <TreemapViewDelegate, TreemapViewDataSource> {
+@interface TreeMapViewController: NSObject   <TreemapViewDelegate, TreemapViewDataSource, FBDialogDelegate, UserInfoLoadDelegate> {
    
 
 	ASINetworkQueue *_networkQueue;
-
+	
 
 	NSMutableArray *_backgrounds;
 
 	//facebook
-
+	UserInfo *_userInfo;
 	
 	//we'll use this to store a feed post (when you press 'post me/feed').
 	//when you press delete me/feed this is the post that's deleted
@@ -54,6 +54,7 @@
 
 
 
+@property (nonatomic, retain) UserInfo *userInfo;
 @property (nonatomic, retain) PeopleMapDB *peopleMapDB;
 
 
