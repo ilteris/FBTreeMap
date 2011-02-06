@@ -51,7 +51,7 @@
 - (id) initializeWithFacebook:(Facebook *)facebook andDelegate:(id<UserInfoLoadDelegate>)delegate;
 - (void) requestAllInfo;
 - (void) requestCountOf;
-- (void)requestWithGraph:(NSString*)post_id andHttpMethod:(NSString*)httpMethod;
+- (void)requestWithGraph:(NSDictionary*)actionDict andAction:(NSString*)action andHttpMethod:(NSString*)httpMethod;
 
 @end
 

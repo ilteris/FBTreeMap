@@ -105,34 +105,24 @@
  */
 
 
-- (void)requestWithGraph:(NSString*)post_id andHttpMethod:(NSString*)httpMethod
+- (void)requestWithGraph:(NSDictionary*)actionDict andAction:(NSString*)action andHttpMethod:(NSString*)httpMethod
 {
 	NSLog(@"requestWithGraph in userInfo");
-	NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[_facebook accessToken],@"access_token",nil];
-
+	NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+								 [_facebook accessToken],@"access_token",
+								 [actionDict objectForKey:@"comment_message"], @"message",
+								 nil];
+	NSLog(@"dict is %@", dict);
+	/*
 	 [_facebook 
-	 requestWithGraphPath:[NSString stringWithFormat:@"%@/likes", post_id] 
+	 requestWithGraphPath:[NSString stringWithFormat:@"%@/%@", [actionDict objectForKey:@"post_id"], action] 
 	 andParams:dict 
 	 andHttpMethod:httpMethod 
 	 andDelegate:self];
-	 
-	
-	
-	/*
-	 NSMutableDictionary* params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-	 @"Facebook developer support sucks",@"message",
-	 @"Suck it!",@"name",
-	 @"http://www.bushmackel.com/2010/01/11/facebook-development-sucks/", @"link",
-	 @"http://www.flatblackfilms.com/finger.JPG", @"picture",
-	 nil];
-	 
-	 [_facebook requestWithGraphPath:@"/me/feed"   // or use page ID instead of 'me'
-	 andParams:params
-	 andHttpMethod:@"POST"
-	 andDelegate:self];
 	 */
 	
-	
+	[dict release];
+		
 }
 - (void) requestCountOf
 {	

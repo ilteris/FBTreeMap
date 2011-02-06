@@ -37,6 +37,11 @@
 @synthesize peopleMapDB = _peopleMapDB;
 @synthesize userInfo = _userInfo;
 
+
+
+static CGFloat kTransitionDuration = 0.3;
+
+
 #pragma mark -
 #pragma mark facebook delegate
 -  init {
@@ -79,6 +84,22 @@
 	NSLog(@"updating cell");
 	//NSLog(@"fruits %@", fruits);
 	
+	//set the user likes first
+	cell.user_likes = [[[fruits  objectAtIndex:index] objectForKey:@"user_likes"] intValue];
+	
+	
+	
+	
+	//	NSLog(@"cell.user_likes is %i", cell.user_likes);
+    cell.canPostComment = [[[fruits  objectAtIndex:index] objectForKey:@"canPostComment"] intValue];
+	
+	
+	cell.titleLabel.text = [[[fruits objectAtIndex:index] objectForKey:@"poster_name"] uppercaseString];
+	//add the post_id
+	cell.post_id = [[fruits objectAtIndex:index] objectForKey:@"post_id"];
+
+	
+	
 	
 	NSNumber *tText;
 	
@@ -86,12 +107,28 @@
 		
 	{
 		tText = [[fruits objectAtIndex:index] objectForKey:@"likeCount"];
+
+		//well give them alpha accordingly to the values.
+		if(cell.user_likes)
+		{
+			cell.countBtn.alpha = 1.0f;
+		}
+		else 
+		{
+			cell.countBtn.alpha = 0.5f;
+		}
+		
 	}
 	else 
 	{
+		NSLog(@"display Mode is comment");
 		tText = [[fruits objectAtIndex:index] objectForKey:@"commentCount"];
+		
+		cell.countBtn.alpha = 0.5f;
+
 	}
 	
+	cell.countLabel.text = [tText stringValue];
 	
 	ASIHTTPRequest *req;
 	
@@ -137,23 +174,6 @@
 		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 		cell.contentLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
 	}
-    cell.user_likes = [[[fruits  objectAtIndex:index] objectForKey:@"user_likes"] intValue];
-	if(cell.user_likes)
-	{
-		cell.countBtn.alpha = 1.0f;
-	}
-	else 
-	{
-		cell.countBtn.alpha = 0.5f;
-	}
-
-	NSLog(@"cell.user_likes is %i", cell.user_likes);
-    cell.canPostComment = [[[fruits  objectAtIndex:index] objectForKey:@"canPostComment"] intValue];
-	
-	cell.countLabel.text = [tText stringValue];
-	cell.titleLabel.text = [[[fruits objectAtIndex:index] objectForKey:@"poster_name"] uppercaseString];
-	//add the post_id
-	cell.post_id = [[fruits objectAtIndex:index] objectForKey:@"post_id"];
 }
 
 
@@ -169,8 +189,8 @@
 	//step 2 if not then like it or comment it to your hearts content
 	//step 3 update the local database, so it's not likeable anymore but still commentable. | so pressing heart likes it and press it again unlikes it. | each press of comment adds a new comment.
 	
-	NSLog(@"_user_likes is %i", cell.user_likes);
-	NSLog(@"_canPostComment is %i", cell.canPostComment);
+	//NSLog(@"_user_likes is %i", cell.user_likes);
+	//NSLog(@"_canPostComment is %i", cell.canPostComment);
 	
 	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 	{
@@ -195,9 +215,9 @@
                                   nil];
             [_peopleMapDB updateItemRow:dict];  
 			
-			//TODO: update facebook here.
+			//update facebook here. sending the already prepared dictionary.
 			
-			[_userInfo requestWithGraph:cell.post_id andHttpMethod:@"POST"];
+			[_userInfo requestWithGraph:dict andAction:@"likes" andHttpMethod:@"POST"];
 			
 			
 		}
@@ -221,13 +241,14 @@
                                   nil];
             [_peopleMapDB updateItemRow:dict];  
 			
-			//TODO: update facebook here.
-			[_userInfo requestWithGraph:cell.post_id andHttpMethod:@"DELETE"];
+			
+			//update facebook here. 
+			[_userInfo requestWithGraph:dict andAction:@"likes" andHttpMethod:@"DELETE"];
         }
-		 
 	}
 	else //comment area
 	{
+		/*
 			//we can only add comment in the first screen, no removing comment.
             NSDictionary *dic = [fruits objectAtIndex:cell.index];
             
@@ -245,9 +266,48 @@
                                   _commentCount, @"commentCount",
                                   nil];
             [_peopleMapDB updateItemRow:dict];  
-			
-			//TODO: update facebook here.
 		
+		NSString* string_ = [NSString stringWithFormat:@"love it!"];
+		NSDictionary *actionDict = [NSDictionary dictionaryWithObjectsAndKeys:
+							  cell.post_id, @"post_id",
+							  string_, @"comment_message",
+							  nil];
+		
+			//TODO: update facebook here.
+			[_userInfo requestWithGraph:actionDict andAction:@"comments" andHttpMethod:@"POST"];
+		 */
+		
+		
+		
+		CGRect rect = CGRectMake(self.treeMapView.frame.size.width/2-500/2, self.treeMapView.frame.size.height/2-200 , 500, 200);
+
+		_tempViewAbove = [[UITextView alloc] initWithFrame:rect];
+		_tempViewAbove.backgroundColor = [UIColor whiteColor];
+		
+			
+		_tempViewAbove.alpha = 1.0;
+		
+		
+		[self.treeMapView addSubview:_tempViewAbove];
+		
+		_tempViewAbove.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.001, 0.001);
+		[UIView beginAnimations:nil context:nil];
+		[UIView setAnimationDuration:kTransitionDuration/1.5];
+		[UIView setAnimationDelegate:self];
+		[UIView setAnimationDidStopSelector:@selector(bounce1AnimationStopped)];
+		_tempViewAbove.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
+		[UIView commitAnimations];
+		
+		/*
+		
+		[UIView beginAnimations:nil context:nil];
+		[UIView setAnimationDuration:.5];
+		tempViewAbove.center = CGPointMake(self.treeMapView.frame.size.width/2, self.treeMapView.frame.size.height/2);
+		tempViewAbove.alpha = 1.0;
+		[UIView commitAnimations];
+
+		
+		*/
 	}
 	
 	//[self resizeView]; //so that fruit gets updated for new values to take effect.
@@ -256,11 +316,58 @@
 	[self.treeMapView reloadData];
 	
 	
+	
 		
 	
 	
 	
 }
+
+- (void)bounce1AnimationStopped {
+	NSLog(@"bounce1AnimationStopped");
+	[UIView beginAnimations:nil context:nil];
+	[UIView setAnimationDuration:kTransitionDuration/2];
+	[UIView setAnimationDelegate:self];
+	[UIView setAnimationDidStopSelector:@selector(bounce2AnimationStopped)];
+	_tempViewAbove.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
+	[UIView commitAnimations];
+}
+
+
+- (void)bounce2AnimationStopped {
+	NSLog(@"bounce2AnimationStopped");
+	[UIView beginAnimations:nil context:nil];
+	[UIView setAnimationDuration:kTransitionDuration/2];
+	[UIView setAnimationDidStopSelector:@selector(bounce3AnimationStopped)];
+	[UIView setAnimationDelegate:self];
+	_tempViewAbove.transform = CGAffineTransformIdentity;
+	[UIView commitAnimations];
+}
+
+- (void)bounce3AnimationStopped {
+	NSLog(@"bounce3AnimationStopped");
+	[_tempViewAbove becomeFirstResponder];
+}
+
+
+
+- (CGAffineTransform)transformForOrientation {
+	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+	if (orientation == UIInterfaceOrientationLandscapeLeft) {
+		return CGAffineTransformMakeRotation(M_PI*1.5);
+	} else if (orientation == UIInterfaceOrientationLandscapeRight) {
+		return CGAffineTransformMakeRotation(M_PI/2);
+	} else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
+		return CGAffineTransformMakeRotation(-M_PI);
+	} else {
+		return CGAffineTransformIdentity;
+	}
+}
+
+
+
+
+
 
 - (void)treemapView:(TreemapView *)treemapView tapped:(NSInteger)index 
 {

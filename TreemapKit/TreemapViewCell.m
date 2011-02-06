@@ -82,7 +82,6 @@
 
 - (void) setLayout:(CGRect)frame
 {
-	NSLog(@"self.user_likes is %i", self.user_likes);
 	//big sized cells
 	if(self.frame.size.width > 400 && self.frame.size.height > 200)
 	{
@@ -132,18 +131,7 @@
 			[_countBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
 			[tImage release];
 		}
-		
-		if(self.user_likes)
-		{
-			//_countBtn.alpha = 1.0;
-			
-		}
-		else 
-		{
-			//_countBtn.alpha = 0.4;
-			//NSLog(@"self.user_likes is 0");
-		}
-
+	
 		
 		
 		NSLog(@"status big");
@@ -216,19 +204,7 @@
 			[tImage release];
 		}
 		
-		
-		if(self.user_likes)
-		{
-			//_countBtn.alpha = 1.0;
-			//NSLog(@"self.user_likes is 1");
-		}
-		else 
-		{
-			//_countBtn.alpha = 0.4;
-			//NSLog(@"self.user_likes is 0");
-		}
-		
-		
+				
 		
 		contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0)];
 		
@@ -341,22 +317,7 @@
 			[_countBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
 			[tImage release];
 		}
-		
-		if(self.user_likes)
-		{
-			//_countBtn.alpha = 1.0;
-			//NSLog(@"self.user_likes is 1");
-		}
-		else 
-		{
-			//_countBtn.alpha = 0.4;
-			//NSLog(@"self.user_likes is 0");
-		}
-		
-		
-		
-		
-		
+
 	}
 	else 
 	{
@@ -364,10 +325,6 @@
 	}
 	
 }
-
-
-
-
 
 
 
