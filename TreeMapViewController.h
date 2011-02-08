@@ -41,7 +41,8 @@
 
 	IBOutlet TreemapView *treeMapView;
 
-	UITextView* _tempViewAbove;
+	UITextView* _tempViewTextField;
+	UIView *_tempViewBg;
 	
 	BOOL failed;
 	BOOL imagesLoaded;
@@ -74,7 +75,7 @@
 @property (nonatomic, retain) IBOutlet TreemapView *treeMapView;
 
 
-- (CGAffineTransform)transformForOrientation ;
+
 - (void)createCellsFromZero;
 
 

@@ -280,22 +280,29 @@ static CGFloat kTransitionDuration = 0.3;
 		
 		
 		CGRect rect = CGRectMake(self.treeMapView.frame.size.width/2-500/2, self.treeMapView.frame.size.height/2-200 , 500, 200);
+		CGRect rect1 = CGRectMake(self.treeMapView.frame.size.width/2-520/2, self.treeMapView.frame.size.height/2-210 , 520, 220);
 
-		_tempViewAbove = [[UITextView alloc] initWithFrame:rect];
-		_tempViewAbove.backgroundColor = [UIColor whiteColor];
+		_tempViewTextField = [[UITextView alloc] initWithFrame:rect];
+		_tempViewBg = [[UITextView alloc] initWithFrame:rect1];
 		
+		_tempViewTextField.backgroundColor = [UIColor whiteColor];
+		_tempViewBg.backgroundColor = [UIColor blackColor];
+
 			
-		_tempViewAbove.alpha = 1.0;
+		_tempViewTextField.alpha = 1.0;
 		
-		
-		[self.treeMapView addSubview:_tempViewAbove];
-		
-		_tempViewAbove.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.001, 0.001);
+		//added to the mainviewcontrooler.view
+		[[self.treeMapView superview] addSubview:_tempViewBg];
+		[[self.treeMapView superview] addSubview:_tempViewTextField];
+		_tempViewBg.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.001, 0.001);
+		_tempViewTextField.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.001, 0.001);
 		[UIView beginAnimations:nil context:nil];
 		[UIView setAnimationDuration:kTransitionDuration/1.5];
 		[UIView setAnimationDelegate:self];
 		[UIView setAnimationDidStopSelector:@selector(bounce1AnimationStopped)];
-		_tempViewAbove.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
+		_tempViewTextField.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
+		_tempViewBg.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
+
 		[UIView commitAnimations];
 		
 		/*
@@ -314,13 +321,7 @@ static CGFloat kTransitionDuration = 0.3;
 	//[self updateCell:cell forIndex:cell.index];
 	
 	[self.treeMapView reloadData];
-	
-	
-	
-		
-	
-	
-	
+
 }
 
 - (void)bounce1AnimationStopped {
@@ -329,7 +330,9 @@ static CGFloat kTransitionDuration = 0.3;
 	[UIView setAnimationDuration:kTransitionDuration/2];
 	[UIView setAnimationDelegate:self];
 	[UIView setAnimationDidStopSelector:@selector(bounce2AnimationStopped)];
-	_tempViewAbove.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
+	_tempViewTextField.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
+	_tempViewBg.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
+
 	[UIView commitAnimations];
 }
 
@@ -340,29 +343,16 @@ static CGFloat kTransitionDuration = 0.3;
 	[UIView setAnimationDuration:kTransitionDuration/2];
 	[UIView setAnimationDidStopSelector:@selector(bounce3AnimationStopped)];
 	[UIView setAnimationDelegate:self];
-	_tempViewAbove.transform = CGAffineTransformIdentity;
+	_tempViewTextField.transform = CGAffineTransformIdentity;
+	_tempViewBg.transform = CGAffineTransformIdentity;
 	[UIView commitAnimations];
 }
 
 - (void)bounce3AnimationStopped {
 	NSLog(@"bounce3AnimationStopped");
-	[_tempViewAbove becomeFirstResponder];
+	[_tempViewTextField becomeFirstResponder];
 }
 
-
-
-- (CGAffineTransform)transformForOrientation {
-	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-	if (orientation == UIInterfaceOrientationLandscapeLeft) {
-		return CGAffineTransformMakeRotation(M_PI*1.5);
-	} else if (orientation == UIInterfaceOrientationLandscapeRight) {
-		return CGAffineTransformMakeRotation(M_PI/2);
-	} else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
-		return CGAffineTransformMakeRotation(-M_PI);
-	} else {
-		return CGAffineTransformIdentity;
-	}
-}
 
 
 
