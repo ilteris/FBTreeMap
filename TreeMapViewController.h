@@ -47,7 +47,7 @@
 	BOOL failed;
 	BOOL imagesLoaded;
 	
-	NSMutableArray *plistArray;
+
 	NSMutableArray *fruits;
 	NSMutableArray *jsonArray;
 	
@@ -62,7 +62,7 @@
 @property (nonatomic, retain) NSMutableArray *fruits;
 @property (nonatomic, retain) NSMutableArray *cells;
 
-@property (nonatomic, retain) NSMutableArray *plistArray;
+
 @property (nonatomic, retain) NSMutableArray *jsonArray;
 
 //facebook
@@ -78,7 +78,7 @@
 
 - (void)createCellsFromZero;
 
-
+- (void)layoutScrollImages:(UIScrollView*)scrollView atOffset:(NSNumber*)index;
 -(void) changeTime;
 - (void)setTheBackgroundArray;
 - (void)resizeView;

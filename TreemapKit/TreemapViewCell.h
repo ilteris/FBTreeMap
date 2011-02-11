@@ -19,11 +19,14 @@
 	
 	
 	//model elements
+	UIImage* _image;
 	NSString* downloadDestinationPath;
 	NSInteger index;
 	NSString *_post_id;
 	NSInteger _user_likes;
 	NSInteger _canPostComment;
+	NSString *_type;
+	
 	//delegates
 	id <TreemapViewCellDelegate> delegate;
 }
@@ -46,9 +49,13 @@
 //models
 @property (nonatomic, retain) NSString *downloadDestinationPath;
 @property(nonatomic, retain) NSString *post_id;
+@property(nonatomic, retain) NSString *type;
+
+
 @property (nonatomic, assign) NSInteger index;
 @property (nonatomic, assign) NSInteger user_likes;
 @property (nonatomic, assign) NSInteger canPostComment;
+@property (nonatomic, retain) UIImage *image;
 
 //delegate
 @property (nonatomic, retain) id <TreemapViewCellDelegate> delegate;

@@ -78,8 +78,6 @@
 	//NSLog(@"userAndPageArray is %@", userAndPageArray);
 
 	
-	
-	
 	for (NSInteger i=0; i < [streamArray count]; i++)
 	{
 		//these are the objects for each dictionary item which is going to be written to the plist file.
@@ -156,7 +154,13 @@
 				_objectType = [NSString stringWithFormat:@"status"];
 			}
 			else
-			{ //this is all the objects including internal fb events,fb photos,fb videos,fb links, external; youtube, tumblr, facebook apps and external links.
+			{
+				
+				//TODO: here
+				//http://i.huffpost.com/gen/243476/thumbs/s-MUBARAK-large.jpg
+				//images coming from huffington posts can be replaced from -small to -large.
+		
+				//this is all the objects including internal fb events,fb photos,fb videos,fb links, external; youtube, tumblr, facebook apps and external links.
 				//their common attribute they all have media.
 				//let's do the split here. first check the objects that only have fb_object_type even if they are empty.
 				if ([[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"]) 
@@ -185,13 +189,41 @@
 
 						}
 						   
-						NSLog(@"objectType is %@", _objectType);
+						//NSLog(@"objectType is %@", _objectType);
+						//facebook video
 						if([_objectType isEqual:@"video"])
 						   {
 							 //  NSString *video_source = [NSString stringWithFormat:@"%@",[[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"video"] objectForKey:@"source_url"]];
-								_image_url = [NSString stringWithFormat:@"%@",[[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"video"] objectForKey:@"source_url"]];
+								_image_url = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"src"]];
+								//for facebook replace _t with _b
+							   _image_url = [_image_url stringByReplacingOccurrencesOfString:@"_t" withString:@"_b"];
+
+							   NSLog(@"fb_object_type image_url  is %@", _image_url);
+							   //save videos url in _href
+
+							   NSString *_temp = [NSString stringWithFormat:@"%@",[[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"video"] objectForKey:@"source_url"]];
 							   
-							 //  NSLog(@"video_source is %@", video_source);
+							   NSString *filePath = [_temp stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+							   //get the second url now:
+							   NSString *regexString   = @"url=(.+)";
+							   //NSLog(@"count one %@", [streamArray objectAtIndex:i] );
+							   //sometimes the urls are facebook links so, grab them instead.
+							   if(![filePath stringByMatching:regexString capture:1L]) 
+							   {
+								   _href =  [NSString stringWithFormat:@"%@", _temp];
+								   //	NSLog(@"_image_url is %@", _image_url);
+
+
+
+							   }
+							   else 
+							   {
+								   _href = [NSString stringWithFormat:@"%@", [filePath stringByMatching:regexString capture:1L]];
+							   }
+							   
+							   
+							   
+
 							   
 						   }
 					}//endif
@@ -203,7 +235,7 @@
 						//NSLog(@"count one %@", [streamArray objectAtIndex:i] );
 						
 						
-						
+												
 						NSString *_temp = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"src"]];
 						
 						NSString *filePath = [_temp stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -221,7 +253,10 @@
 						}
 						else 
 						{
+							
+							
 							_image_url = [NSString stringWithFormat:@"%@", [filePath stringByMatching:regexString capture:1L]];
+							
 						}
 						
 						
@@ -235,11 +270,41 @@
 						
 						_objectType = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
 						
-						NSLog(@"objectType is %@", _objectType);
 						if([_objectType isEqual:@"video"])
 						{
-							_image_url = [NSString stringWithFormat:@"%@",[[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"video"] objectForKey:@"source_url"]];
+							_href = [NSString stringWithFormat:@"%@",[[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"video"] objectForKey:@"source_url"]];
 							
+							
+							
+							NSString *_temp = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"src"] ];
+							
+							NSString *filePath = [_temp stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+							//get the second url now:
+							NSString *regexString   = @"url=(.+)";
+							//NSLog(@"count one %@", [streamArray objectAtIndex:i] );
+							//sometimes the urls are facebook links so, grab them instead.
+							NSString *caption =  [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"caption"]];
+							if([caption isEqual:@"www.youtube.com"])
+							   {
+								    //do the youtube things here.
+								   	if([filePath stringByMatching:regexString capture:1L]) 
+									{
+										NSLog(@"youtube before %@", _image_url);
+										NSString *regexString2  = @"([^/]+\\.jpg)$";
+										//change all the last portion /x.jpg to ---> /0.jpg
+										NSString *source_string = [NSString stringWithFormat:@"%@", [filePath stringByMatching:regexString capture:1L]];
+										_image_url  = [source_string stringByReplacingOccurrencesOfRegex:regexString2 withString:@"0.jpg"];
+										NSLog(@"youtube after %@", _image_url);
+									}
+							   }
+							   else
+							   {
+								   if([filePath stringByMatching:regexString capture:1L]) 
+								   {
+									   NSLog(@"non youtube true %@", _image_url);
+									   _image_url =  [NSString stringWithFormat:@"%@", [filePath stringByMatching:regexString capture:1L]];
+								   }
+							   }
 						//	NSLog(@"video_source is %@", video_source);
 							
 						}
@@ -247,8 +312,6 @@
 						{
                             NSLog(@"poster_name %@", _poster_name);
 							_href = [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"href"]];
-
-
 						}
 
 												
@@ -262,7 +325,7 @@
 				{
 					//still getting only up to name ---> if that's empty maybe even go further up to description?
 					
-				//	NSLog(@"attachment media is %@", [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"]);
+					//NSLog(@"attachment media is %@", [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"]);
 					
 					
 					NSString *_temp = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"src"]];
@@ -276,11 +339,13 @@
 					//NSLog(@"regexString is ----> %@", _src);
 					//NSLog(@"count one %@", [streamArray objectAtIndex:i] );
 					
+					//no second src
 					if(![filePath stringByMatching:regexString capture:1L]) 
 					{
 						_image_url =  [NSString stringWithFormat:@"%@", _temp];
 						//	NSLog(@"_image_url is %@", _image_url);
 						_image_url = [_temp stringByReplacingOccurrencesOfString:@"_s" withString:@"_n"];
+						
 						//	NSLog(@"_image_url is %@", _image_url);
 						//_image_url =  [NSString stringWithFormat:@"%@", _temp];
 					}
@@ -288,8 +353,11 @@
 					{
 						_image_url = [NSString stringWithFormat:@"%@", [filePath stringByMatching:regexString capture:1L]];
                         _image_url = [_image_url stringByReplacingOccurrencesOfString:@"_s" withString:@""];
+						_image_url = [_image_url stringByReplacingOccurrencesOfString:@"s72-c" withString:@"s1600"];
+
 					}
 					
+					//blogpost hack
 					_message =   [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
 					
 					if([_message length] == 0) _message = [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"name"];
@@ -301,7 +369,7 @@
                         NSLog(@"poster_name %@", _poster_name);
 
                         if([_href length] == 0) _href = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"href"]];
-                        NSLog(@"href is %@", _href);
+                       // NSLog(@"href is %@", _href);
                     }
                     
 				}//endelse
@@ -338,7 +406,7 @@
 		 // Dictionary keys
 		*/
 
-        NSLog(@"href is %@", _href);
+        //NSLog(@"dict is %@", _href);
 
 		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
 							  _post_id, @"post_id",
@@ -360,6 +428,7 @@
 							  nil];
 		
 		[_peopleMapDB addItemRow:dict];
+		//NSLog(@"dict is %@", dict);
 	}//endfor
 	[_likesAndCommentsRequestDelegate likesAndCommentsRequestComplete];
 

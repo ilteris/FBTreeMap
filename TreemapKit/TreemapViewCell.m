@@ -20,11 +20,13 @@
 
 
 @synthesize post_id = _post_id;
+@synthesize type = _type;
 @synthesize canPostComment = _canPostComment;
 @synthesize user_likes = _user_likes;
 
 @synthesize playBtn = _playBtn;
 @synthesize countBtn = _countBtn;
+@synthesize image = _image;
 
 #pragma mark -
 
@@ -47,10 +49,12 @@
 		self.imageViewA.clipsToBounds = YES;
 		//self.imageViewA.autoresizingMask =  UIViewAutoresizingNone;
 		//self.aView.contentMode = UIViewContentModeCenter;
-		
+		//self.aView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
+
 		[self.aView addSubview:imageViewA];
 		self.bView.backgroundColor = [UIColor whiteColor];
 		self.downloadDestinationPath = [NSString stringWithFormat:@""];
+		
 		
 		
 		
@@ -221,6 +225,7 @@
 		
 		contentLabel.alpha = 1;
 		
+		
 	}
 	
 	//very small sized cells
@@ -332,12 +337,13 @@
 {
 
 	
-	//self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.0] CGColor];
+	self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.0] CGColor];
 	
 	[UIView beginAnimations:nil context:NULL]; 
 	
 	[UIView setAnimationDuration:0.5]; 
 	
+
 	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:self cache:YES]; 
 	[UIView setAnimationDidStopSelector:@selector(animationDidStop)];
 	

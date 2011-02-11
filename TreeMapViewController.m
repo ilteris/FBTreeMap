@@ -27,7 +27,7 @@
 
 @synthesize treeMapView;
 
-@synthesize plistArray;
+
 //fcebook
 
 @synthesize feedPostId;
@@ -82,7 +82,7 @@ static CGFloat kTransitionDuration = 0.3;
 - (void)updateCell:(TreemapViewCell *)cell forIndex:(NSInteger)index 
 {
 	NSLog(@"updating cell");
-	//NSLog(@"fruits %@", fruits);
+	NSLog(@"fruits %@", fruits);
 	
 	//set the user likes first
 	cell.user_likes = [[[fruits  objectAtIndex:index] objectForKey:@"user_likes"] intValue];
@@ -143,35 +143,50 @@ static CGFloat kTransitionDuration = 0.3;
 		[_networkQueue addOperation:req];		
 	}
 	
-	
+	NSLog(@"img is  present %@", [[fruits  objectAtIndex:index] objectForKey:@"image_url"]);
+
+
 	
 	if([[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"video"])
 	{
 		//when it's the video image, don't crop it, it makes the image looks awkward.
 		cell.imageViewA.image = img;
+		cell.image = img;
+		NSInteger _width = cell.frame.size.width;
+		NSInteger _height = cell.frame.size.width;		
 		
-		//TODO: need to check the size of the frame and display the play button accordingly.
-		//cell.playBtn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
-		//cell.playBtn.frame = CGRectMake(0, 0, 56.0, 55.0);
-		//cell.playBtn.frame = CGRectMake((cell.imageViewA.bounds.size.width-cell.playBtn.bounds.size.width)/2, (cell.imageViewA.bounds.size.height-cell.playBtn.bounds.size.height)/2, cell.playBtn.frame.size.width, cell.playBtn.frame.size.height);
-		//UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"play" ofType:@"png"]];
-		//[cell.playBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
-		//[tImage release];
+		NSInteger _areaOfCell = _width*_height;
+		NSInteger _areaOfPlayBtn = 56*56;
 		
-		//[cell.aView addSubview:cell.playBtn];
+		if(_areaOfCell > _areaOfPlayBtn) //meaning cell area is larger than the playBtn.
+		{
+
+			cell.playBtn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+			cell.playBtn.frame = CGRectMake(0, 0, 56.0, 55.0);
+			cell.playBtn.frame = CGRectMake((cell.imageViewA.bounds.size.width-cell.playBtn.bounds.size.width)/2, (cell.imageViewA.bounds.size.height-cell.playBtn.bounds.size.height)/2, cell.playBtn.frame.size.width, cell.playBtn.frame.size.height);
+			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"play" ofType:@"png"]];
+			[cell.playBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+			[tImage release];
+			
+			[cell.aView addSubview:cell.playBtn];
+			[cell.playBtn release];
+			
+		}
+		
 		cell.contentLabel.text = @"";//	[[fruits objectAtIndex:index] objectForKey:@"message"];
 		
 	}
-	else if([[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"photo"] || [[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"link"])
+	else if([[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"photo"] || [[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"link"] || [[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"event"])
 	{
 		
-		
 		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
+		cell.image = img;
 		cell.contentLabel.text = @"";//	[[fruits objectAtIndex:index] objectForKey:@"message"];
 	}else //if it's a status just display the background uncropped.
 	{
-		//cell.imageViewA.image = img;
-		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
+		cell.image = img;
+		cell.imageViewA.image = img;
+		//cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 		cell.contentLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
 	}
 }
@@ -278,7 +293,7 @@ static CGFloat kTransitionDuration = 0.3;
 		 */
 		
 		
-		
+		/*
 		CGRect rect = CGRectMake(self.treeMapView.frame.size.width/2-500/2, self.treeMapView.frame.size.height/2-200 , 500, 200);
 		CGRect rect1 = CGRectMake(self.treeMapView.frame.size.width/2-520/2, self.treeMapView.frame.size.height/2-210 , 520, 220);
 
@@ -304,7 +319,7 @@ static CGFloat kTransitionDuration = 0.3;
 		_tempViewBg.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
 
 		[UIView commitAnimations];
-		
+		*/
 		/*
 		
 		[UIView beginAnimations:nil context:nil];
@@ -337,6 +352,7 @@ static CGFloat kTransitionDuration = 0.3;
 }
 
 
+
 - (void)bounce2AnimationStopped {
 	NSLog(@"bounce2AnimationStopped");
 	[UIView beginAnimations:nil context:nil];
@@ -362,11 +378,139 @@ static CGFloat kTransitionDuration = 0.3;
 - (void)treemapView:(TreemapView *)treemapView tapped:(NSInteger)index 
 {
 	NSLog(@"here");
-	TreemapViewCell *cell = (TreemapViewCell *)[self.treeMapView.subviews objectAtIndex:index];	
+	/*
+	for (NSInteger i = 0; i < [self.treeMapView.subviews count]; i++) {
+		TreemapViewCell *cell = (TreemapViewCell *)[self.treeMapView.subviews objectAtIndex:i];	
+		//[cell flipIt];
+		
+		[cell performSelector:@selector(flipIt) withObject:nil afterDelay:i*.1];
+
+	}
+*/
+	
+	[self performSelector:@selector(createbackView:) withObject:[NSNumber numberWithInt:index]  afterDelay:.5];
+	
+}
+
+
+
+- (void) createbackView:(NSNumber*)index
+{
+	
+	CGRect rect = CGRectMake(0, 0 , self.treeMapView.frame.size.width, self.treeMapView.frame.size.height);
+
+
+	NSLog(@"createBackrect is %@", NSStringFromCGRect(rect));
+	
+	//TreemapViewCell *cell = (TreemapViewCell *)[self.treeMapView.subviews objectAtIndex:[index integerValue]];
+
+	//UIImageView *_viewBg = [[UIImageView alloc] initWithFrame:rect];
+	//[self.treeMapView bringSubviewToFront:cell];
+	
+	//cell.alpha = 0.0;
+	//cell.frame = rect;
+	
+	//_viewBg.backgroundColor = [UIColor blackColor];
+	
+	//cell.alpha = 1.0;
+
+	//_viewBg.image = [cell.image imageCroppedToFitSize:rect.size];
+
+	//cell.imageViewA.image = [cell.image imageCroppedToFitSize:rect.size];
+	
+	//[[self.treeMapView superview] addSubview:_viewBg];
+
+	//added to the mainviewcontrooler.view
+	
+	UIScrollView *scrollView1 = [[UIScrollView alloc] initWithFrame:rect];
+	[scrollView1 setCanCancelContentTouches:NO];
+	scrollView1.indicatorStyle = UIScrollViewIndicatorStyleWhite;
+	//scrollView1.clipsToBounds = YES;		// default is NO, we want to restrict drawing within our scrollview
+	scrollView1.scrollEnabled = YES;
+	scrollView1.pagingEnabled = YES;
+	
+	NSLog(@" [self.treeMapView.subviews count] is %i",[self.treeMapView.subviews count] );
+
+
+	for (NSUInteger i = 1; [self.treeMapView.subviews count] > 0; i++)
+	{
+		NSLog(@"i is %i", i);
+		TreemapViewCell *cell = (TreemapViewCell *)[self.treeMapView.subviews objectAtIndex:0];	
+
+		// setup each frame to a default height and width, it will be properly placed when we call "updateScrollList"
+		NSLog(@"createBackrect frame is %@", NSStringFromCGRect(cell.frame));
+		cell.frame = rect;
+		cell.tag = i;	// tag our images for later use when we place them in serial fashion
+		cell.imageViewA.image = [cell.image imageCroppedToFitSize:rect.size];
+		[scrollView1 addSubview:cell];
+
+	}
+	
+	//[self.treeMapView.subviews enumerateObjectsWithOptions:NSReverseEnumeration block:^(id obj, NSUInteger idx, BOOL *stop) { /* do stuff */ }];
+	
+	
+	
+	[self layoutScrollImages:scrollView1 atOffset:index];
+	scrollView1.alpha = 0.0f;
+	[self.treeMapView addSubview:scrollView1];
+
+	[UIView beginAnimations:nil context:nil];
+	[UIView setAnimationDuration:kTransitionDuration];
+	[UIView setAnimationDelegate:self];
+	//[UIView setAnimationDidStopSelector:@selector(bounce1AnimationStopped)];
+	scrollView1.alpha = 1.0;
+	
+	
+	[UIView commitAnimations];
 
 	
-	[cell flipIt];
+		
+//	_viewBg.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.001, 0.001);
+	/*
+	[UIView beginAnimations:nil context:nil];
+	[UIView setAnimationDuration:kTransitionDuration];
+	[UIView setAnimationDelegate:self];
+	[UIView setAnimationDidStopSelector:@selector(bounce1AnimationStopped)];
+	cell.alpha = 1.0;
+	//_viewBg.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
+	
+	[UIView commitAnimations];
+	 */
 }
+
+- (void)layoutScrollImages:(UIScrollView*)scrollView atOffset:(NSNumber*)index
+{
+	CGRect rect = CGRectMake(0, 0 , self.treeMapView.frame.size.width, self.treeMapView.frame.size.height);
+	
+	
+	NSLog(@"layoutScrollImages is %@", NSStringFromCGRect(rect));
+	
+	NSLog(@"layoutScrollImages is %@", NSStringFromCGRect(rect));
+	UIImageView *view = nil;
+	NSArray *subviews = [scrollView subviews];
+	
+	// reposition all image subviews in a horizontal serial fashion
+	CGFloat curXLoc = 0;
+	for (view in subviews)
+	{
+		NSLog(@"layoutScrollImages frame is %@", NSStringFromCGRect(view.frame));
+		if ([view isKindOfClass:[TreemapViewCell class]] && view.tag > 0)
+		{
+			NSLog(@"view is %@", view);
+			CGRect frame = view.frame;
+			frame.origin = CGPointMake(curXLoc, 0);
+			view.frame = frame;
+			
+			curXLoc += self.treeMapView.frame.size.width;
+		}
+	}
+	
+	// set the content size so it can be scrollable
+	[scrollView setContentSize:CGSizeMake(([fruits count] * self.treeMapView.frame.size.width), [scrollView bounds].size.height)];
+	[scrollView setContentOffset:CGPointMake([index integerValue]*self.treeMapView.frame.size.width,0) animated:NO];
+}
+
+
 
 -(NSString*)returnDurationString:(int)integer
 {
@@ -691,9 +835,9 @@ static CGFloat kTransitionDuration = 0.3;
 			if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", [row objectForKey:@"post_id" ]]]])
 				
 			{
-				NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"video"  ofType:@"jpg"]];
-				
-				[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", [row objectForKey:@"post_id" ]]] atomically:YES];
+			//	NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"video"  ofType:@"jpg"]];
+			//	
+			//	[imgData writeToFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", [row objectForKey:@"post_id" ]]] atomically:YES];
 			}	
 			
 		}//endif

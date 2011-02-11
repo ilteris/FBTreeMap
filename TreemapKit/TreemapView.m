@@ -37,7 +37,7 @@
 			[self addSubview:cell];
 			
 			//	NSLog(@"cell %@", cell);
-			//	NSLog(@"index here is %i", index);
+				NSLog(@"index here is %i", index);
 			//	[cell layoutSubviews];
 			
 		}
@@ -177,7 +177,7 @@
 	 
 }
 
-//changed to withCreate:NO ---> YES;
+
 - (void)resizeNodes {
 	NSLog(@"resizing nodes");
 	//need an extra method here to address the change in the count of the nodes. when the app
