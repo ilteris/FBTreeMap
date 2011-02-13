@@ -82,7 +82,7 @@ static CGFloat kTransitionDuration = 0.3;
 - (void)updateCell:(TreemapViewCell *)cell forIndex:(NSInteger)index 
 {
 	NSLog(@"updating cell");
-	NSLog(@"fruits %@", fruits);
+//	NSLog(@"fruits %@", fruits);
 	
 	//set the user likes first
 	cell.user_likes = [[[fruits  objectAtIndex:index] objectForKey:@"user_likes"] intValue];
@@ -97,7 +97,7 @@ static CGFloat kTransitionDuration = 0.3;
 	cell.titleLabel.text = [[[fruits objectAtIndex:index] objectForKey:@"poster_name"] uppercaseString];
 	//add the post_id
 	cell.post_id = [[fruits objectAtIndex:index] objectForKey:@"post_id"];
-
+	cell.objectType = [[fruits objectAtIndex:index] objectForKey:@"objectType"];
 	
 	
 	
@@ -150,7 +150,7 @@ static CGFloat kTransitionDuration = 0.3;
 	if([[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"video"])
 	{
 		//when it's the video image, don't crop it, it makes the image looks awkward.
-		cell.imageViewA.image = img;
+		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 		cell.image = img;
 		NSInteger _width = cell.frame.size.width;
 		NSInteger _height = cell.frame.size.width;		
@@ -161,15 +161,7 @@ static CGFloat kTransitionDuration = 0.3;
 		if(_areaOfCell > _areaOfPlayBtn) //meaning cell area is larger than the playBtn.
 		{
 
-			cell.playBtn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
-			cell.playBtn.frame = CGRectMake(0, 0, 56.0, 55.0);
-			cell.playBtn.frame = CGRectMake((cell.imageViewA.bounds.size.width-cell.playBtn.bounds.size.width)/2, (cell.imageViewA.bounds.size.height-cell.playBtn.bounds.size.height)/2, cell.playBtn.frame.size.width, cell.playBtn.frame.size.height);
-			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"play" ofType:@"png"]];
-			[cell.playBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
-			[tImage release];
 			
-			[cell.aView addSubview:cell.playBtn];
-			[cell.playBtn release];
 			
 		}
 		

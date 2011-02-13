@@ -25,7 +25,7 @@
 	NSString *_post_id;
 	NSInteger _user_likes;
 	NSInteger _canPostComment;
-	NSString *_type;
+	NSString *_objectType;
 	
 	//delegates
 	id <TreemapViewCellDelegate> delegate;
@@ -49,7 +49,7 @@
 //models
 @property (nonatomic, retain) NSString *downloadDestinationPath;
 @property(nonatomic, retain) NSString *post_id;
-@property(nonatomic, retain) NSString *type;
+@property(nonatomic, retain) NSString *objectType;
 
 
 @property (nonatomic, assign) NSInteger index;
