@@ -121,7 +121,7 @@
 		{
 			self.countBtn = [[[UIButton buttonWithType:UIButtonTypeCustom] retain] autorelease];
 			[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
-
+			NSLog(@"count btn is first");
 			[self.aView addSubview:self.countBtn];
 			
 		}
@@ -210,6 +210,7 @@
 		
 		if (_countBtn == NULL) 
 		{
+			NSLog(@"count btn is second");
 			self.countBtn = [[[UIButton buttonWithType:UIButtonTypeCustom] retain] autorelease];
 			[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
 			
@@ -221,89 +222,18 @@
 		
 		
 		
-		
-		if(contentLabel == NULL) contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0)];
-		
-		
-		contentLabel.frame = CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0);
-		
-		contentLabel.font = [UIFont boldSystemFontOfSize:24];
-		
-		contentLabel.textAlignment = UITextAlignmentLeft;
-		
-		contentLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f]; 
-		contentLabel.backgroundColor = [UIColor clearColor];
-		contentLabel.shadowColor  = [UIColor blackColor];
-		contentLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-		contentLabel.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
-		
-		contentLabel.numberOfLines = 0;
-		
-		contentLabel.alpha = 1;
-		
-		if([self.objectType isEqual:@"video"] && self.playBtn == NULL)
+		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 		{
-			NSLog(@"self.frame.size.width > 400 && self.frame.size.height > 200");
-			
-			self.playBtn = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
-			self.playBtn.frame = CGRectMake(0, 0, 56.0, 55.0);
-			
-			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"play" ofType:@"png"]];
-			[self.playBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"1_like_red" ofType:@"png"]];
+			[_countBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
 			[tImage release];
-			
-			[self.aView addSubview:self.playBtn];
-			[self.playBtn release];
-			
 		}
-		self.playBtn.frame = CGRectMake((self.imageViewA.bounds.size.width-self.playBtn.bounds.size.width)/2, (self.imageViewA.bounds.size.height-self.playBtn.bounds.size.height)/2, self.playBtn.frame.size.width, self.playBtn.frame.size.height);
-	}
-	
-	else if((self.frame.size.width >= 400 && self.frame.size.height >= 200) && self.frame.size.height < 400)
-	{
-		
-		NSLog(@"self.frame.size.width > 400 && self.frame.size.height > 400");
-		NSLog(@"status big and title label is %@", titleLabel.text);
-		
-		if(self.titleLabel == NULL) self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 10)];
-		
-		titleLabel.frame = CGRectMake(0, 0, self.frame.size.width, 10);
-		titleLabel.font = [UIFont boldSystemFontOfSize:11];
-		titleLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
-		titleLabel.textAlignment = UITextAlignmentLeft;
-		titleLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
-		titleLabel.shadowColor  = [UIColor blackColor];
-		titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-		titleLabel.lineBreakMode = UILineBreakModeCharacterWrap;
-		
-		titleLabel.backgroundColor = [UIColor clearColor];
-		
-		titleLabel.alpha = 1;
-		
-		if(self.countLabel == NULL) self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(11, self.frame.size.height - 61, 200, 48)];
-		
-		self.countLabel.frame = CGRectMake(11, self.frame.size.height - 61, 200, 48);
-		
-		countLabel.numberOfLines = 0;
-		countLabel.font = [UIFont boldSystemFontOfSize:60];
-		
-		
-		countLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
-		countLabel.backgroundColor = [UIColor clearColor];
-		countLabel.shadowColor  = [UIColor blackColor];
-		countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-		
-		if (_countBtn == NULL) 
+		else 
 		{
-			self.countBtn = [[[UIButton buttonWithType:UIButtonTypeCustom] retain] autorelease];
-			[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
-			
-			[self.aView addSubview:self.countBtn];
-			
+			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"1_comment_blue" ofType:@"png"]];
+			[_countBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+			[tImage release];
 		}
-		
-		_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
-		
 		
 		
 		
@@ -345,8 +275,7 @@
 	}
 	
 	
-	else if((self.frame.size.height > 200 && self.frame.size.height < 400)  && (self.frame.size.width > 600 ))
-	{
+	else if(((self.frame.size.height > 200 && self.frame.size.height < 500)  && self.frame.size.width > 200) || (self.frame.size.width > 200 && self.frame.size.width < 500 && self.frame.size.height > 500))	{
 		
 		NSLog(@"self.frame.size.height > 200 && self.frame.size.height < 400)  && (self.frame.size.width > 600 ))");
 		NSLog(@"status big and title label is %@", titleLabel.text);
@@ -381,15 +310,31 @@
 		
 		
 
-		if (_countBtn == NULL) 
+		if (self.countBtn == NULL) 
 		{
-			self.countBtn = [[[UIButton buttonWithType:UIButtonTypeCustom] retain] autorelease];
-			[self.aView addSubview:self.countBtn];
+			_countBtn = [[[UIButton buttonWithType:UIButtonTypeCustom] retain] autorelease];
 			[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
-
+			
+			[self.aView addSubview:_countBtn];
+			
 		}
 		
 		_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
+		
+		
+		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
+		{
+			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"1_like_red" ofType:@"png"]];
+			[_countBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+			[tImage release];
+		}
+		else 
+		{
+			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"1_comment_blue" ofType:@"png"]];
+			[_countBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+			[tImage release];
+		}
+		
 		
 		
 		
@@ -466,6 +411,8 @@
 		
 		if (_countBtn == NULL) 
 		{
+			NSLog(@"count btn is fifth");
+
 			self.countBtn = [[[UIButton buttonWithType:UIButtonTypeCustom] retain] autorelease];
 			[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
 			
@@ -788,9 +735,24 @@
 			
 		}
 	
+		
+		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
+		{
+			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"1_like_red" ofType:@"png"]];
+			[_countBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+			[tImage release];
+		}
+		else 
+		{
+			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"1_comment_blue" ofType:@"png"]];
+			[_countBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+			[tImage release];
+		}
+
+		
 		_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
 		
-		
+	
 		
 		
 		if(contentLabel == NULL) contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0)];
@@ -868,7 +830,7 @@
 		{
 			_countBtn = [[[UIButton buttonWithType:UIButtonTypeCustom] retain] autorelease];
 			[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
-			NSLog(@"hereee");
+			
 			[self.aView addSubview:_countBtn];
 			
 		}
@@ -914,7 +876,7 @@
 		}
 		self.playBtn.frame = CGRectMake((self.imageViewA.bounds.size.width-self.playBtn.bounds.size.width)/2, (self.imageViewA.bounds.size.height-self.playBtn.bounds.size.height)/2, self.playBtn.frame.size.width, self.playBtn.frame.size.height);
 	}
-	else if((self.frame.size.height > 200 && self.frame.size.height < 500)  && (self.frame.size.width > 200 ))
+	else if(((self.frame.size.height > 200 && self.frame.size.height < 500)  && self.frame.size.width > 200) || (self.frame.size.width > 200 && self.frame.size.width < 500 && self.frame.size.height > 500))
 	{
 		
 		NSLog(@"self.frame.size.height > 200 && self.frame.size.height < 400)  && (self.frame.size.width > 600 ))");
@@ -944,13 +906,12 @@
 		countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
 		
 		
-
-		if (_countBtn == NULL) 
+		if (self.countBtn == NULL) 
 		{
-			self.countBtn = [[[UIButton buttonWithType:UIButtonTypeCustom] retain] autorelease];
+			_countBtn = [[[UIButton buttonWithType:UIButtonTypeCustom] retain] autorelease];
 			[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
 			
-			[self.aView addSubview:self.countBtn];
+			[self.aView addSubview:_countBtn];
 			
 		}
 		_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
@@ -1172,10 +1133,12 @@
 		
 		titleLabel.alpha = 1;
 		
+
+		
 		self.countLabel.frame = CGRectMake(11, self.frame.size.height - 61, 200, 48);
 		
 		countLabel.numberOfLines = 0;
-		countLabel.font = [UIFont boldSystemFontOfSize:0];
+		countLabel.font = [UIFont boldSystemFontOfSize:60];
 		
 		
 		countLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];

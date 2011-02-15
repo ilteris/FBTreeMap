@@ -50,6 +50,8 @@
 
 	NSMutableArray *fruits;
 	NSMutableArray *jsonArray;
+	BOOL scrollViewIsAtJob;
+	
 	
 }
 

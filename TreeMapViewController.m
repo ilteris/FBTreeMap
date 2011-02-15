@@ -68,7 +68,7 @@ static CGFloat kTransitionDuration = 0.3;
 	[_networkQueue setDelegate:self];
 	[_networkQueue go];
 	
-
+	scrollViewIsAtJob = NO;
 	
 	//[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"displayMode"];
 	//NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
@@ -150,21 +150,11 @@ static CGFloat kTransitionDuration = 0.3;
 	if([[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"video"])
 	{
 		//when it's the video image, don't crop it, it makes the image looks awkward.
+		// I cancrop it now since I am using the sole images of the videos.
 		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 		cell.image = img;
-		NSInteger _width = cell.frame.size.width;
-		NSInteger _height = cell.frame.size.width;		
 		
-		NSInteger _areaOfCell = _width*_height;
-		NSInteger _areaOfPlayBtn = 56*56;
-		
-		if(_areaOfCell > _areaOfPlayBtn) //meaning cell area is larger than the playBtn.
-		{
-
-			
-			
-		}
-		
+				
 		cell.contentLabel.text = @"";//	[[fruits objectAtIndex:index] objectForKey:@"message"];
 		
 	}
@@ -174,10 +164,10 @@ static CGFloat kTransitionDuration = 0.3;
 		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 		cell.image = img;
 		cell.contentLabel.text = @"";//	[[fruits objectAtIndex:index] objectForKey:@"message"];
-	}else //if it's a status just display the background uncropped.
+	}else //if it's a status just display the background cropped.
 	{
 		cell.image = img;
-		cell.imageViewA.image = img;
+		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 		//cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 		cell.contentLabel.text = 	[[fruits objectAtIndex:index] objectForKey:@"message"];
 	}
@@ -378,16 +368,43 @@ static CGFloat kTransitionDuration = 0.3;
 		[cell performSelector:@selector(flipIt) withObject:nil afterDelay:i*.1];
 
 	}
+	 
+	 
 */
 	
-	[self performSelector:@selector(createbackView:) withObject:[NSNumber numberWithInt:index]  afterDelay:.5];
 	
+	if(scrollViewIsAtJob)
+	{
+		//convert back to old treemapview.
+		NSLog(@"convert here to treemaview");
+		//remove the scrollview
+		for (UIView *view in self.treeMapView.subviews) 
+		{
+			[view removeFromSuperview];
+			scrollViewIsAtJob = NO;
+		}
+		
+		[self createCellsFromZero];
+	}
+	else 
+	{
+		//cfreate scrollview and go to offset.
+		[self performSelector:@selector(createbackView:) withObject:[NSNumber numberWithInt:index]  afterDelay:.5];	
+		scrollViewIsAtJob = YES; //activated scrollView
+		
+	}
+
+
 }
 
 
 
 - (void) createbackView:(NSNumber*)index
 {
+	
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(createbackView:) object:index];
+
+
 	
 	CGRect rect = CGRectMake(0, 0 , self.treeMapView.frame.size.width, self.treeMapView.frame.size.height);
 
@@ -421,16 +438,13 @@ static CGFloat kTransitionDuration = 0.3;
 	scrollView1.scrollEnabled = YES;
 	scrollView1.pagingEnabled = YES;
 	
-	NSLog(@" [self.treeMapView.subviews count] is %i",[self.treeMapView.subviews count] );
+
 
 
 	for (NSUInteger i = 1; [self.treeMapView.subviews count] > 0; i++)
 	{
-		NSLog(@"i is %i", i);
 		TreemapViewCell *cell = (TreemapViewCell *)[self.treeMapView.subviews objectAtIndex:0];	
-
 		// setup each frame to a default height and width, it will be properly placed when we call "updateScrollList"
-		NSLog(@"createBackrect frame is %@", NSStringFromCGRect(cell.frame));
 		cell.frame = rect;
 		cell.tag = i;	// tag our images for later use when we place them in serial fashion
 		cell.imageViewA.image = [cell.image imageCroppedToFitSize:rect.size];
@@ -445,6 +459,7 @@ static CGFloat kTransitionDuration = 0.3;
 	[self layoutScrollImages:scrollView1 atOffset:index];
 	scrollView1.alpha = 0.0f;
 	[self.treeMapView addSubview:scrollView1];
+	[scrollView1 release];
 
 	[UIView beginAnimations:nil context:nil];
 	[UIView setAnimationDuration:kTransitionDuration];
@@ -452,11 +467,9 @@ static CGFloat kTransitionDuration = 0.3;
 	//[UIView setAnimationDidStopSelector:@selector(bounce1AnimationStopped)];
 	scrollView1.alpha = 1.0;
 	
-	
-	[UIView commitAnimations];
 
+	[UIView commitAnimations];
 	
-		
 //	_viewBg.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.001, 0.001);
 	/*
 	[UIView beginAnimations:nil context:nil];
@@ -552,6 +565,7 @@ static CGFloat kTransitionDuration = 0.3;
 	NSString *durationString = [self returnDurationString:[[NSUserDefaults standardUserDefaults] integerForKey:@"durationMode"]];
 	
 	
+	
 	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) //likes
 	{
 		
@@ -639,6 +653,8 @@ static CGFloat kTransitionDuration = 0.3;
 
 - (void) createCellsFromZero
 {
+	scrollViewIsAtJob = NO; //changing the timeframe, resetting the scrollView;
+	
 	[self.treeMapView removeNodes];
 	[self.treeMapView createNodes];
 }
@@ -926,7 +942,7 @@ static CGFloat kTransitionDuration = 0.3;
 	NSString *b0 = [NSString stringWithFormat:@"blacksand"];
 	NSString *b1 = [NSString stringWithFormat:@"carbonfiber"];
 	NSString *b2 = [NSString stringWithFormat:@"concrete"];
-	NSString *b3 = [NSString stringWithFormat:@"diamondsteel"];
+	NSString *b3 = [NSString stringWithFormat:@"diamondsteel1"];
 	NSString *b4 = [NSString stringWithFormat:@"fabricburgundy"];
 	NSString *b5 = [NSString stringWithFormat:@"gold"];
 	NSString *b6 = [NSString stringWithFormat:@"granulardark"];
