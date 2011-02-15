@@ -3,6 +3,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIImage+Tint.h"
 #import "UIImage+ProportionalFill.h"
+#import "CommentView.h"
+
 
 @implementation TreemapViewCell
 
@@ -31,7 +33,7 @@
 #pragma mark -
 
 
-
+static CGFloat kTransitionDuration = 0.3;
 
 - (id)initWithFrame:(CGRect)frame {
 	if ((self = [super initWithFrame:frame])) {
@@ -82,6 +84,81 @@
 	}
 	return self;
 }
+
+- (void) loadScrollingComments:(CGRect)rect
+{
+	//init the scrollView
+	CGRect scrollViewRect = CGRectMake(0, rect.size.height-383, rect.size.width, 383);
+	
+	UIScrollView *scrollView1 = [[UIScrollView alloc] initWithFrame:scrollViewRect];
+	[scrollView1 setCanCancelContentTouches:NO];
+	scrollView1.indicatorStyle = UIScrollViewIndicatorStyleWhite;
+	//scrollView1.clipsToBounds = YES;		// default is NO, we want to restrict drawing within our scrollview
+	scrollView1.scrollEnabled = YES;
+	scrollView1.pagingEnabled = YES;
+	
+	CGRect commentRect = CGRectMake(0, 0, 336, 383);
+
+	
+	for (NSUInteger i = 1; i < 5; i++)
+	{
+		
+		CommentView* cv = [[CommentView alloc] initWithFrame:commentRect];
+		cv.frame = commentRect;
+		cv.tag = i;	// tag our images for later use when we place them in serial fashion
+		[scrollView1 addSubview:cv];
+		[cv release];
+		
+	}
+	
+	[self layoutScrollImages:scrollView1 ];
+	[self addSubview:scrollView1];
+	[scrollView1 release];
+	
+	scrollView1.alpha = 0.0f;
+	
+	
+	
+	[UIView beginAnimations:nil context:nil];
+	[UIView setAnimationDuration:kTransitionDuration];
+	[UIView setAnimationDelegate:self];
+	//[UIView setAnimationDidStopSelector:@selector(bounce1AnimationStopped)];
+	scrollView1.alpha = 1.0;
+	
+	[UIView commitAnimations];
+	
+}
+
+
+- (void)layoutScrollImages:(UIScrollView*)scrollView 
+{
+//	CGRect rect = CGRectMake(0, 0 , self.frame.size.width, self.frame.size.height);
+	
+
+	UIImageView *view = nil;
+	NSArray *subviews = [scrollView subviews];
+	
+	// reposition all image subviews in a horizontal serial fashion
+	CGFloat curXLoc = 0;
+	for (view in subviews)
+	{
+		NSLog(@"layoutScrollImages frame is %@", NSStringFromCGRect(view.frame));
+		if ([view isKindOfClass:[CommentView class]] && view.tag > 0)
+		{
+			NSLog(@"view is %@", view);
+			CGRect frame = view.frame;
+			frame.origin = CGPointMake(curXLoc, 0);
+			view.frame = frame;
+			NSLog(@"view is %@", view);
+			curXLoc += view.frame.size.width;
+		}
+	}
+	
+	// set the content size so it can be scrollable
+	[scrollView setContentSize:CGSizeMake((4 * 336), [scrollView bounds].size.height)];
+	//[scrollView setContentOffset:CGPointMake(5*self.frame.size.width,0) animated:NO];
+}
+
 
 
 - (void) setLayout:(CGRect)frame
@@ -677,6 +754,13 @@
 	//self.layer.borderColor = [[UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.3] CGColor];
 }
 
+
+/*
+- (void)layoutSubviews
+{
+	[self setLayout:self.frame];
+}
+*/
 
 - (void)layoutSubviews {
 	[super layoutSubviews];

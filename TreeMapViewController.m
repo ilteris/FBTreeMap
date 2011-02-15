@@ -68,7 +68,7 @@ static CGFloat kTransitionDuration = 0.3;
 	[_networkQueue setDelegate:self];
 	[_networkQueue go];
 	
-	scrollViewIsAtJob = NO;
+	treeMapIsScrolled = NO;
 	
 	//[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"displayMode"];
 	//NSLog(@"display mode is %i", [[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]);
@@ -373,7 +373,7 @@ static CGFloat kTransitionDuration = 0.3;
 */
 	
 	
-	if(scrollViewIsAtJob)
+	if(treeMapIsScrolled)
 	{
 		//convert back to old treemapview.
 		NSLog(@"convert here to treemaview");
@@ -381,7 +381,7 @@ static CGFloat kTransitionDuration = 0.3;
 		for (UIView *view in self.treeMapView.subviews) 
 		{
 			[view removeFromSuperview];
-			scrollViewIsAtJob = NO;
+			treeMapIsScrolled = NO;
 		}
 		
 		[self createCellsFromZero];
@@ -390,7 +390,7 @@ static CGFloat kTransitionDuration = 0.3;
 	{
 		//cfreate scrollview and go to offset.
 		[self performSelector:@selector(createbackView:) withObject:[NSNumber numberWithInt:index]  afterDelay:.5];	
-		scrollViewIsAtJob = YES; //activated scrollView
+		treeMapIsScrolled = YES; //activated scrollView
 		
 	}
 
@@ -448,12 +448,10 @@ static CGFloat kTransitionDuration = 0.3;
 		cell.frame = rect;
 		cell.tag = i;	// tag our images for later use when we place them in serial fashion
 		cell.imageViewA.image = [cell.image imageCroppedToFitSize:rect.size];
+		[cell loadScrollingComments:rect];
 		[scrollView1 addSubview:cell];
 
 	}
-	
-	//[self.treeMapView.subviews enumerateObjectsWithOptions:NSReverseEnumeration block:^(id obj, NSUInteger idx, BOOL *stop) { /* do stuff */ }];
-	
 	
 	
 	[self layoutScrollImages:scrollView1 atOffset:index];
@@ -488,9 +486,9 @@ static CGFloat kTransitionDuration = 0.3;
 	CGRect rect = CGRectMake(0, 0 , self.treeMapView.frame.size.width, self.treeMapView.frame.size.height);
 	
 	
-	NSLog(@"layoutScrollImages is %@", NSStringFromCGRect(rect));
+	//NSLog(@"layoutScrollImages is %@", NSStringFromCGRect(rect));
 	
-	NSLog(@"layoutScrollImages is %@", NSStringFromCGRect(rect));
+//	NSLog(@"layoutScrollImages is %@", NSStringFromCGRect(rect));
 	UIImageView *view = nil;
 	NSArray *subviews = [scrollView subviews];
 	
@@ -498,10 +496,10 @@ static CGFloat kTransitionDuration = 0.3;
 	CGFloat curXLoc = 0;
 	for (view in subviews)
 	{
-		NSLog(@"layoutScrollImages frame is %@", NSStringFromCGRect(view.frame));
+		//NSLog(@"layoutScrollImages frame is %@", NSStringFromCGRect(view.frame));
 		if ([view isKindOfClass:[TreemapViewCell class]] && view.tag > 0)
 		{
-			NSLog(@"view is %@", view);
+		//	NSLog(@"view is %@", view);
 			CGRect frame = view.frame;
 			frame.origin = CGPointMake(curXLoc, 0);
 			view.frame = frame;
@@ -653,7 +651,7 @@ static CGFloat kTransitionDuration = 0.3;
 
 - (void) createCellsFromZero
 {
-	scrollViewIsAtJob = NO; //changing the timeframe, resetting the scrollView;
+	treeMapIsScrolled = NO; //changing the timeframe, resetting the scrollView;
 	
 	[self.treeMapView removeNodes];
 	[self.treeMapView createNodes];
@@ -944,7 +942,7 @@ static CGFloat kTransitionDuration = 0.3;
 	NSString *b2 = [NSString stringWithFormat:@"concrete"];
 	NSString *b3 = [NSString stringWithFormat:@"diamondsteel1"];
 	NSString *b4 = [NSString stringWithFormat:@"fabricburgundy"];
-	NSString *b5 = [NSString stringWithFormat:@"gold"];
+	NSString *b5 = [NSString stringWithFormat:@"blackboard"];
 	NSString *b6 = [NSString stringWithFormat:@"granulardark"];
 	NSString *b7 = [NSString stringWithFormat:@"greenmarble"];
 	NSString *b8 = [NSString stringWithFormat:@"ice"];
@@ -953,7 +951,7 @@ static CGFloat kTransitionDuration = 0.3;
 	NSString *b11 = [NSString stringWithFormat:@"metalmesh"];
 	NSString *b12 = [NSString stringWithFormat:@"metalscratched"];
 	NSString *b13 = [NSString stringWithFormat:@"russian"];
-	NSString *b14 = [NSString stringWithFormat:@"rust"];
+	NSString *b14 = [NSString stringWithFormat:@"rust1"];
 	NSString *b15 = [NSString stringWithFormat:@"slate"];
 	NSString *b16 = [NSString stringWithFormat:@"wood"];
 	NSString *b17 = [NSString stringWithFormat:@"concrete"];

@@ -50,7 +50,7 @@
 
 	NSMutableArray *fruits;
 	NSMutableArray *jsonArray;
-	BOOL scrollViewIsAtJob;
+	BOOL treeMapIsScrolled;
 	
 	
 }

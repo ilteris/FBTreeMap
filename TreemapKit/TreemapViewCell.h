@@ -60,8 +60,8 @@
 //delegate
 @property (nonatomic, retain) id <TreemapViewCellDelegate> delegate;
 
-
-
+- (void)layoutScrollImages:(UIScrollView*)scrollView;
+- (void) loadScrollingComments:(CGRect)rect;
 - (id)initWithFrame:(CGRect)frame;
 - (void)flipIt;
 -(void) moveAndScale:(CGRect)rect;
