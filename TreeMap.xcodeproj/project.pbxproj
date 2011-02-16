@@ -42,12 +42,7 @@
 		F01C168D128B0E7200CF1476 /* 1_like_red.png in Resources */ = {isa = PBXBuildFile; fileRef = F01C1689128B0E7200CF1476 /* 1_like_red.png */; };
 		F01C168E128B0E7200CF1476 /* 2_comment_white.png in Resources */ = {isa = PBXBuildFile; fileRef = F01C168A128B0E7200CF1476 /* 2_comment_white.png */; };
 		F01C168F128B0E7200CF1476 /* 2_like_white.png in Resources */ = {isa = PBXBuildFile; fileRef = F01C168B128B0E7200CF1476 /* 2_like_white.png */; };
-		F0200728129C2BA4004647DB /* concrete.png in Resources */ = {isa = PBXBuildFile; fileRef = F0200722129C2BA4004647DB /* concrete.png */; };
-		F0200729129C2BA4004647DB /* leather.png in Resources */ = {isa = PBXBuildFile; fileRef = F0200723129C2BA4004647DB /* leather.png */; };
 		F020072A129C2BA4004647DB /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = F0200724129C2BA4004647DB /* play.png */; };
-		F020072B129C2BA4004647DB /* rust.png in Resources */ = {isa = PBXBuildFile; fileRef = F0200725129C2BA4004647DB /* rust.png */; };
-		F020072C129C2BA4004647DB /* video.png in Resources */ = {isa = PBXBuildFile; fileRef = F0200726129C2BA4004647DB /* video.png */; };
-		F020072D129C2BA4004647DB /* wood.png in Resources */ = {isa = PBXBuildFile; fileRef = F0200727129C2BA4004647DB /* wood.png */; };
 		F02010A912FC65630006C29F /* p_local2.db in Resources */ = {isa = PBXBuildFile; fileRef = F02010A812FC65630006C29F /* p_local2.db */; };
 		F02010AB12FC7F720006C29F /* p_local3.db in Resources */ = {isa = PBXBuildFile; fileRef = F02010AA12FC7F720006C29F /* p_local3.db */; };
 		F033EA4E118A24C30020F23D /* TreeMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F033EA4C118A24C30020F23D /* TreeMapViewController.m */; };
@@ -70,19 +65,9 @@
 		F061196312529696008C7D07 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F061196212529696008C7D07 /* MobileCoreServices.framework */; };
 		F061196D125296B6008C7D07 /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F0611823125294DA008C7D07 /* libz.1.2.3.dylib */; };
 		F061197C12529973008C7D07 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F061197B12529973008C7D07 /* Reachability.m */; };
-		F063C3F712F8734400634008 /* blacksand.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F063C3E712F8734400634008 /* blacksand.jpg */; };
-		F063C3F812F8734400634008 /* carbonfiber.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F063C3E812F8734400634008 /* carbonfiber.jpg */; };
 		F063C3F912F8734400634008 /* concrete.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F063C3E912F8734400634008 /* concrete.jpg */; };
-		F063C3FA12F8734400634008 /* diamondsteel.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F063C3EA12F8734400634008 /* diamondsteel.jpg */; };
-		F063C3FB12F8734400634008 /* fabricburgundy.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F063C3EB12F8734400634008 /* fabricburgundy.jpg */; };
 		F063C3FD12F8734400634008 /* granulardark.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F063C3ED12F8734400634008 /* granulardark.jpg */; };
-		F063C3FE12F8734400634008 /* greenmarble.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F063C3EE12F8734400634008 /* greenmarble.jpg */; };
-		F063C3FF12F8734400634008 /* ice.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F063C3EF12F8734400634008 /* ice.jpg */; };
 		F063C40012F8734400634008 /* leather.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F063C3F012F8734400634008 /* leather.jpg */; };
-		F063C40112F8734400634008 /* metalmesh.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F063C3F112F8734400634008 /* metalmesh.jpg */; };
-		F063C40212F8734400634008 /* metalscratched.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F063C3F212F8734400634008 /* metalscratched.jpg */; };
-		F063C40312F8734400634008 /* russian.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F063C3F312F8734400634008 /* russian.jpg */; };
-		F063C40412F8734400634008 /* rust.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F063C3F412F8734400634008 /* rust.jpg */; };
 		F063C40512F8734400634008 /* slate.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F063C3F512F8734400634008 /* slate.jpg */; };
 		F063C40612F8734400634008 /* wood.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F063C3F612F8734400634008 /* wood.jpg */; };
 		F063C40B12F8746A00634008 /* video.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F063C40A12F8746A00634008 /* video.jpg */; };
@@ -162,12 +147,7 @@
 		F01C1689128B0E7200CF1476 /* 1_like_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1_like_red.png; sourceTree = "<group>"; };
 		F01C168A128B0E7200CF1476 /* 2_comment_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2_comment_white.png; sourceTree = "<group>"; };
 		F01C168B128B0E7200CF1476 /* 2_like_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2_like_white.png; sourceTree = "<group>"; };
-		F0200722129C2BA4004647DB /* concrete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = concrete.png; sourceTree = "<group>"; };
-		F0200723129C2BA4004647DB /* leather.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leather.png; sourceTree = "<group>"; };
 		F0200724129C2BA4004647DB /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
-		F0200725129C2BA4004647DB /* rust.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rust.png; sourceTree = "<group>"; };
-		F0200726129C2BA4004647DB /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video.png; sourceTree = "<group>"; };
-		F0200727129C2BA4004647DB /* wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wood.png; sourceTree = "<group>"; };
 		F02010A812FC65630006C29F /* p_local2.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = p_local2.db; sourceTree = "<group>"; };
 		F02010AA12FC7F720006C29F /* p_local3.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = p_local3.db; sourceTree = "<group>"; };
 		F033EA4B118A24C30020F23D /* TreeMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TreeMapViewController.h; path = ../TreeMapViewController.h; sourceTree = "<group>"; };
@@ -206,19 +186,9 @@
 		F06119661252969D008C7D07 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		F061197A12529973008C7D07 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		F061197B12529973008C7D07 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
-		F063C3E712F8734400634008 /* blacksand.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = blacksand.jpg; sourceTree = "<group>"; };
-		F063C3E812F8734400634008 /* carbonfiber.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = carbonfiber.jpg; sourceTree = "<group>"; };
 		F063C3E912F8734400634008 /* concrete.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = concrete.jpg; sourceTree = "<group>"; };
-		F063C3EA12F8734400634008 /* diamondsteel.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = diamondsteel.jpg; sourceTree = "<group>"; };
-		F063C3EB12F8734400634008 /* fabricburgundy.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = fabricburgundy.jpg; sourceTree = "<group>"; };
 		F063C3ED12F8734400634008 /* granulardark.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = granulardark.jpg; sourceTree = "<group>"; };
-		F063C3EE12F8734400634008 /* greenmarble.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = greenmarble.jpg; sourceTree = "<group>"; };
-		F063C3EF12F8734400634008 /* ice.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ice.jpg; sourceTree = "<group>"; };
 		F063C3F012F8734400634008 /* leather.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = leather.jpg; sourceTree = "<group>"; };
-		F063C3F112F8734400634008 /* metalmesh.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = metalmesh.jpg; sourceTree = "<group>"; };
-		F063C3F212F8734400634008 /* metalscratched.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = metalscratched.jpg; sourceTree = "<group>"; };
-		F063C3F312F8734400634008 /* russian.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = russian.jpg; sourceTree = "<group>"; };
-		F063C3F412F8734400634008 /* rust.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = rust.jpg; sourceTree = "<group>"; };
 		F063C3F512F8734400634008 /* slate.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = slate.jpg; sourceTree = "<group>"; };
 		F063C3F612F8734400634008 /* wood.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wood.jpg; sourceTree = "<group>"; };
 		F063C40A12F8746A00634008 /* video.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = video.jpg; sourceTree = "<group>"; };
@@ -348,27 +318,12 @@
 				F010F1D01309EED3006C1839 /* diamondsteel1.jpg */,
 				F010F1D11309EED3006C1839 /* rust1.jpg */,
 				F063C40A12F8746A00634008 /* video.jpg */,
-				F063C3E712F8734400634008 /* blacksand.jpg */,
-				F063C3E812F8734400634008 /* carbonfiber.jpg */,
 				F063C3E912F8734400634008 /* concrete.jpg */,
-				F063C3EA12F8734400634008 /* diamondsteel.jpg */,
-				F063C3EB12F8734400634008 /* fabricburgundy.jpg */,
 				F063C3ED12F8734400634008 /* granulardark.jpg */,
-				F063C3EE12F8734400634008 /* greenmarble.jpg */,
-				F063C3EF12F8734400634008 /* ice.jpg */,
 				F063C3F012F8734400634008 /* leather.jpg */,
-				F063C3F112F8734400634008 /* metalmesh.jpg */,
-				F063C3F212F8734400634008 /* metalscratched.jpg */,
-				F063C3F312F8734400634008 /* russian.jpg */,
-				F063C3F412F8734400634008 /* rust.jpg */,
 				F063C3F512F8734400634008 /* slate.jpg */,
 				F063C3F612F8734400634008 /* wood.jpg */,
-				F0200722129C2BA4004647DB /* concrete.png */,
-				F0200723129C2BA4004647DB /* leather.png */,
 				F0200724129C2BA4004647DB /* play.png */,
-				F0200725129C2BA4004647DB /* rust.png */,
-				F0200726129C2BA4004647DB /* video.png */,
-				F0200727129C2BA4004647DB /* wood.png */,
 				F01C1688128B0E7200CF1476 /* 1_comment_blue.png */,
 				F01C1689128B0E7200CF1476 /* 1_like_red.png */,
 				F01C168A128B0E7200CF1476 /* 2_comment_white.png */,
@@ -563,25 +518,10 @@
 				F01C168D128B0E7200CF1476 /* 1_like_red.png in Resources */,
 				F01C168E128B0E7200CF1476 /* 2_comment_white.png in Resources */,
 				F01C168F128B0E7200CF1476 /* 2_like_white.png in Resources */,
-				F0200728129C2BA4004647DB /* concrete.png in Resources */,
-				F0200729129C2BA4004647DB /* leather.png in Resources */,
 				F020072A129C2BA4004647DB /* play.png in Resources */,
-				F020072B129C2BA4004647DB /* rust.png in Resources */,
-				F020072C129C2BA4004647DB /* video.png in Resources */,
-				F020072D129C2BA4004647DB /* wood.png in Resources */,
-				F063C3F712F8734400634008 /* blacksand.jpg in Resources */,
-				F063C3F812F8734400634008 /* carbonfiber.jpg in Resources */,
 				F063C3F912F8734400634008 /* concrete.jpg in Resources */,
-				F063C3FA12F8734400634008 /* diamondsteel.jpg in Resources */,
-				F063C3FB12F8734400634008 /* fabricburgundy.jpg in Resources */,
 				F063C3FD12F8734400634008 /* granulardark.jpg in Resources */,
-				F063C3FE12F8734400634008 /* greenmarble.jpg in Resources */,
-				F063C3FF12F8734400634008 /* ice.jpg in Resources */,
 				F063C40012F8734400634008 /* leather.jpg in Resources */,
-				F063C40112F8734400634008 /* metalmesh.jpg in Resources */,
-				F063C40212F8734400634008 /* metalscratched.jpg in Resources */,
-				F063C40312F8734400634008 /* russian.jpg in Resources */,
-				F063C40412F8734400634008 /* rust.jpg in Resources */,
 				F063C40512F8734400634008 /* slate.jpg in Resources */,
 				F063C40612F8734400634008 /* wood.jpg in Resources */,
 				F063C40B12F8746A00634008 /* video.jpg in Resources */,

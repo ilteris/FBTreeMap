@@ -955,24 +955,23 @@ static CGFloat kTransitionDuration = 0.3;
 - (void)setTheBackgroundArray
 {
 	_backgrounds = [[NSMutableArray alloc] initWithCapacity:1];
-	NSString *b0 = [NSString stringWithFormat:@"blacksand"];
-	NSString *b1 = [NSString stringWithFormat:@"carbonfiber"];
-	NSString *b2 = [NSString stringWithFormat:@"concrete"];
-	NSString *b3 = [NSString stringWithFormat:@"diamondsteel1"];
-	NSString *b4 = [NSString stringWithFormat:@"fabricburgundy"];
-	NSString *b5 = [NSString stringWithFormat:@"blackboard"];
-	NSString *b6 = [NSString stringWithFormat:@"granulardark"];
-	NSString *b7 = [NSString stringWithFormat:@"greenmarble"];
-	NSString *b8 = [NSString stringWithFormat:@"ice"];
-	NSString *b9 = [NSString stringWithFormat:@"leather"];
-	NSString *b10 = [NSString stringWithFormat:@"metalmesh"];
-	NSString *b11 = [NSString stringWithFormat:@"metalmesh"];
-	NSString *b12 = [NSString stringWithFormat:@"metalscratched"];
-	NSString *b13 = [NSString stringWithFormat:@"russian"];
-	NSString *b14 = [NSString stringWithFormat:@"rust1"];
-	NSString *b15 = [NSString stringWithFormat:@"slate"];
-	NSString *b16 = [NSString stringWithFormat:@"wood"];
-	NSString *b17 = [NSString stringWithFormat:@"concrete"];
+
+	NSString *b0 = [NSString stringWithFormat:@"blackboard"];
+	NSString *b1 = [NSString stringWithFormat:@"diamondsteel1"];
+	NSString *b2 = [NSString stringWithFormat:@"rust1"];
+
+	NSString *b3 = [NSString stringWithFormat:@"concrete"];
+
+	NSString *b4 = [NSString stringWithFormat:@"granulardark"];
+
+
+	NSString *b5 = [NSString stringWithFormat:@"leather"];
+
+
+
+
+	NSString *b6 = [NSString stringWithFormat:@"slate"];
+	NSString *b7 = [NSString stringWithFormat:@"wood"];
 
 	
 	
@@ -984,16 +983,7 @@ static CGFloat kTransitionDuration = 0.3;
 	[_backgrounds addObject:b5];
 	[_backgrounds addObject:b6];
 	[_backgrounds addObject:b7];
-	[_backgrounds addObject:b8];
-	[_backgrounds addObject:b9];
-	[_backgrounds addObject:b10];
-	[_backgrounds addObject:b11];
-	[_backgrounds addObject:b12];
-	[_backgrounds addObject:b13];
-	[_backgrounds addObject:b14];
-	[_backgrounds addObject:b15];
-	[_backgrounds addObject:b16];
-	[_backgrounds addObject:b17];
+	
 	
 }
 
