@@ -8,6 +8,10 @@
 
 @implementation TreemapViewCell
 
+
+@synthesize swipeLeftRecognizer;
+
+
 @synthesize titleLabel;
 @synthesize countLabel;
 @synthesize contentLabel;
@@ -67,6 +71,7 @@ static CGFloat kTransitionDuration = 0.3;
 		
 		
 		
+		
 		[self setLayout:frame];
 		
 		
@@ -88,14 +93,14 @@ static CGFloat kTransitionDuration = 0.3;
 - (void) loadScrollingComments:(CGRect)rect
 {
 	//init the scrollView
-	CGRect scrollViewRect = CGRectMake(0, rect.size.height-383, rect.size.width, 383);
+	CGRect scrollViewRect = CGRectMake(0, self.frame.size.height, rect.size.width, 383);
 	
-	UIScrollView *scrollView1 = [[UIScrollView alloc] initWithFrame:scrollViewRect];
-	[scrollView1 setCanCancelContentTouches:NO];
-	scrollView1.indicatorStyle = UIScrollViewIndicatorStyleWhite;
+	_scrollView = [[UIScrollView alloc] initWithFrame:scrollViewRect];
+	[_scrollView setCanCancelContentTouches:NO];
+	_scrollView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
 	//scrollView1.clipsToBounds = YES;		// default is NO, we want to restrict drawing within our scrollview
-	scrollView1.scrollEnabled = YES;
-	scrollView1.pagingEnabled = YES;
+	_scrollView.scrollEnabled = YES;
+	_scrollView.pagingEnabled = YES;
 	
 	CGRect commentRect = CGRectMake(0, 0, 336, 383);
 
@@ -106,16 +111,16 @@ static CGFloat kTransitionDuration = 0.3;
 		CommentView* cv = [[CommentView alloc] initWithFrame:commentRect];
 		cv.frame = commentRect;
 		cv.tag = i;	// tag our images for later use when we place them in serial fashion
-		[scrollView1 addSubview:cv];
+		[_scrollView addSubview:cv];
 		[cv release];
 		
 	}
 	
-	[self layoutScrollImages:scrollView1 ];
-	[self addSubview:scrollView1];
-	[scrollView1 release];
+	[self layoutScrollImages:_scrollView ];
+	[self addSubview:_scrollView];
+	[_scrollView release];
 	
-	scrollView1.alpha = 0.0f;
+	_scrollView.alpha = 0.0f;
 	
 	
 	
@@ -123,11 +128,70 @@ static CGFloat kTransitionDuration = 0.3;
 	[UIView setAnimationDuration:kTransitionDuration];
 	[UIView setAnimationDelegate:self];
 	//[UIView setAnimationDidStopSelector:@selector(bounce1AnimationStopped)];
-	scrollView1.alpha = 1.0;
+	_scrollView.alpha = 1.0;
 	
 	[UIView commitAnimations];
 	
+	
+	/*
+     Create a swipe gesture recognizer to recognize right swipes (the default).
+     We're only interested in receiving messages from this recognizer, and the view will take ownership of it, so we don't need to keep a reference to it.
+     */
+	
+	UISwipeGestureRecognizer *recognizer;
+
+	
+	
+	recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeFrom:)];
+	[recognizer setDirection:(UISwipeGestureRecognizerDirectionUp)];
+	[self addGestureRecognizer:recognizer];
+	[recognizer release];
+	
+
+	
+	
+	recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeFrom:)];
+
+	[recognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
+	[self addGestureRecognizer:recognizer];
+	[recognizer release];
+   
+		
+	
 }
+
+
+/*
+ In response to a swipe gesture, show the image view appropriately then move the image view in the direction of the swipe as it fades out.
+ */
+- (void)handleSwipeFrom:(UISwipeGestureRecognizer *)recognizer {
+	
+
+//	[self showImageWithText:@"swipe" atPoint:location];
+	
+	NSLog(@"handleSwipeFrom");
+    if (recognizer.direction == UISwipeGestureRecognizerDirectionUp) {
+		[UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDuration:0.55];
+		_countBtn.frame = CGRectMake(_countBtn.frame.origin.x, self.frame.size.height-_scrollView.frame.size.height - _countBtn.frame.size.height - 11, _countBtn.frame.size.width,_countBtn.frame.size.height);
+		countLabel.frame = CGRectMake(countLabel.frame.origin.x, self.frame.size.height-_scrollView.frame.size.height - countLabel.frame.size.height - 11, countLabel.frame.size.width,countLabel.frame.size.height);
+		_scrollView.frame = CGRectMake(_scrollView.frame.origin.x, self.frame.size.height-_scrollView.frame.size.height, _scrollView.frame.size.width,_scrollView.frame.size.height);
+		[UIView commitAnimations];
+    }
+    else {
+        [UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDuration:0.55];
+		_countBtn.frame = CGRectMake(_countBtn.frame.origin.x, self.frame.size.height-_countBtn.frame.size.height - 11, _countBtn.frame.size.width,_countBtn.frame.size.height);
+
+		countLabel.frame = CGRectMake(countLabel.frame.origin.x, self.frame.size.height-countLabel.frame.size.height - 11, countLabel.frame.size.width,countLabel.frame.size.height);
+
+		_scrollView.frame = CGRectMake(_scrollView.frame.origin.x, self.frame.size.height, _scrollView.frame.size.width,_scrollView.frame.size.height);
+		[UIView commitAnimations];
+    }
+	
+	
+}
+
 
 
 - (void)layoutScrollImages:(UIScrollView*)scrollView 
@@ -718,7 +782,7 @@ static CGFloat kTransitionDuration = 0.3;
 
 -(void) moveAndScale:(CGRect)rect
 {
-	//NSLog(@"moveAndScale");
+	NSLog(@"moveAndScale");
 	
 	//NSLog(@"cell.frame: %@", NSStringFromCGRect(self.bounds));
 	//NSLog(@"rect %@", NSStringFromCGRect(rect));

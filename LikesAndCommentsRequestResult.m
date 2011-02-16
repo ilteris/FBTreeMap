@@ -37,7 +37,7 @@
 - (void)request:(FBRequest*)request didLoad:(id)result{
 	
    // NSMutableArray *fruits = [[[NSMutableArray alloc] init] autorelease];
-	NSLog(@"result %@", result);
+//	NSLog(@"result %@", result);
 
 	
 	

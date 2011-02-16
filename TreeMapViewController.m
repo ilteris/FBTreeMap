@@ -189,62 +189,78 @@ static CGFloat kTransitionDuration = 0.3;
 	//NSLog(@"_user_likes is %i", cell.user_likes);
 	//NSLog(@"_canPostComment is %i", cell.canPostComment);
 	
+	
+	//TODO: make sure don't try to resize it wwhen it's in the treeMapIsScrolled state
 	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 	{
-        
-        if(!cell.user_likes) // meaning I can like this motherfucker
-        {
-            NSDictionary *dic = [fruits objectAtIndex:cell.index];
-            
-            // NSLog(@"dic is %i", [[dic valueForKey:@"likeCount"] intValue]);
-            
-			//update locally because layout kinda fucks up if we reload the fruits array doing resizeview due nature of creation of treemapview.
-            [dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] + 1] forKey:@"likeCount"];
-			[dic setValue:[NSNumber numberWithInt:1] forKey:@"user_likes"];
-			//update  local database
-			NSNumber* _likeCount = [NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] + 1];
-            NSNumber* _user_likes = [NSNumber numberWithInt:1];
-            //cell.user_likes = 0; //cannot like it anymore
-            NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  cell.post_id, @"post_id",
-                                 _user_likes, @"user_likes",
-                                  _likeCount, @"likeCount",
-                                  nil];
-            [_peopleMapDB updateItemRow:dict];  
+        if(!treeMapIsScrolled)
+		{
 			
-			//update facebook here. sending the already prepared dictionary.
-			
-			[_userInfo requestWithGraph:dict andAction:@"likes" andHttpMethod:@"POST"];
-			
+			if(!cell.user_likes) // meaning I can like this motherfucker
+			{
+				NSDictionary *dic = [fruits objectAtIndex:cell.index];
+				
+				NSLog(@"!cell.user_likes");
+				
+				//update locally because layout kinda fucks up if we reload the fruits array doing resizeview due nature of creation of treemapview.
+				[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] + 1] forKey:@"likeCount"];
+				[dic setValue:[NSNumber numberWithInt:1] forKey:@"user_likes"];
+				//update  local database
+				NSNumber* _likeCount = [NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] + 1];
+				NSNumber* _user_likes = [NSNumber numberWithInt:1];
+				//cell.user_likes = 0; //cannot like it anymore
+				NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+									  cell.post_id, @"post_id",
+									  _user_likes, @"user_likes",
+									  _likeCount, @"likeCount",
+									  nil];
+				[_peopleMapDB updateItemRow:dict];  
+				
+				//update facebook here. sending the already prepared dictionary.
+				
+				[_userInfo requestWithGraph:dict andAction:@"likes" andHttpMethod:@"POST"];
+				
+				[self.treeMapView reloadData];
+			}
+			else //dislike this motherfucker
+			{
+				NSLog(@"cell.user_likes");
+				NSDictionary *dic = [fruits objectAtIndex:cell.index];
+				
+				//   NSLog(@"dic is %i", [[dic valueForKey:@"likeCount"] intValue]);
+				//update locally because layout kinda fucks up if we reload the fruits array doing resizeview due nature of creation of treemapview.
+				[dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] - 1] forKey:@"likeCount"];
+				[dic setValue:[NSNumber numberWithInt:0] forKey:@"user_likes"];
+				
+				//update local database
+				NSNumber* _likeCount = [NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] - 1];
+				//it's likeable again.
+				NSNumber* _user_likes = [NSNumber numberWithInt:0];
+				NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+									  cell.post_id, @"post_id",
+									  _user_likes, @"user_likes",
+									  _likeCount, @"likeCount",
+									  nil];
+				[_peopleMapDB updateItemRow:dict];  
+				
+				
+				//update facebook here. 
+				[_userInfo requestWithGraph:dict andAction:@"likes" andHttpMethod:@"DELETE"];
+				
+				[self.treeMapView reloadData];
+			}
 			
 		}
-        else //dislike this motherfucker
-        {
-            NSDictionary *dic = [fruits objectAtIndex:cell.index];
-            
-            //   NSLog(@"dic is %i", [[dic valueForKey:@"likeCount"] intValue]);
-			//update locally because layout kinda fucks up if we reload the fruits array doing resizeview due nature of creation of treemapview.
-            [dic setValue:[NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] - 1] forKey:@"likeCount"];
-			[dic setValue:[NSNumber numberWithInt:0] forKey:@"user_likes"];
-			 
-			//update local database
-            NSNumber* _likeCount = [NSNumber numberWithInt:[[dic valueForKey:@"likeCount"] intValue] - 1];
-           //it's likeable again.
-			NSNumber* _user_likes = [NSNumber numberWithInt:0];
-            NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  cell.post_id, @"post_id",
-                                  _user_likes, @"user_likes",
-                                  _likeCount, @"likeCount",
-                                  nil];
-            [_peopleMapDB updateItemRow:dict];  
+		
+		else 
+		{
 			
-			
-			//update facebook here. 
-			[_userInfo requestWithGraph:dict andAction:@"likes" andHttpMethod:@"DELETE"];
-        }
+		}
+
 	}
 	else //comment area
 	{
+		[self.treeMapView reloadData];
 		/*
 			//we can only add comment in the first screen, no removing comment.
             NSDictionary *dic = [fruits objectAtIndex:cell.index];
@@ -317,7 +333,7 @@ static CGFloat kTransitionDuration = 0.3;
 	//[self resizeView]; //so that fruit gets updated for new values to take effect.
 	//[self updateCell:cell forIndex:cell.index];
 	
-	[self.treeMapView reloadData];
+
 
 }
 
@@ -378,6 +394,7 @@ static CGFloat kTransitionDuration = 0.3;
 		//convert back to old treemapview.
 		NSLog(@"convert here to treemaview");
 		//remove the scrollview
+		
 		for (UIView *view in self.treeMapView.subviews) 
 		{
 			[view removeFromSuperview];
@@ -385,6 +402,7 @@ static CGFloat kTransitionDuration = 0.3;
 		}
 		
 		[self createCellsFromZero];
+		 
 	}
 	else 
 	{

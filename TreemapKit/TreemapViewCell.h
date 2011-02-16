@@ -2,8 +2,11 @@
 
 @protocol TreemapViewCellDelegate;
 
-@interface TreemapViewCell : UIControl 
+@interface TreemapViewCell : UIControl <UIGestureRecognizerDelegate>
 {
+	
+	UISwipeGestureRecognizer *swipeLeftRecognizer;
+	
 	
 	//view elements
 	UILabel *titleLabel;
@@ -16,7 +19,7 @@
 	UIView *aView;
 	UIView *bView;
 	
-	
+	UIScrollView *_scrollView;
 	
 	//model elements
 	UIImage* _image;
@@ -27,9 +30,15 @@
 	NSInteger _canPostComment;
 	NSString *_objectType;
 	
+	
+	
 	//delegates
 	id <TreemapViewCellDelegate> delegate;
 }
+
+
+@property (nonatomic, retain) UISwipeGestureRecognizer *swipeLeftRecognizer;
+
 
 //view elements
 @property (nonatomic, retain) UIButton *playBtn;
