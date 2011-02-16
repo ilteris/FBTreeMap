@@ -137,13 +137,13 @@ static CGFloat kTransitionDuration = 0.3;
 	//NSLog(@"the name is %@", [[fruits  objectAtIndex:index] objectForKey:@"poster_name"]);
 	if (![[NSFileManager defaultManager] isReadableFileAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", [[fruits  objectAtIndex:index] objectForKey:@"post_id" ]]]])
 	{
-		NSLog(@"img is not present %@", [[fruits  objectAtIndex:index] objectForKey:@"image_url"]);
+		//NSLog(@"img is not present %@", [[fruits  objectAtIndex:index] objectForKey:@"image_url"]);
 		req = [[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:[[fruits  objectAtIndex:index] objectForKey:@"image_url"]]] autorelease];
 		[req setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", [[fruits  objectAtIndex:index] objectForKey:@"post_id" ]]]];
 		[_networkQueue addOperation:req];		
 	}
 	
-	NSLog(@"img is  present %@", [[fruits  objectAtIndex:index] objectForKey:@"image_url"]);
+	//NSLog(@"img is  present %@", [[fruits  objectAtIndex:index] objectForKey:@"image_url"]);
 
 
 	

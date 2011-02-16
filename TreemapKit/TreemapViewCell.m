@@ -72,7 +72,7 @@ static CGFloat kTransitionDuration = 0.3;
 		
 		
 		
-		[self setLayout:frame];
+		[self setLayout:self.frame];
 		
 		
 		
@@ -97,10 +97,11 @@ static CGFloat kTransitionDuration = 0.3;
 	
 	_scrollView = [[UIScrollView alloc] initWithFrame:scrollViewRect];
 	[_scrollView setCanCancelContentTouches:NO];
-	_scrollView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
+	_scrollView.indicatorStyle = UIScrollViewIndicatorStyleBlack;
 	//scrollView1.clipsToBounds = YES;		// default is NO, we want to restrict drawing within our scrollview
 	_scrollView.scrollEnabled = YES;
 	_scrollView.pagingEnabled = YES;
+
 	
 	CGRect commentRect = CGRectMake(0, 0, 336, 383);
 
@@ -168,7 +169,7 @@ static CGFloat kTransitionDuration = 0.3;
 	
 
 //	[self showImageWithText:@"swipe" atPoint:location];
-	
+	_swipeAction = YES;
 	NSLog(@"handleSwipeFrom");
     if (recognizer.direction == UISwipeGestureRecognizerDirectionUp) {
 		[UIView beginAnimations:nil context:NULL];
@@ -230,6 +231,8 @@ static CGFloat kTransitionDuration = 0.3;
 	//big sized cells
 	if(self.frame.size.width >= 500 && self.frame.size.height >= 500)
 	{
+		NSLog(@"self.frame.size.width >= 500 && self.frame.size.height >= 500");
+		NSLog(@"status big and title label is %@", titleLabel.text);
 		
 		if(self.titleLabel == NULL) self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 10)];
 		titleLabel.font = [UIFont boldSystemFontOfSize:11];
@@ -314,11 +317,10 @@ static CGFloat kTransitionDuration = 0.3;
 			[self.playBtn release];
 		}
 	}
-	
 	else if((self.frame.size.width >= 500 && self.frame.size.height >= 200) && self.frame.size.height < 500)
 	{
 		
-		NSLog(@"self.frame.size.width > 400 && self.frame.size.height > 400");
+		NSLog(@"self.frame.size.width >= 500 && self.frame.size.height >= 200) && self.frame.size.height < 500");
 		NSLog(@"status big and title label is %@", titleLabel.text);
 		
 		if(self.titleLabel == NULL) self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 10)];
@@ -414,9 +416,8 @@ static CGFloat kTransitionDuration = 0.3;
 		}
 		self.playBtn.frame = CGRectMake((self.imageViewA.bounds.size.width-self.playBtn.bounds.size.width)/2, (self.imageViewA.bounds.size.height-self.playBtn.bounds.size.height)/2, self.playBtn.frame.size.width, self.playBtn.frame.size.height);
 	}
-	
-	
-	else if(((self.frame.size.height > 200 && self.frame.size.height < 500)  && self.frame.size.width > 200) || (self.frame.size.width > 200 && self.frame.size.width < 500 && self.frame.size.height > 500))	{
+	else if(((self.frame.size.height > 200 && self.frame.size.height < 500)  && self.frame.size.width > 200) || (self.frame.size.width > 200 && self.frame.size.width < 500 && self.frame.size.height > 500))	
+	{
 		
 		NSLog(@"self.frame.size.height > 200 && self.frame.size.height < 400)  && (self.frame.size.width > 600 ))");
 		NSLog(@"status big and title label is %@", titleLabel.text);
@@ -519,8 +520,6 @@ static CGFloat kTransitionDuration = 0.3;
 		
 		
 	}
-	
-	
 	else if(((self.frame.size.height > 100 && self.frame.size.height < 200) && self.frame.size.width > 108) || ((self.frame.size.width > 108 && self.frame.size.width < 400) && self.frame.size.height > 200))
 	{
 		NSLog(@"status small");
@@ -615,8 +614,6 @@ static CGFloat kTransitionDuration = 0.3;
 		
 		
 	}
-	
-	//very small sized cells
 	else if(self.frame.size.width <= 108)
 	{
 		NSLog(@"frame width is smaller than 113");
@@ -843,7 +840,7 @@ static CGFloat kTransitionDuration = 0.3;
 	if(self.frame.size.width >= 500 && self.frame.size.height >= 500)
 	{
 		
-		NSLog(@"self.frame.size.width > 400 && self.frame.size.height > 400");
+		NSLog(@"self.frame.size.width >= 500 && self.frame.size.height >= 500");
 		NSLog(@"status big and title label is %@", titleLabel.text);
 		
 		if(self.titleLabel == NULL) self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 10)];
@@ -863,8 +860,9 @@ static CGFloat kTransitionDuration = 0.3;
 		
 		if(self.countLabel == NULL) self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(11, self.frame.size.height - 61, 200, 48)];
 		
-		self.countLabel.frame = CGRectMake(11, self.frame.size.height - 61, 200, 48);
 		
+		NSLog(@"countLabel frame is %@", NSStringFromCGRect(countLabel.frame));
+		NSLog(@"self frame is %@", NSStringFromCGRect(self.frame));		
 		countLabel.numberOfLines = 0;
 		countLabel.font = [UIFont boldSystemFontOfSize:60];
 		
@@ -898,9 +896,20 @@ static CGFloat kTransitionDuration = 0.3;
 		}
 
 		
-		_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
+		if(_swipeAction) //set to true once the first gesture happens
+		{
+			countLabel.frame = CGRectMake(countLabel.frame.origin.x, self.frame.size.height-_scrollView.frame.size.height - countLabel.frame.size.height - 11, countLabel.frame.size.width,countLabel.frame.size.height);
+			_countBtn.frame = CGRectMake(_countBtn.frame.origin.x, self.frame.size.height-_scrollView.frame.size.height - _countBtn.frame.size.height - 11, _countBtn.frame.size.width,_countBtn.frame.size.height);
+			
+		}
+		else
+		{
+			self.countLabel.frame = CGRectMake(11, self.frame.size.height - 61, 200, 48);
+
+			_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.frame.size.height - 61, 56.0, 48.0);
+
+		}
 		
-	
 		
 		
 		if(contentLabel == NULL) contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0)];
@@ -938,11 +947,18 @@ static CGFloat kTransitionDuration = 0.3;
 			
 		}
 		self.playBtn.frame = CGRectMake((self.imageViewA.bounds.size.width-self.playBtn.bounds.size.width)/2, (self.imageViewA.bounds.size.height-self.playBtn.bounds.size.height)/2, self.playBtn.frame.size.width, self.playBtn.frame.size.height);
+
+		
+	
+		
+		
+
+	
 	}
 	else if((self.frame.size.width >= 500 && self.frame.size.height >= 200) && self.frame.size.height < 500)
 	{
 		
-		NSLog(@"self.frame.size.width > 400 && self.frame.size.height > 400");
+		NSLog(@"self.frame.size.width >= 500 && self.frame.size.height >= 200) && self.frame.size.height < 500");
 		NSLog(@"status big and title label is %@", titleLabel.text);
 		
 		if(self.titleLabel == NULL) self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 10)];

@@ -159,7 +159,9 @@
 				//TODO: here
 				//http://i.huffpost.com/gen/243476/thumbs/s-MUBARAK-large.jpg
 				//images coming from huffington posts can be replaced from -small to -large.
-		
+				//images coming from NYtimes can be turned into from ---> http://graphics8.nytimes.com/images/2011/02/14/style/14moncler1/14moncler1-thumbStandard-v2.jpg
+				//to ---> http://graphics8.nytimes.com/images/2011/02/14/style/14moncler1/14moncler1-popup.jpg
+				
 				//this is all the objects including internal fb events,fb photos,fb videos,fb links, external; youtube, tumblr, facebook apps and external links.
 				//their common attribute they all have media.
 				//let's do the split here. first check the objects that only have fb_object_type even if they are empty.
@@ -246,19 +248,41 @@
 						if(![filePath stringByMatching:regexString capture:1L]) 
 						{
 							_image_url =  [NSString stringWithFormat:@"%@", _temp];
-							//	NSLog(@"_image_url is %@", _image_url);
+								
 							_image_url = [_temp stringByReplacingOccurrencesOfString:@"_s" withString:@"_n"];
 							//	NSLog(@"_image_url is %@", _image_url);
 							//_image_url =  [NSString stringWithFormat:@"%@", _temp];
 						}
 						else 
-						{
-							
-							
+						{ //nytimes comes here, probably huffington post comes here too.
+						
 							_image_url = [NSString stringWithFormat:@"%@", [filePath stringByMatching:regexString capture:1L]];
 							
+
+							
+							
+							
 						}
-						
+						NSString *caption =  [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"caption"]];
+						//nytimes regex.
+						if([caption isEqual:@"www.nytimes.com"])
+						{
+
+							//NSLog(@"_image_url is %@", _image_url);
+							
+							NSString *regexString2  = @"([^/]+\\.jpg)$"; //grabs the last portion of the string
+							//../14moncler1-thumbStandard-v2.jpg
+							NSString *lastPortion = [NSString stringWithFormat:@"%@", [_image_url stringByMatching:regexString2 capture:1L]];
+							NSString *regexString3  = @"(-.*\\.jpg)$";
+							//match anything after first dash if there's one. --> -thumbStandard-v2.jpg
+							NSString *new_lastPart  = [lastPortion stringByReplacingOccurrencesOfRegex:regexString3 withString:@"-popup.jpg"];
+							//replace the last part with new last part.
+							NSString *temp_image_url  = [_image_url stringByReplacingOccurrencesOfRegex:regexString2 withString:new_lastPart];
+							_image_url = temp_image_url;
+							
+
+
+						}
 						
 						
 						_message =   [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
@@ -289,19 +313,19 @@
 								    //do the youtube things here.
 								   	if([filePath stringByMatching:regexString capture:1L]) 
 									{
-										NSLog(@"youtube before %@", _image_url);
+										//NSLog(@"youtube before %@", _image_url);
 										NSString *regexString2  = @"([^/]+\\.jpg)$";
 										//change all the last portion /x.jpg to ---> /0.jpg
 										NSString *source_string = [NSString stringWithFormat:@"%@", [filePath stringByMatching:regexString capture:1L]];
 										_image_url  = [source_string stringByReplacingOccurrencesOfRegex:regexString2 withString:@"0.jpg"];
-										NSLog(@"youtube after %@", _image_url);
+									//	NSLog(@"youtube after %@", _image_url);
 									}
 							   }
 							   else
 							   {
 								   if([filePath stringByMatching:regexString capture:1L]) 
 								   {
-									   NSLog(@"non youtube true %@", _image_url);
+									 //  NSLog(@"non youtube true %@", _image_url);
 									   _image_url =  [NSString stringWithFormat:@"%@", [filePath stringByMatching:regexString capture:1L]];
 								   }
 							   }
@@ -343,7 +367,7 @@
 					if(![filePath stringByMatching:regexString capture:1L]) 
 					{
 						_image_url =  [NSString stringWithFormat:@"%@", _temp];
-						//	NSLog(@"_image_url is %@", _image_url);
+						
 						_image_url = [_temp stringByReplacingOccurrencesOfString:@"_s" withString:@"_n"];
 						
 						//	NSLog(@"_image_url is %@", _image_url);
@@ -356,6 +380,8 @@
 						_image_url = [_image_url stringByReplacingOccurrencesOfString:@"s72-c" withString:@"s1600"];
 
 					}
+					
+					//NSLog(@"_image_url is %@", _image_url);
 					
 					//blogpost hack
 					_message =   [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];

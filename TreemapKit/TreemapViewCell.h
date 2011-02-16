@@ -6,7 +6,7 @@
 {
 	
 	UISwipeGestureRecognizer *swipeLeftRecognizer;
-	
+	BOOL	_swipeAction;
 	
 	//view elements
 	UILabel *titleLabel;
