@@ -82,7 +82,7 @@ static CGFloat kTransitionDuration = 0.3;
 - (void)updateCell:(TreemapViewCell *)cell forIndex:(NSInteger)index 
 {
 	NSLog(@"updating cell");
-//	NSLog(@"fruits %@", fruits);
+	//NSLog(@"fruits %@", fruits);
 	
 	//set the user likes first
 	cell.user_likes = [[[fruits  objectAtIndex:index] objectForKey:@"user_likes"] intValue];
@@ -101,13 +101,17 @@ static CGFloat kTransitionDuration = 0.3;
 	
 	
 	
-	NSNumber *tText;
+
 	
 	if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
 		
 	{
-		tText = [[fruits objectAtIndex:index] objectForKey:@"likeCount"];
+		cell.countLabel.text = [[[fruits objectAtIndex:index] objectForKey:@"likeCount"] stringValue];
+		cell.grayCountLabel.text =[[[fruits objectAtIndex:index] objectForKey:@"commentCount"] stringValue];
 
+
+		
+		
 		//well give them alpha accordingly to the values.
 		if(cell.user_likes)
 		{
@@ -121,14 +125,14 @@ static CGFloat kTransitionDuration = 0.3;
 	}
 	else 
 	{
-		NSLog(@"display Mode is comment");
-		tText = [[fruits objectAtIndex:index] objectForKey:@"commentCount"];
-		
+	//	NSLog(@"display Mode is comment");
+		cell.countLabel.text = [[[fruits objectAtIndex:index] objectForKey:@"commentCount"] stringValue];		
 		cell.countBtn.alpha = 0.5f;
+		cell.grayCountLabel.text = [[[fruits objectAtIndex:index] objectForKey:@"likeCount"] stringValue];
 
 	}
 	
-	cell.countLabel.text = [tText stringValue];
+	
 	
 	ASIHTTPRequest *req;
 	
@@ -171,6 +175,24 @@ static CGFloat kTransitionDuration = 0.3;
 		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 		cell.image = img;
 		cell.contentLabel.text = @"";//	[[fruits objectAtIndex:index] objectForKey:@"message"];
+		
+		
+	}
+	else if([[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"status"])
+	{
+		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
+		cell.image = img;
+		if(![[[fruits objectAtIndex:index] objectForKey:@"message"] length]> 0) //if the message is empty
+		{
+			cell.contentLabel.text = [[fruits objectAtIndex:index] objectForKey:@"link_name"];
+		//	NSLog(@"message is empty");
+		}//endif
+		else
+		{
+			cell.contentLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
+		//	NSLog(@"message is NOT empty");
+		}//endelse
+
 		
 		
 	}
@@ -478,6 +500,9 @@ static CGFloat kTransitionDuration = 0.3;
 		cell.imageViewA.image = [cell.image imageCroppedToFitSize:rect.size];
 		[cell loadScrollingComments:rect];
 		[scrollView1 addSubview:cell];
+		
+		
+
 
 	}
 	
@@ -511,12 +536,6 @@ static CGFloat kTransitionDuration = 0.3;
 
 - (void)layoutScrollImages:(UIScrollView*)scrollView atOffset:(NSNumber*)index
 {
-	CGRect rect = CGRectMake(0, 0 , self.treeMapView.frame.size.width, self.treeMapView.frame.size.height);
-	
-	
-	//NSLog(@"layoutScrollImages is %@", NSStringFromCGRect(rect));
-	
-//	NSLog(@"layoutScrollImages is %@", NSStringFromCGRect(rect));
 	UIImageView *view = nil;
 	NSArray *subviews = [scrollView subviews];
 	
@@ -533,6 +552,7 @@ static CGFloat kTransitionDuration = 0.3;
 			view.frame = frame;
 			
 			curXLoc += self.treeMapView.frame.size.width;
+		//	[self updateCell:(TreemapViewCell*)view forIndex:view.tag-1];
 		}
 	}
 	
@@ -845,7 +865,7 @@ static CGFloat kTransitionDuration = 0.3;
 	[self setTheBackgroundArray];
 	//SELECT post_id, poster_name, objectType, message, image_url, commentCount, datetime(posted_time,'unixepoch', 'localtime') FROM "object" WHERE poster_type = "user" AND datetime(posted_time,'unixepoch', 'localtime') >= datetime('now', '-2 hours', 'localtime') ORDER BY "commentCount" DESC LIMIT 8
 	
-	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT post_id, poster_name, objectType, message, image_url, user_likes, canPostComment, %@ FROM \"object\" WHERE poster_type = \"%@\" AND datetime(posted_time,'unixepoch', 'localtime') >= datetime('now', '%@', 'localtime') ORDER BY \"%@\" DESC LIMIT 8", section, viewType, duration, section]])
+	for (row in [_peopleMapDB getQuery:[NSString stringWithFormat:@"SELECT post_id, poster_name, objectType, message, link_name, image_url, user_likes, canPostComment, likeCount, commentCount FROM \"object\" WHERE poster_type = \"%@\" AND datetime(posted_time,'unixepoch', 'localtime') >= datetime('now', '%@', 'localtime') ORDER BY \"%@\" DESC LIMIT 8",  viewType, duration, section]])
 	{
 		//[self dispRow:row];
 		
@@ -896,7 +916,7 @@ static CGFloat kTransitionDuration = 0.3;
 		
 	}
 	
-	//NSLog(@"fruits is %@", self.fruits);
+	NSLog(@"fruits is %@", self.fruits);
 	//	NSLog(@"treemap is %@", self.treeMapView);
 	//[(TreemapView *)self.treeMapView reloadData];
 }

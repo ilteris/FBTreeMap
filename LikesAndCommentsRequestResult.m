@@ -132,7 +132,7 @@
 		_updated_time =		[NSNumber numberWithInt:[[[streamArray objectAtIndex:i] objectForKey:@"updated_time"] integerValue]];
 		_post_id =			[NSString stringWithFormat:@"%@", [[streamArray objectAtIndex:i] objectForKey:@"post_id"]];
 		
-		//NSLog(@"post_id is %@", [NSString stringWithFormat:@"%@", [[streamArray objectAtIndex:i] objectForKey:@"post_id"]]);
+		NSLog(@"post_id is %@", [NSString stringWithFormat:@"%@", [[streamArray objectAtIndex:i] objectForKey:@"post_id"]]);
 		
 		
 		 
@@ -149,11 +149,13 @@
 				_image_url = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&", [[streamArray objectAtIndex:i] objectForKey:@"actor_id"]];
 				_message = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
 				_objectType = [NSString stringWithFormat:@"status"];
-				NSLog(@"_post_id %@", _post_id);
+				//NSLog(@"_post_id %@", _post_id);
 				//705660968_163532200362253
-				NSLog(@"item is %@", [streamArray objectAtIndex:i]);
+				//NSLog(@"item is %@", [streamArray objectAtIndex:i]);
 				
-				_link_name = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"name"]];
+				_link_name = [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"name"]];
+				//NSLog(@"link_name is %@", _link_name);
+				
 				_description = [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"description"]];
 
 			}
@@ -298,6 +300,8 @@
 						if([_objectType isEqual:@"video"])
 						{
 							_href = [NSString stringWithFormat:@"%@",[[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"video"] objectForKey:@"source_url"]];
+							
+							
 							NSString *_temp = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"src"] ];
 							
 							NSString *filePath = [_temp stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -305,9 +309,13 @@
 							NSString *regexString   = @"url=(.+)";
 							//NSLog(@"count one %@", [streamArray objectAtIndex:i] );
 							//sometimes the urls are facebook links so, grab them instead.
+							//also there are some stupid youtubevideos that don't have caption... so need to check them out too. and grab their preview_image 
+													
+							
 							NSString *caption =  [NSString stringWithFormat:@"%@",[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"caption"]];
 							if([caption isEqual:@"www.youtube.com"])
 							{
+								
 								//do the youtube things here.
 								if([filePath stringByMatching:regexString capture:1L]) 
 								{
@@ -316,6 +324,7 @@
 									//change all the last portion /x.jpg to ---> /0.jpg
 									NSString *source_string = [NSString stringWithFormat:@"%@", [filePath stringByMatching:regexString capture:1L]];
 									_image_url  = [source_string stringByReplacingOccurrencesOfRegex:regexString2 withString:@"0.jpg"];
+									
 									//	NSLog(@"youtube after %@", _image_url);
 								}//endif
 							}//endif
@@ -342,7 +351,7 @@
 				//	NSLog(@"count one %@", [streamArray objectAtIndex:i] );
 					
 				}//endif
-				else //this is most probably an tumblr, instagram, foursquare or a facebook app so expect images as app icons map icons etc... sometimes fb page is too!
+				else //this is most probably an tumblr, instagram, foursquare or a facebook app so expect images as app icons map icons etc... sometimes youtube video and fb page is too!
 				{
 					//still getting only up to name ---> if that's empty maybe even go further up to description?
 					
@@ -390,6 +399,7 @@
 					
                     _objectType = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]];
 					
+					
 					if([_objectType isEqual:@"link"])
                     {
 						// NSLog(@"poster_name %@", _poster_name);
@@ -397,6 +407,34 @@
                         if([_href length] == 0) _href = [NSString stringWithFormat:@"%@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"href"]];
 						// NSLog(@"href is %@", _href);
                     }
+					else if([_objectType isEqual:@"video"])
+					{
+						//  NSString *video_source = [NSString stringWithFormat:@"%@",[[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"video"] objectForKey:@"source_url"]];
+						NSString *temp_href = [NSString stringWithFormat:@"%@",[[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"video"] objectForKey:@"source_url"]];
+						_temp = [temp_href stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
+						
+						NSString *_temp = [NSString stringWithFormat:@"%@",[[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"video"] objectForKey:@"preview_img"]];
+						
+						NSString *filePath = [_temp stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+						//get the second url now:
+						NSString *regexString   = @"src=(.+)";
+						//NSLog(@"count one %@", [streamArray objectAtIndex:i] );
+						//sometimes the urls are facebook links so, grab them instead.
+						if(![filePath stringByMatching:regexString capture:1L]) 
+						{
+							_image_url =  [NSString stringWithFormat:@"%@", _temp];
+						}
+						else 
+						{
+								//NSLog(@"youtube before %@", _image_url);
+								NSString *regexString2  = @"([^/]+\\.jpg)$";
+								//change all the last portion /x.jpg to ---> /0.jpg
+								NSString *source_string = [NSString stringWithFormat:@"%@", [filePath stringByMatching:regexString capture:1L]];
+								_image_url  = [source_string stringByReplacingOccurrencesOfRegex:regexString2 withString:@"0.jpg"];
+						}
+						NSLog(@"_image_url %@", _image_url);
+					}//endelseif
 				}//endelse
 				
 			}//endelse

@@ -32,6 +32,9 @@
 
 @synthesize playBtn = _playBtn;
 @synthesize countBtn = _countBtn;
+
+@synthesize grayCountLabel = _grayCountLabel;
+@synthesize grayCountBtn = _grayCountBtn;
 @synthesize image = _image;
 
 #pragma mark -
@@ -82,6 +85,8 @@ static CGFloat kTransitionDuration = 0.3;
 		[self.aView addSubview:contentLabel];
 		
 		[self.aView addSubview:titleLabel];
+		
+		[self.aView addSubview:_grayCountLabel];
 		
 		[self insertSubview:self.aView atIndex:1];
 		[self insertSubview:self.bView atIndex:0];
@@ -174,6 +179,12 @@ static CGFloat kTransitionDuration = 0.3;
     if (recognizer.direction == UISwipeGestureRecognizerDirectionUp) {
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:0.55];
+		
+		_grayCountLabel.frame = CGRectMake(_grayCountLabel.frame.origin.x, self.frame.size.height-_scrollView.frame.size.height - _grayCountLabel.frame.size.height - 11, _grayCountLabel.frame.size.width,_grayCountLabel.frame.size.height);
+		_grayCountBtn.frame = CGRectMake(_grayCountBtn.frame.origin.x, self.frame.size.height-_scrollView.frame.size.height - _grayCountBtn.frame.size.height - 11, _grayCountBtn.frame.size.width,_grayCountBtn.frame.size.height);
+		
+		
+	
 		_countBtn.frame = CGRectMake(_countBtn.frame.origin.x, self.frame.size.height-_scrollView.frame.size.height - _countBtn.frame.size.height - 11, _countBtn.frame.size.width,_countBtn.frame.size.height);
 		countLabel.frame = CGRectMake(countLabel.frame.origin.x, self.frame.size.height-_scrollView.frame.size.height - countLabel.frame.size.height - 11, countLabel.frame.size.width,countLabel.frame.size.height);
 		_scrollView.frame = CGRectMake(_scrollView.frame.origin.x, self.frame.size.height-_scrollView.frame.size.height, _scrollView.frame.size.width,_scrollView.frame.size.height);
@@ -182,6 +193,9 @@ static CGFloat kTransitionDuration = 0.3;
     else {
         [UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:0.55];
+		_grayCountLabel.frame =  CGRectMake(self.frame.size.width-273, self.frame.size.height-61, 200, 48);
+		_grayCountBtn.frame = CGRectMake(self.frame.size.width-56 - 11, self.aView.frame.size.height - 61, 56.0, 48.0);
+		
 		_countBtn.frame = CGRectMake(_countBtn.frame.origin.x, self.frame.size.height-_countBtn.frame.size.height - 11, _countBtn.frame.size.width,_countBtn.frame.size.height);
 
 		countLabel.frame = CGRectMake(countLabel.frame.origin.x, self.frame.size.height-countLabel.frame.size.height - 11, countLabel.frame.size.width,countLabel.frame.size.height);
@@ -210,11 +224,11 @@ static CGFloat kTransitionDuration = 0.3;
 		NSLog(@"layoutScrollImages frame is %@", NSStringFromCGRect(view.frame));
 		if ([view isKindOfClass:[CommentView class]] && view.tag > 0)
 		{
-			NSLog(@"view is %@", view);
+
 			CGRect frame = view.frame;
 			frame.origin = CGPointMake(curXLoc, 0);
 			view.frame = frame;
-			NSLog(@"view is %@", view);
+
 			curXLoc += view.frame.size.width;
 		}
 	}
@@ -229,7 +243,168 @@ static CGFloat kTransitionDuration = 0.3;
 - (void) setLayout:(CGRect)frame
 {
 	//big sized cells
-	if(self.frame.size.width >= 500 && self.frame.size.height >= 500)
+	
+	if(self.frame.size.width >= 700 && self.frame.size.height >= 700 )
+	{
+		//this is the detailed screen
+		NSLog(@"self.frame.size.width >= 800 && self.frame.size.height >= 800 ");
+		NSLog(@"status big and title label is %@", titleLabel.text);
+		
+		if(self.titleLabel == NULL) self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 10)];
+		titleLabel.frame = CGRectMake(0, 0, self.frame.size.width, 10);
+		
+		titleLabel.font = [UIFont boldSystemFontOfSize:11];
+		titleLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
+		titleLabel.textAlignment = UITextAlignmentLeft;
+		titleLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		titleLabel.shadowColor  = [UIColor blackColor];
+		titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		titleLabel.lineBreakMode = UILineBreakModeCharacterWrap;
+		
+		titleLabel.backgroundColor = [UIColor clearColor];
+		
+		titleLabel.alpha = 1;
+		
+		
+		if(self.countLabel == NULL) self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(11, self.frame.size.height - 61, 200, 48)];
+		
+		
+		countLabel.numberOfLines = 0;
+		countLabel.font = [UIFont boldSystemFontOfSize:60];
+		
+		
+		countLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		countLabel.backgroundColor = [UIColor clearColor];
+		countLabel.shadowColor  = [UIColor blackColor];
+		countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		
+		
+		if(_grayCountLabel == NULL) _grayCountLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.frame.size.width-273, self.frame.size.height-61, 200, 48)];
+		_grayCountLabel.numberOfLines = 0;
+		_grayCountLabel.font = [UIFont boldSystemFontOfSize:60];
+
+		_grayCountLabel.textAlignment = UITextAlignmentRight;
+
+		_grayCountLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		_grayCountLabel.backgroundColor = [UIColor clearColor];
+		_grayCountLabel.shadowColor  = [UIColor blackColor];
+		_grayCountLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		_grayCountLabel.alpha = .2f;
+		
+		if (_grayCountBtn == NULL) 
+		{
+			_grayCountBtn = [[[UIButton buttonWithType:UIButtonTypeCustom] retain] autorelease];
+			//[_grayCountBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+
+			[self.aView addSubview:_grayCountBtn];
+			
+		}
+		
+		
+		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
+		{
+			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"1_comment_white" ofType:@"png"]];
+			[_grayCountBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+			[tImage release];
+		}
+		else 
+		{
+			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"1_like_white" ofType:@"png"]];
+			[_grayCountBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+			[tImage release];
+		}
+		
+		_grayCountBtn.alpha = .2f;
+		
+		
+		
+		if (_countBtn == NULL) 
+		{
+			self.countBtn = [[[UIButton buttonWithType:UIButtonTypeCustom] retain] autorelease];
+			[_countBtn addTarget:self action:@selector(onCountBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+			NSLog(@"count btn is first");
+			[self.aView addSubview:self.countBtn];
+			
+		}
+		
+		
+		if(![[NSUserDefaults standardUserDefaults] integerForKey:@"displayMode"]) // meaning its set to likes 
+		{
+			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"1_like_red" ofType:@"png"]];
+			[_countBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+			[tImage release];
+		}
+		else 
+		{
+			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"1_comment_blue" ofType:@"png"]];
+			[_countBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+			[tImage release];
+		}
+		
+		
+		self.countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
+		
+		
+		
+		
+		if(_swipeAction) //set to true once the first gesture happens
+		{
+			_grayCountLabel.frame = CGRectMake(_grayCountLabel.frame.origin.x, self.frame.size.height-_scrollView.frame.size.height - _grayCountLabel.frame.size.height - 11, _grayCountLabel.frame.size.width,_grayCountLabel.frame.size.height);
+			_grayCountBtn.frame = CGRectMake(_grayCountBtn.frame.origin.x, self.frame.size.height-_scrollView.frame.size.height - _grayCountBtn.frame.size.height - 11, _grayCountBtn.frame.size.width,_grayCountBtn.frame.size.height);
+
+			countLabel.frame = CGRectMake(countLabel.frame.origin.x, self.frame.size.height-_scrollView.frame.size.height - countLabel.frame.size.height - 11, countLabel.frame.size.width,countLabel.frame.size.height);
+			_countBtn.frame = CGRectMake(_countBtn.frame.origin.x, self.frame.size.height-_scrollView.frame.size.height - _countBtn.frame.size.height - 11, _countBtn.frame.size.width,_countBtn.frame.size.height);
+			NSLog(@"_swipeAction is true");
+		}
+		else
+		{
+			NSLog(@"_swipeAction is false");
+			
+			_grayCountLabel.frame = CGRectMake(self.frame.size.width-273, self.frame.size.height-61, 200, 48);
+			_grayCountBtn.frame = CGRectMake(self.frame.size.width-56 - 11, self.aView.frame.size.height - 61, 56.0, 48.0);
+
+			self.countLabel.frame = CGRectMake(11, self.frame.size.height - 61, 200, 48);
+			_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.frame.size.height - 61, 56.0, 48.0);
+			
+		}
+		
+		
+		
+		if(contentLabel == NULL) contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0)];
+		contentLabel.frame = CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0);
+		contentLabel.font = [UIFont boldSystemFontOfSize:48];
+		//contentLabel.text = @"";
+		contentLabel.textAlignment = UITextAlignmentLeft;
+		//contentLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		contentLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f]; 
+		contentLabel.backgroundColor = [UIColor clearColor];
+		contentLabel.shadowColor  = [UIColor blackColor];
+		contentLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		contentLabel.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
+		
+		contentLabel.numberOfLines = 0;
+		
+		contentLabel.alpha = 1;
+		
+		if([self.objectType isEqual:@"video"])
+		{
+			NSLog(@"creating button");
+			if(self.playBtn==NULL) self.playBtn = [[[UIButton buttonWithType:UIButtonTypeCustom] retain] autorelease];
+			self.playBtn.frame = CGRectMake(0, 0, 56.0, 55.0);
+			self.playBtn.frame = CGRectMake((self.imageViewA.bounds.size.width-self.playBtn.bounds.size.width)/2, (self.imageViewA.bounds.size.height-self.playBtn.bounds.size.height)/2, self.playBtn.frame.size.width, self.playBtn.frame.size.height);
+			UIImage *tImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"play" ofType:@"png"]];
+			[self.playBtn setBackgroundImage:[tImage stretchableImageWithLeftCapWidth:0 topCapHeight:0] forState:UIControlStateNormal];
+			[tImage release];
+			
+			[self.aView addSubview:self.playBtn];
+			
+		}
+		
+		self.playBtn.frame = CGRectMake((self.imageViewA.bounds.size.width-self.playBtn.bounds.size.width)/2, (self.imageViewA.bounds.size.height-self.playBtn.bounds.size.height)/2, self.playBtn.frame.size.width, self.playBtn.frame.size.height);
+		
+		
+	}
+	else if(self.frame.size.width >= 500 && self.frame.size.height >= 500 && self.frame.size.width < 700 && self.frame.size.width < 700)
 	{
 		NSLog(@"self.frame.size.width >= 500 && self.frame.size.height >= 500");
 		NSLog(@"status big and title label is %@", titleLabel.text);
@@ -262,6 +437,19 @@ static CGFloat kTransitionDuration = 0.3;
 		countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
 		
 		
+		if(_grayCountLabel == NULL) _grayCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width-100, self.frame.size.height-61, 100, 48)];
+		_grayCountLabel.numberOfLines = 0;
+		_grayCountLabel.font = [UIFont boldSystemFontOfSize:0];
+		
+		_grayCountLabel.textAlignment = UITextAlignmentRight;
+		
+		_grayCountLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		_grayCountLabel.backgroundColor = [UIColor clearColor];
+		_grayCountLabel.shadowColor  = [UIColor blackColor];
+		_grayCountLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		_grayCountLabel.alpha = .2f;
+		
+		
 		
 		if (_countBtn == NULL) 
 		{
@@ -287,24 +475,16 @@ static CGFloat kTransitionDuration = 0.3;
 		}
 		
 		
-		self.countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
 		
 		
-	
 		
-		if(_swipeAction) //set to true once the first gesture happens
-		{
-			countLabel.frame = CGRectMake(countLabel.frame.origin.x, self.frame.size.height-_scrollView.frame.size.height - countLabel.frame.size.height - 11, countLabel.frame.size.width,countLabel.frame.size.height);
-			_countBtn.frame = CGRectMake(_countBtn.frame.origin.x, self.frame.size.height-_scrollView.frame.size.height - _countBtn.frame.size.height - 11, _countBtn.frame.size.width,_countBtn.frame.size.height);
-			
-		}
-		else
-		{
-			self.countLabel.frame = CGRectMake(11, self.frame.size.height - 61, 200, 48);
-			
-			_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.frame.size.height - 61, 56.0, 48.0);
-			
-		}
+		
+		
+		self.countLabel.frame = CGRectMake(11, self.frame.size.height - 61, 200, 48);
+		
+		_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.frame.size.height - 61, 56.0, 48.0);
+		
+		
 		
 		
 		
@@ -375,6 +555,20 @@ static CGFloat kTransitionDuration = 0.3;
 		countLabel.backgroundColor = [UIColor clearColor];
 		countLabel.shadowColor  = [UIColor blackColor];
 		countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		
+		
+		if(_grayCountLabel == NULL) _grayCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width-100, self.frame.size.height-61, 100, 48)];
+		_grayCountLabel.numberOfLines = 0;
+		_grayCountLabel.font = [UIFont boldSystemFontOfSize:0];
+		
+		_grayCountLabel.textAlignment = UITextAlignmentRight;
+		
+		_grayCountLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		_grayCountLabel.backgroundColor = [UIColor clearColor];
+		_grayCountLabel.shadowColor  = [UIColor blackColor];
+		_grayCountLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		_grayCountLabel.alpha = .2f;
+		
 		
 		if (_countBtn == NULL) 
 		{
@@ -479,6 +673,18 @@ static CGFloat kTransitionDuration = 0.3;
 		countLabel.shadowColor  = [UIColor blackColor];
 		countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
 		
+		if(_grayCountLabel == NULL) _grayCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width-100, self.frame.size.height-61, 100, 48)];
+		_grayCountLabel.numberOfLines = 0;
+		_grayCountLabel.font = [UIFont boldSystemFontOfSize:0];
+		
+		_grayCountLabel.textAlignment = UITextAlignmentRight;
+		
+		_grayCountLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		_grayCountLabel.backgroundColor = [UIColor clearColor];
+		_grayCountLabel.shadowColor  = [UIColor blackColor];
+		_grayCountLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		_grayCountLabel.alpha = .2f;
+		
 		
 
 		if (self.countBtn == NULL) 
@@ -581,6 +787,20 @@ static CGFloat kTransitionDuration = 0.3;
 		countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
 		
 		
+		if(_grayCountLabel == NULL) _grayCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width-100, self.frame.size.height-61, 100, 48)];
+		_grayCountLabel.numberOfLines = 0;
+		_grayCountLabel.font = [UIFont boldSystemFontOfSize:0];
+		
+		_grayCountLabel.textAlignment = UITextAlignmentRight;
+		
+		_grayCountLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		_grayCountLabel.backgroundColor = [UIColor clearColor];
+		_grayCountLabel.shadowColor  = [UIColor blackColor];
+		_grayCountLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		_grayCountLabel.alpha = .2f;
+		
+		
+		
 		if (_countBtn == NULL) 
 		{
 			NSLog(@"count btn is fifth");
@@ -612,6 +832,7 @@ static CGFloat kTransitionDuration = 0.3;
 		if(contentLabel == NULL)  contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0)];
 		contentLabel.frame = CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0);
 
+		
 		contentLabel.font = [UIFont boldSystemFontOfSize:24];
 		contentLabel.textAlignment = UITextAlignmentLeft;
 		contentLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
@@ -674,6 +895,18 @@ static CGFloat kTransitionDuration = 0.3;
 		countLabel.shadowColor  = [UIColor blackColor];
 		countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
 		
+		
+		if(_grayCountLabel == NULL) _grayCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width-100, self.frame.size.height-61, 100, 48)];
+		_grayCountLabel.numberOfLines = 0;
+		_grayCountLabel.font = [UIFont boldSystemFontOfSize:0];
+		
+		_grayCountLabel.textAlignment = UITextAlignmentRight;
+		
+		_grayCountLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		_grayCountLabel.backgroundColor = [UIColor clearColor];
+		_grayCountLabel.shadowColor  = [UIColor blackColor];
+		_grayCountLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		_grayCountLabel.alpha = .2f;
 		
 		
 		if (_countBtn == NULL) 
@@ -769,6 +1002,17 @@ static CGFloat kTransitionDuration = 0.3;
 		countLabel.shadowColor  = [UIColor blackColor];
 		countLabel.shadowOffset = CGSizeMake(0.0, -1.0);
 		
+		if(_grayCountLabel == NULL) _grayCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width-100, self.frame.size.height-61, 100, 48)];
+		_grayCountLabel.numberOfLines = 0;
+		_grayCountLabel.font = [UIFont boldSystemFontOfSize:0];
+		
+		_grayCountLabel.textAlignment = UITextAlignmentRight;
+		
+		_grayCountLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
+		_grayCountLabel.backgroundColor = [UIColor clearColor];
+		_grayCountLabel.shadowColor  = [UIColor blackColor];
+		_grayCountLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+		_grayCountLabel.alpha = .2f;
 		
 		
 		

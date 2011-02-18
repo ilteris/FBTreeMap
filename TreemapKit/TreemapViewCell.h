@@ -19,6 +19,12 @@
 	UIView *aView;
 	UIView *bView;
 	
+	
+	//
+	UILabel *_grayCountLabel;
+	UIButton *_grayCountBtn;
+	
+	
 	UIScrollView *_scrollView;
 	
 	//model elements
@@ -53,6 +59,9 @@
 @property (nonatomic, retain) UIView *aView;
 @property (nonatomic, retain) UIView *bView;
 
+
+@property (nonatomic, retain) UILabel *grayCountLabel;
+@property (nonatomic, retain) UIButton *grayCountBtn;
 
 
 //models

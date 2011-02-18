@@ -20,6 +20,8 @@
 		F010F214130AFA41006C1839 /* CommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = F010F213130AFA41006C1839 /* CommentView.m */; };
 		F010F756130D9518006C1839 /* p_local5.db in Resources */ = {isa = PBXBuildFile; fileRef = F010F755130D9518006C1839 /* p_local5.db */; };
 		F010F7A5130DE82D006C1839 /* p_local6.db in Resources */ = {isa = PBXBuildFile; fileRef = F010F7A4130DE82D006C1839 /* p_local6.db */; };
+		F010F966130F017E006C1839 /* 1_comment_white.png in Resources */ = {isa = PBXBuildFile; fileRef = F010F964130F017E006C1839 /* 1_comment_white.png */; };
+		F010F967130F017E006C1839 /* 1_like_white.png in Resources */ = {isa = PBXBuildFile; fileRef = F010F965130F017E006C1839 /* 1_like_white.png */; };
 		F01C0AAA1281D2A200CF1476 /* FBDialog.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F01C0A921281D2A200CF1476 /* FBDialog.bundle */; };
 		F01C0AAB1281D2A200CF1476 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C0A961281D2A200CF1476 /* NSObject+SBJSON.m */; };
 		F01C0AAC1281D2A200CF1476 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = F01C0A981281D2A200CF1476 /* NSString+SBJSON.m */; };
@@ -108,6 +110,8 @@
 		F010F213130AFA41006C1839 /* CommentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentView.m; sourceTree = "<group>"; };
 		F010F755130D9518006C1839 /* p_local5.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = p_local5.db; sourceTree = "<group>"; };
 		F010F7A4130DE82D006C1839 /* p_local6.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = p_local6.db; sourceTree = "<group>"; };
+		F010F964130F017E006C1839 /* 1_comment_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1_comment_white.png; sourceTree = "<group>"; };
+		F010F965130F017E006C1839 /* 1_like_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1_like_white.png; sourceTree = "<group>"; };
 		F01C0A921281D2A200CF1476 /* FBDialog.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = FBDialog.bundle; sourceTree = "<group>"; };
 		F01C0A941281D2A200CF1476 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
 		F01C0A951281D2A200CF1476 /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
@@ -319,6 +323,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F010F964130F017E006C1839 /* 1_comment_white.png */,
+				F010F965130F017E006C1839 /* 1_like_white.png */,
 				F010F20B130AF3EB006C1839 /* bg_comment.png */,
 				F010F1CF1309EED3006C1839 /* blackboard.jpg */,
 				F010F1D01309EED3006C1839 /* diamondsteel1.jpg */,
@@ -540,6 +546,8 @@
 				F010F20C130AF3EB006C1839 /* bg_comment.png in Resources */,
 				F010F756130D9518006C1839 /* p_local5.db in Resources */,
 				F010F7A5130DE82D006C1839 /* p_local6.db in Resources */,
+				F010F966130F017E006C1839 /* 1_comment_white.png in Resources */,
+				F010F967130F017E006C1839 /* 1_like_white.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
