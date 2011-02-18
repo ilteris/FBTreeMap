@@ -82,6 +82,7 @@ static CGFloat kTransitionDuration = 0.3;
 - (void)updateCell:(TreemapViewCell *)cell forIndex:(NSInteger)index 
 {
 	NSLog(@"updating cell");
+	NSLog(@"treeMapIsScrolled is %i", treeMapIsScrolled);
 	//NSLog(@"fruits %@", fruits);
 	
 	//set the user likes first
@@ -110,8 +111,6 @@ static CGFloat kTransitionDuration = 0.3;
 		cell.grayCountLabel.text =[[[fruits objectAtIndex:index] objectForKey:@"commentCount"] stringValue];
 
 
-		
-		
 		//well give them alpha accordingly to the values.
 		if(cell.user_likes)
 		{
@@ -129,7 +128,6 @@ static CGFloat kTransitionDuration = 0.3;
 		cell.countLabel.text = [[[fruits objectAtIndex:index] objectForKey:@"commentCount"] stringValue];		
 		cell.countBtn.alpha = 0.5f;
 		cell.grayCountLabel.text = [[[fruits objectAtIndex:index] objectForKey:@"likeCount"] stringValue];
-
 	}
 	
 	
@@ -147,9 +145,6 @@ static CGFloat kTransitionDuration = 0.3;
 		[_networkQueue addOperation:req];		
 	}
 	
-	//NSLog(@"img is  present %@", [[fruits  objectAtIndex:index] objectForKey:@"image_url"]);
-
-
 	
 	if([[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"video"])
 	{
@@ -157,9 +152,15 @@ static CGFloat kTransitionDuration = 0.3;
 		// I cancrop it now since I am using the sole images of the videos.
 		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 		cell.image = img;
+		NSLog(@"treeMapIsScrolled is %i", treeMapIsScrolled);
 		
-				
-		cell.contentLabel.text = @"";//	[[fruits objectAtIndex:index] objectForKey:@"message"];
+		
+			cell.contentLabel.text = [[fruits objectAtIndex:index] objectForKey:@"message"];
+		
+			//cell.contentLabel.text = @"";//	[[fruits objectAtIndex:index] objectForKey:@"message"];
+
+		
+
 		
 	}
 	else if([[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"photo"] || [[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"event"])
@@ -559,6 +560,8 @@ static CGFloat kTransitionDuration = 0.3;
 	// set the content size so it can be scrollable
 	[scrollView setContentSize:CGSizeMake(([fruits count] * self.treeMapView.frame.size.width), [scrollView bounds].size.height)];
 	[scrollView setContentOffset:CGPointMake([index integerValue]*self.treeMapView.frame.size.width,0) animated:NO];
+	//[self.treeMapView reloadData];
+	
 }
 
 
