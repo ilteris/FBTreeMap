@@ -309,7 +309,7 @@ static CGFloat kTransitionDuration = 0.3;
 		
 		
 		if(contentLabel == NULL) contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0)];
-		
+		contentLabel.frame = CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0);
 		contentLabel.font = [UIFont boldSystemFontOfSize:48];
 		//contentLabel.text = @"";
 		contentLabel.textAlignment = UITextAlignmentLeft;
@@ -448,7 +448,7 @@ static CGFloat kTransitionDuration = 0.3;
 	else if(((self.frame.size.height > 200 && self.frame.size.height < 500)  && self.frame.size.width > 200) || (self.frame.size.width > 200 && self.frame.size.width < 500 && self.frame.size.height > 500))	
 	{
 		
-		NSLog(@"self.frame.size.height > 200 && self.frame.size.height < 400)  && (self.frame.size.width > 600 ))");
+		NSLog(@"(self.frame.size.height > 200 && self.frame.size.height < 500)  && self.frame.size.width > 200) || (self.frame.size.width > 200 && self.frame.size.width < 500 && self.frame.size.height > 500)");
 		NSLog(@"status big and title label is %@", titleLabel.text);
 		if(self.titleLabel == NULL) self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 10)];
 		
@@ -532,7 +532,7 @@ static CGFloat kTransitionDuration = 0.3;
 		
 		if([self.objectType isEqual:@"video"] && self.playBtn == NULL)
 		{
-			NSLog(@"self.frame.size.width > 400 && self.frame.size.height > 200");
+
 			
 			self.playBtn = [[[UIButton buttonWithType:UIButtonTypeCustom] retain] autorelease];
 			self.playBtn.frame = CGRectMake(0, 0, 56.0, 55.0);
@@ -608,17 +608,11 @@ static CGFloat kTransitionDuration = 0.3;
 
 		
 		_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
-		
-		
-		
-		
-				
-		
-		
+			
 		if(contentLabel == NULL)  contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0)];
-		
+		contentLabel.frame = CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0);
+
 		contentLabel.font = [UIFont boldSystemFontOfSize:24];
-		contentLabel.text = @"";
 		contentLabel.textAlignment = UITextAlignmentLeft;
 		contentLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
 		contentLabel.backgroundColor = [UIColor clearColor];
@@ -711,8 +705,8 @@ static CGFloat kTransitionDuration = 0.3;
 		
 		
 		if(contentLabel == NULL)  contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0)];
+		contentLabel.frame = CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0);
 		contentLabel.font = [UIFont boldSystemFontOfSize:0];
-		contentLabel.text = @"";
 		contentLabel.textAlignment = UITextAlignmentLeft;
 		contentLabel.textColor = [UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
 		contentLabel.backgroundColor = [UIColor clearColor];
@@ -765,7 +759,7 @@ static CGFloat kTransitionDuration = 0.3;
 		titleLabel.alpha = 1;
 		
 		if(self.countLabel == NULL) self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(11, self.frame.size.height - 61, 200, 48)];
-		
+
 		countLabel.numberOfLines = 0;
 		countLabel.font = [UIFont boldSystemFontOfSize:60];
 		
@@ -804,7 +798,8 @@ static CGFloat kTransitionDuration = 0.3;
 		
 		_countBtn.frame = CGRectMake(countLabel.bounds.origin.x + countLabel.bounds.size.width/2 + 10, self.aView.frame.size.height - 61, 56.0, 48.0);
 		
-		
+		if(contentLabel == NULL)  contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0)];
+
 		contentLabel.frame = CGRectMake(countLabel.frame.origin.x, 11, self.aView.frame.size.width-20, 0);
 		
 		contentLabel.font = [UIFont boldSystemFontOfSize:0];

@@ -50,7 +50,7 @@ static CGFloat kTransitionDuration = 0.3;
 	/*Facebook Application ID*/
 	//NSString *client_id = @"128496757192973";
 	self.cells = [[NSMutableArray alloc] initWithCapacity:2];
-	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local4.db"];
+	if (!_peopleMapDB) _peopleMapDB = [[PeopleMapDB alloc] initWithFilename:@"p_local6.db"];
 	
 	[self setTheBackgroundArray];
 	
@@ -158,13 +158,23 @@ static CGFloat kTransitionDuration = 0.3;
 		cell.contentLabel.text = @"";//	[[fruits objectAtIndex:index] objectForKey:@"message"];
 		
 	}
-	else if([[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"photo"] || [[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"link"] || [[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"event"])
+	else if([[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"photo"] || [[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"event"])
 	{
 		
 		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
 		cell.image = img;
 		cell.contentLabel.text = @"";//	[[fruits objectAtIndex:index] objectForKey:@"message"];
-	}else //if it's a status just display the background cropped.
+		
+	}
+	else if([[[fruits objectAtIndex:index] objectForKey:@"objectType"] isEqual:@"link"])
+	{
+		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
+		cell.image = img;
+		cell.contentLabel.text = @"";//	[[fruits objectAtIndex:index] objectForKey:@"message"];
+		
+		
+	}
+	else //if it's a status just display the background cropped.
 	{
 		cell.image = img;
 		cell.imageViewA.image = [img imageCroppedToFitSize:cell.frame.size];
