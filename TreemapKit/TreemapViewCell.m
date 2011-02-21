@@ -66,6 +66,7 @@ static CGFloat kTransitionDuration = 0.3;
 		
 		
 		
+
 		
 		self.layer.borderWidth = .5;
 		

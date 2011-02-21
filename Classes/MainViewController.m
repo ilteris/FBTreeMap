@@ -108,6 +108,8 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	
 	[mySwitch setOn:NO animated:NO];
 
+	//self.view.autoresizingMask=(UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
+	
 	
 	_treemapViewController = [[TreeMapViewController alloc] init];
 	NSLog(@"treemapView is %@", self.treeMapView);
@@ -286,9 +288,6 @@ menu,like_btn,comment_btn,refresh_btn, containerView, mySwitch;
 	}
 	
 }
-
-
-
 
 
 #pragma mark -
