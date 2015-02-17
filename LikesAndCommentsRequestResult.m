@@ -175,25 +175,25 @@
 				
 				//this is all the objects including internal fb events,fb photos,fb videos,fb links, external; youtube, tumblr, facebook apps and external links.
 				//their common attribute they all have media.
-				//let's do the split here. first check the objects that only have fb_object_type even if they are empty.
-				if ([[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"]) 
+				//let's do the split here. first check the objects that only have objectType even if they are empty.
+				if ([[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"objectType"]) 
 				{ 
-					//if the value of fb_object_type is more than 0 then this is internal facebook objects including fb videos, fb events, fb photos, fb albums.
-					if ([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"] length] > 0) 
+					//if the value of objectType is more than 0 then this is internal facebook objects including fb videos, fb events, fb photos, fb albums.
+					if ([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"objectType"] length] > 0) 
 					{ 
 						//NSLog(@"facebook events videos photos or albums");
-						//NSLog(@"fb object type is %@", [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"] );
+						//NSLog(@"fb object type is %@", [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"objectType"] );
 						//NSLog(@"count one %@", [streamArray objectAtIndex:i] );
 						
 						//NSLog(@"internal shit");
-						//NSLog(@"fb_object_type is %@",[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"] );
+						//NSLog(@"objectType is %@",[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"objectType"] );
 						//NSLog(@"attachment media is %@", [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"]);
 						NSString *_temp = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"src"]];
 						_image_url = [_temp stringByReplacingOccurrencesOfString:@"_s" withString:@"_n"];
 						_message =   [NSString stringWithFormat:@"%@",[[streamArray objectAtIndex:i] objectForKey:@"message"]];
 						//if([_message length] == 0) _message = [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"name"];
 						
-						if([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"fb_object_type"] isEqual:@"event"])
+						if([[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"objectType"] isEqual:@"event"])
 						{
 							_objectType = [NSString stringWithFormat:@"event"];
 						}
@@ -211,7 +211,7 @@
 							//for facebook replace _t with _b
 							_image_url = [_image_url stringByReplacingOccurrencesOfString:@"_t" withString:@"_b"];
 							
-							//NSLog(@"fb_object_type image_url  is %@", _image_url);
+							//NSLog(@"objectType image_url  is %@", _image_url);
 							//save videos url in _href
 							
 							NSString *_temp = [NSString stringWithFormat:@"%@",[[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"video"] objectForKey:@"source_url"]];
@@ -236,7 +236,7 @@
 
 						
 					}//endif
-					else 	//here we know these could either be external links OR youtube videos as long as fb_object_type == @"" && media is an array.
+					else 	//here we know these could either be external links OR youtube videos as long as objectType == @"" && media is an array.
 					{
 						//we can differentiate between those two by loooking at the attachment>media>type as youtube type == video and external links type == link.
 						//NSLog(@"type is %@", [[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"type"]);
@@ -357,6 +357,7 @@
 					
 					//NSLog(@"attachment media is %@", [[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"]);
 					
+                    
 					
 					NSString *_temp = [NSString stringWithFormat:@"%@",[[[[[streamArray objectAtIndex:i] objectForKey:@"attachment"] objectForKey:@"media"] objectAtIndex:0] objectForKey:@"src"]];
 					
